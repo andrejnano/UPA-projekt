@@ -58,3 +58,10 @@ Body zadání, které musí databáze a aplikace splňovat, jsou:
 3. vytvořit databázové schéma a aplikaci
 4. archiv hlavní větve repositáře se zdrojovými kódy a postupy pro sestavení a nasazení odeslat do WISu jako finální výsledek projektu
 5. prezentovat výsledky na závěrečné obhajobě
+
+
+## Project setup
+
+1. Install **Java 13**.
+2. Install [**JavaFX SDK 13**](https://gluonhq.com/products/javafx/).
+3. [Setup IntelliJ](https://openjfx.io/openjfx-docs/) with this project.
