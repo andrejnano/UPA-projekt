@@ -1,6 +1,14 @@
 # UPA-projekt
 Projekt UPA - FIT VUT BRNO
 
+## Project setup
+
+1. Install **Java 13**.
+2. Install [**JavaFX SDK 13**](https://gluonhq.com/products/javafx/) to `~/java/java-sdk-13/`.
+3. [Setup IntelliJ](https://openjfx.io/openjfx-docs/) with this project.
+
+## O projekte
+
 Zoznam členov:
 
 1.	Marko Peter (**xmarko15**)
@@ -37,9 +45,9 @@ Body zadání, které musí databáze a aplikace splňovat, jsou:
   - dalších 2 prostorových operátorů (opět geometrie s indexem)
   - nebo funkcí (výsledkem je geometrie, ale index není potřeba)
   - a alespoň 3 analytických funkcí nebo operací  (výsledkem je číslo, např. obvod geometrie) demonstrujících práci nad prostorovými daty (pro příklady vizte demonstrační cvičení).
-- **Obecně k databázi*:
+- **Obecně k databázi**:
   - databáze (schéma a data) musí běžet na databázovém serveru Oracle 12c a vyšší s tím, že jako referenční platforma slouží fakultní databázový server Oracle určený pro tento předmět.
-- **Obecně k aplikaci*:
+- **Obecně k aplikaci**:
   - aplikace s grafickým uživatelským rozhraním (použitelná nápověda, intuitivní ovládání) běžící spolehlivě na platformách Linux nebo Windows, která se připojuje k databázovému serveru a využívá funkcí prostorových a multimediálních databází včetně propojení s relačními daty,
   - aplikace musí umožňovat volbu přihlašovacích údajů pro připojení k databázovému serveru a (znovu-)naplnění tamní databáze tabulkami se sadou ukázkových dat (implementováno např. formou s aplikací dodávaného inicializačního skriptu, jehož příkazy aplikace na požádání přečte a odešle do připojené databáze),
   - preferovaný implementační jazyk je Java, ale je možné zvolit i jiný, avšak ověřte si, že má podporu pro připojení k databázi Oracle nejlépe i s podporou jejích multimediálních a prostorových rozšíření,
@@ -58,10 +66,3 @@ Body zadání, které musí databáze a aplikace splňovat, jsou:
 3. vytvořit databázové schéma a aplikaci
 4. archiv hlavní větve repositáře se zdrojovými kódy a postupy pro sestavení a nasazení odeslat do WISu jako finální výsledek projektu
 5. prezentovat výsledky na závěrečné obhajobě
-
-
-## Project setup
-
-1. Install **Java 13**.
-2. Install [**JavaFX SDK 13**](https://gluonhq.com/products/javafx/).
-3. [Setup IntelliJ](https://openjfx.io/openjfx-docs/) with this project.
