@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600" prefWidth="900" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+
+    <top></top>
+
+    <left>
+        <VBox>
+            <Label text="UPA 2019"/>
+            <!-- content from databaseView.fxml included here -->
+            <!--
+            TODO: add databaseView
+            <fx:include fx:id="databaseView" source="databaseView.fxml" />
+            -->
+        </VBox>
+    </left>
+
+    <center>
+        <!-- content from canvasView.fxml included here -->
+        <fx:include fx:id="canvasView" source="canvasView.fxml" />
+    </center>
+
+    <right>
+        <!-- content from offersView.fxml included here -->
+        <fx:include fx:id="offersView" source="offersView.fxml" />
+    </right>
+
+    <!--<bottom>
+       TODO: add offerDetailView
+    </bottom>-->
+
+</BorderPane>
