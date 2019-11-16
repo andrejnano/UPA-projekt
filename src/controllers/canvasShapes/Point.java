@@ -1,9 +1,9 @@
-package controllers.canvasUtils;
+package controllers.canvasShapes;
 
 import javafx.scene.canvas.GraphicsContext;
 
 // simple point in 2D
-public class Point {
+public class Point extends Shape {
     double x;
     double y;
 

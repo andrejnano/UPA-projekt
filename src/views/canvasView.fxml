@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.scene.canvas.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CanvasController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CanvasController">
    <children>
-      <VBox prefHeight="400.0" prefWidth="600.0">
+      <VBox prefHeight="600.0" prefWidth="900.0">
          <children>
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <ToolBar prefHeight="40.0" prefWidth="900.0">
               <items>
-                <Button mnemonicParsing="false" text="Button" />
+                  <Button fx:id="drawShapesButton" mnemonicParsing="false" onAction="#drawShapes" style="-fx-background-color: green;" text="Draw Shapes" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                <Button fx:id="clearCanvasButton" mnemonicParsing="false" onAction="#clearCanvas" style="-fx-background-color: red;" text="Clear Canvas" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Button>
+                  <Button fx:id="logShapesButton" mnemonicParsing="false" onAction="#logShapes" text="Log Shapes" />
                   <Label fx:id="canvasLabel" prefHeight="17.0" prefWidth="477.0" text="This is canvasView">
                      <font>
                         <Font size="16.0" />
@@ -23,7 +28,7 @@
                   </Label>
               </items>
             </ToolBar>
-            <Canvas fx:id="canvas" height="360.0" width="600.0" />
+            <Canvas fx:id="canvas" height="560.0" width="600.0" />
          </children>
       </VBox>
    </children>

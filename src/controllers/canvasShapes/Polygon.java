@@ -1,8 +1,8 @@
-package controllers.canvasUtils;
+package controllers.canvasShapes;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class Polygon {
+public class Polygon extends Shape {
     double[] xPoints;
     double[] yPoints;
     int numberOfPoints;

@@ -1,8 +1,8 @@
-package controllers.canvasUtils;
+package controllers.canvasShapes;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class Line {
+public class Line extends Shape {
     Double x1, x2, y1, y2;
 
     public Line(Double x1, Double x2, Double y1, Double y2) {
