@@ -23,6 +23,8 @@ import javafx.scene.paint.Color;
 public class CanvasController implements Initializable, ConvertSpatialObjects {
 
     @FXML
+    Button connectPointsButton;
+    @FXML
     Button drawShapesButton;
     @FXML
     Button clearCanvasButton;
@@ -92,7 +94,11 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
     @FXML
     private void clearCanvas() {
+        // repaint
         gc.clearRect(0, 0, canvasWidth, canvasHeight);
+        // remove old objects
+        points.clear();
+        polygons.clear();
     }
 
     @FXML
@@ -115,6 +121,19 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         drawPolygons();
     }
 
+    // Connects all points with a new Polygon shape
+    @FXML
+    private void connectPoints() {
+        double[] xPoints = new double[points.size()];
+        double[] yPoints = new double[points.size()];
+        for (int i=0; i < points.size(); i++) {
+            xPoints[i] = points.get(i).getX();
+            yPoints[i] = points.get(i).getY();
+        }
+        polygons.add(new Polygon(xPoints, yPoints, points.size()));
+        drawShapes();
+    }
+
     private boolean drawShape = true;
     private double mouseX;
     private double mouseY;
@@ -124,6 +143,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         public void handle(MouseEvent mouseEvent) {
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 System.out.println("mouse x:" + mouseEvent.getX() + ", y: "+ mouseEvent.getY());
+                points.add(new Point(mouseEvent.getX(), mouseEvent.getY()));
+                drawShapes();
             }
         }
     };

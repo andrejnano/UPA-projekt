@@ -5,13 +5,31 @@ import oracle.spatial.geometry.JGeometry;
 
 public interface ConvertSpatialObjects {
 
-    // TODO: JGeometry -> Shape
+    // JGeometry -> Shape
     public static Shape geometryToShape(JGeometry geometry) {
+
+        switch (geometry.getType()) {
+
+            case JGeometry.GTYPE_POINT:
+                // return new point with x, y set from point
+                return new Point(geometry.getPoint()[0], geometry.getPoint()[1]);
+
+            case JGeometry.GTYPE_POLYGON:
+            case JGeometry.GTYPE_CURVE:
+            case JGeometry.GTYPE_COLLECTION:
+            case JGeometry.GTYPE_MULTICURVE:
+            case JGeometry.GTYPE_MULTIPOLYGON:
+            case JGeometry.GTYPE_MULTIPOINT:
+                // TODO: implement
+                break;
+        }
+
         return null;
     }
 
-    // TODO: Shape -> JGeometry
+    // Shape -> JGeometry
     public static JGeometry shapeToGeometry(Shape shape) {
+        // TODO:
         return null;
     }
 }

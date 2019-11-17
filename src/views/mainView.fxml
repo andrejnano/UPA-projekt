@@ -8,14 +8,11 @@
     <top></top>
 
     <left>
-        <VBox>
-            <Label text="UPA 2019"/>
-            <!-- content from databaseView.fxml included here -->
-            <!--
-            TODO: add databaseView
-            <fx:include fx:id="databaseView" source="databaseView.fxml" />
-            -->
-        </VBox>
+        <!-- content from databaseView.fxml included here -->
+        <!--
+        TODO: add databaseView
+        <fx:include fx:id="databaseView" source="databaseView.fxml" />
+        -->
     </left>
 
     <center>

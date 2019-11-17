@@ -57,5 +57,4 @@ public class DatabaseManager {
 
     // TODO: initialize database with root level init.sql script
     // This will probably require SQL parser
-
 }

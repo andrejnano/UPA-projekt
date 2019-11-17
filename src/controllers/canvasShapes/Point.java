@@ -10,6 +10,7 @@ public class Point extends Shape {
     public Point(double x, double y) {
         this.x = x;
         this.y = y;
+        this.type = "point";
     }
 
     public double getX() {

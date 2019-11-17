@@ -11,6 +11,7 @@ public class Polygon extends Shape {
         this.xPoints = xPoints;
         this.yPoints = yPoints;
         this.numberOfPoints = numberOfPoints;
+        this.type = "polygon";
     }
 
     public int getNumberOfPoints() {

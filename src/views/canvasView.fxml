@@ -21,6 +21,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font></Button>
                   <Button fx:id="logShapesButton" mnemonicParsing="false" onAction="#logShapes" text="Log Shapes" />
+                  <Button fx:id="connectPointsButton" mnemonicParsing="false" onAction="#connectPoints" text="Connect Points" />
                   <Label fx:id="canvasLabel" prefHeight="17.0" prefWidth="477.0" text="This is canvasView">
                      <font>
                         <Font size="16.0" />
