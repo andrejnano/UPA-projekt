@@ -59,6 +59,4 @@ INSERT INTO USER_SDO_GEOM_METADATA VALUES (
 CREATE INDEX index_estates_geometry ON estates ( geometry ) indextype is MDSYS.SPATIAL_INDEX ;
 CREATE INDEX index_map_entities_geometry ON map_entities ( geometry ) indextype is MDSYS.SPATIAL_INDEX ;
 
-
-
 COMMIT;
