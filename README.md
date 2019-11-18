@@ -1,11 +1,21 @@
 # UPA-projekt
 Projekt UPA - FIT VUT BRNO
 
+## Requirements
+
+- Java JDK 13
+- [Java FX 13](https://openjfx.io/)
+- Oracle JDBC
+- Oracle Spatial
+
 ## Project setup
 
 1. Install **Java 13**.
 2. Install [**JavaFX SDK 13**](https://gluonhq.com/products/javafx/) to `~/java/java-sdk-13/`.
-3. [Setup IntelliJ](https://openjfx.io/openjfx-docs/) with this project.
+3. Install Oracle JDBC to `~/java/jdbc/`.
+4. Install Oracle Spatial to `~/java/spatial/`.
+5. `git clone https://github.com/andrejnano/UPA-projekt`
+6. [Setup IntelliJ](https://openjfx.io/openjfx-docs/) with this project.
 
 ## Project structure
 
