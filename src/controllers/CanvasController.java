@@ -72,7 +72,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         polygons.add(new Polygon(new double[]{40, 55, 60, 85, 250}, new double[]{70, 90, 40, 50, 60}, 5));
         polygons.add(new Polygon(new double[]{40, 55, 60, 85, 250}, new double[]{170, 190, 140, 150, 160}, 5));
 
-
         drawShapes();
     }
 
@@ -139,13 +138,17 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private double mouseY;
 
     EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
+
         @Override
         public void handle(MouseEvent mouseEvent) {
+
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 System.out.println("mouse x:" + mouseEvent.getX() + ", y: "+ mouseEvent.getY());
                 points.add(new Point(mouseEvent.getX(), mouseEvent.getY()));
                 drawShapes();
             }
+
+
         }
     };
 }

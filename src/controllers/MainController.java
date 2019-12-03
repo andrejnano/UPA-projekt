@@ -1,7 +1,11 @@
 package controllers;
 
+import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 
 public class MainController {
-    public AnchorPane canvasView;
+    @FXML
+    AnchorPane canvasView;
+    @FXML
+    AnchorPane offersView;
 }

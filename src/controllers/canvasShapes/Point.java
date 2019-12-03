@@ -1,11 +1,13 @@
 package controllers.canvasShapes;
 
 import javafx.scene.canvas.GraphicsContext;
+import oracle.spatial.geometry.JGeometry;
 
 // simple point in 2D
 public class Point extends Shape {
     double x;
     double y;
+    JGeometry geometry;
 
     public Point(double x, double y) {
         this.x = x;
