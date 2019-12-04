@@ -1,6 +1,8 @@
 package model;
 
 import oracle.jdbc.pool.OracleDataSource;
+import oracle.spatial.geometry.JGeometry;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -46,6 +48,14 @@ public class DatabaseManager {
             System.err.println("SQLException: " + sqlException.getMessage());
         }
     }
+
+//    public void execStatement(JGeometry updatedObject) {
+//        if(sh)
+//    }
+
+    // CanvasShape
+    // AppShape
+    // JGeometry
 
     public Connection getConnection() {
         return connection;
