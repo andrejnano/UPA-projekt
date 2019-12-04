@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CanvasController">
    <children>
-      <VBox prefHeight="600.0" prefWidth="900.0">
+      <AnchorPane prefHeight="600.0" prefWidth="900.0">
          <children>
             <ToolBar prefHeight="40.0" prefWidth="900.0">
-              <items>
-                  <Button fx:id="drawShapesButton" mnemonicParsing="false" onAction="#drawShapes" style="-fx-background-color: green;" text="Draw Shapes" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Button>
-                <Button fx:id="clearCanvasButton" mnemonicParsing="false" onAction="#clearCanvas" style="-fx-background-color: red;" text="Clear Canvas" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font></Button>
-                  <Button fx:id="logShapesButton" mnemonicParsing="false" onAction="#logShapes" text="Log Shapes" />
-                  <Button fx:id="connectPointsButton" mnemonicParsing="false" onAction="#connectPoints" text="Connect Points" />
-                  <Label fx:id="canvasLabel" prefHeight="17.0" prefWidth="477.0" text="This is canvasView">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-              </items>
+                <items>
+                    <Button fx:id="createPoint" mnemonicParsing="false" onAction="#createPoint" text="Insert points" />
+                    <Button fx:id="createPolyLine" mnemonicParsing="false" onAction="#createPolyLine" text="Insert polyline" />
+                    <Button fx:id="createPolygonButton" mnemonicParsing="false" onAction="#createArea" text="Insert polygons" />
+                    <Button fx:id="editButton" mnemonicParsing="false" onAction="#editMode" text="Edit Mode" />
+                    <Button fx:id="clearCanvasButton" mnemonicParsing="false" onAction="#clearCanvas" style="-fx-background-color: red;" text="Clear Canvas" textFill="WHITE">
+                        <font>
+                            <Font name="System Bold" size="14.0" />
+                        </font>
+                    </Button>
+                    <Label fx:id="canvasLabel" prefHeight="17.0" prefWidth="477.0" text="This is canvasView">
+                        <font>
+                            <Font size="16.0" />
+                        </font>
+                    </Label>
+                </items>
             </ToolBar>
-            <Canvas fx:id="canvas" height="560.0" width="600.0" />
+            <AnchorPane fx:id="pane" AnchorPane.topAnchor="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
          </children>
-      </VBox>
+      </AnchorPane>
    </children>
 </AnchorPane>

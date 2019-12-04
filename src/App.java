@@ -1,9 +1,15 @@
-
+import controllers.canvasShapes.Point;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
 
 // This is the initial starting point for the whole application
 public class App extends Application {
@@ -22,11 +28,10 @@ public class App extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // load root FXML VIEW
-        Parent root = FXMLLoader.load(getClass().getResource("views/mainView.fxml"));
+        BorderPane root =  FXMLLoader.load(getClass().getResource("views/mainView.fxml"));
 
         // assign it to the scene
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 600, 500);
         primaryStage.setTitle("UPA 2019 - Estate manager");
         primaryStage.setScene(scene);
         primaryStage.show();

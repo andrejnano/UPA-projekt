@@ -2,11 +2,7 @@ package model;
 
 import oracle.jdbc.pool.OracleDataSource;
 import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Connection;
 
 // this should be a singleton service, handling all oracle database operations, connection setup, etc.
 public class DatabaseManager {
