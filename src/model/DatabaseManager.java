@@ -56,9 +56,8 @@ public class DatabaseManager {
             String fileData = "";
             String lineData = "";
             while ((lineData = reader.readLine()) != null) {
-                if (lineData.length() > 0)
-                    if (lineData.charAt(0) != '-')
-                        fileData += lineData;
+                String[] parts = lineData.split("--" , 2);
+                fileData += parts[0];
             }
             toQuery = Arrays.asList(fileData.split(";"));
         } catch (IOException e) {
