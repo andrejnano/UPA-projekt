@@ -48,6 +48,35 @@ public class DatabaseManager {
             System.err.println("SQLException: " + sqlException.getMessage());
         }
     }
+    
+    // input: file in sql, stores file into sql db
+    public void loadDbFromFile(String filename) {
+        List<String> toQuery = new ArrayList<String>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String fileData = "";
+            String lineData = "";
+            while ((lineData = reader.readLine()) != null) {
+                if (lineData.length() > 0)
+                    if (lineData.charAt(0) != '-')
+                        fileData += lineData;
+            }
+            toQuery = Arrays.asList(fileData.split(";"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (Statement stmt = connection.createStatement()) {
+            for (String query : toQuery) {
+                System.out.println(query);
+                try {
+                    stmt.executeUpdate(query);
+                } catch(SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 //    public void execStatement(JGeometry updatedObject) {
 //        if(sh)
