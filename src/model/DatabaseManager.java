@@ -1,15 +1,29 @@
 package model;
 
 import oracle.jdbc.pool.OracleDataSource;
-import oracle.spatial.geometry.JGeometry;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.io.IOException;
 
 // this should be a singleton service, handling all oracle database operations, connection setup, etc.
 public class DatabaseManager {
+
+    private static DatabaseManager instance = null;
     private OracleDataSource ods;
     private Connection connection;
+
+    public DatabaseManager() {
+        instance = this;
+    }
+
+    public static DatabaseManager getInstance() { return instance; }
+
+    public Connection getConnection() { return connection; }
 
     // Configure OracleDataSource to a Database Server¶
     public void setup(String host, String port, String serviceName, String user, String password) throws SQLException {
@@ -65,7 +79,6 @@ public class DatabaseManager {
         }
         try (Statement stmt = connection.createStatement()) {
             for (String query : toQuery) {
-                System.out.println(query);
                 try {
                     stmt.executeUpdate(query);
                 } catch(SQLException e) {
@@ -77,18 +90,8 @@ public class DatabaseManager {
         }
     }
 
-//    public void execStatement(JGeometry updatedObject) {
-//        if(sh)
-//    }
-
     // CanvasShape
     // AppShape
     // JGeometry
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-    // TODO: initialize database with root level init.sql script
-    // This will probably require SQL parser
 }
