@@ -1,15 +1,29 @@
 package model;
 
 import oracle.jdbc.pool.OracleDataSource;
-import oracle.spatial.geometry.JGeometry;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+import java.io.IOException;
 
 // this should be a singleton service, handling all oracle database operations, connection setup, etc.
 public class DatabaseManager {
+
+    private static DatabaseManager instance = null;
     private OracleDataSource ods;
     private Connection connection;
+
+    public DatabaseManager() {
+        instance = this;
+    }
+
+    public static DatabaseManager getInstance() { return instance; }
+
+    public Connection getConnection() { return connection; }
 
     // Configure OracleDataSource to a Database Server¶
     public void setup(String host, String port, String serviceName, String user, String password) throws SQLException {
@@ -48,19 +62,36 @@ public class DatabaseManager {
             System.err.println("SQLException: " + sqlException.getMessage());
         }
     }
-
-//    public void execStatement(JGeometry updatedObject) {
-//        if(sh)
-//    }
+    
+    // input: file in sql, stores file into sql db
+    public void loadDbFromFile(String filename) {
+        List<String> toQuery = new ArrayList<String>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String fileData = "";
+            String lineData = "";
+            while ((lineData = reader.readLine()) != null) {
+                String[] parts = lineData.split("--" , 2);
+                fileData += parts[0];
+            }
+            toQuery = Arrays.asList(fileData.split(";"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (Statement stmt = connection.createStatement()) {
+            for (String query : toQuery) {
+                try {
+                    stmt.executeUpdate(query);
+                } catch(SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     // CanvasShape
     // AppShape
     // JGeometry
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-    // TODO: initialize database with root level init.sql script
-    // This will probably require SQL parser
 }
