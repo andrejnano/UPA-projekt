@@ -13,6 +13,7 @@
     <orderEntry type="library" exported="" name="sdoapi" level="project" />
     <orderEntry type="library" exported="" name="javafx-sdk-11.0" level="project" />
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="sdoapi1" level="project" />
+    <orderEntry type="library" name="admin" level="project" />
+    <orderEntry type="library" name="ordim" level="project" />
   </component>
 </module>

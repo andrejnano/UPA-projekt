@@ -17,7 +17,7 @@ public class PointInsertor extends Manipulator {
     protected ArrayList<Double> xyPoints;
     protected Circle firstPoint;
     protected ArrayList<Line> lines;
-    protected ObservableList<Anchor> anchors;
+//    protected ObservableList<Anchor> anchors;
     protected EnumPtr state;
 
 

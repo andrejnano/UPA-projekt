@@ -10,14 +10,15 @@ import java.util.ArrayList;
 
 public class Area extends Shape {
 
-    public Area(Pane p, EnumPtr state) {
-        super(p, state);
-        visualObject = new Polygon();
+    public Area(Pane p, EnumPtr state, ShapeEditController controller) {
+        super(p, state, controller);
+        visualObject = new VisualObject(new Polygon(), state);
+        visualObject.shape.setStroke(Color.BLUE);
     }
 
     public void clear() {
-        pane.getChildren().remove(visualObject);
-        pane.getChildren().removeAll(anchors);
+        pane.getChildren().remove(visualObject.shape);
+        pane.getChildren().removeAll(visualObject.anchors);
     }
 
     public boolean add(Coord c, ArrayList<Shape> shapes) {
@@ -32,6 +33,7 @@ public class Area extends Shape {
                 addPolygon();
                 shapes.add(this);
                 pane.getChildren().remove(firstPoint);
+                finish();
                 return true;
             }
         } else {
@@ -43,7 +45,7 @@ public class Area extends Shape {
 
     private void addPolygon() {
         pane.getChildren().removeAll(lines);
-        Polygon polygon = (Polygon) visualObject;
+        Polygon polygon = (Polygon) visualObject.shape;
 
         int size = xyPoints.size();
         Double[] points = new Double[size];
@@ -51,11 +53,11 @@ public class Area extends Shape {
             points[i] = xyPoints.get(i);
         }
         polygon.getPoints().addAll(points);
-//        visualObject.setFill(Color.rgb(0,0,200, 0.2));
-        pane.getChildren().add(visualObject);
+        pane.getChildren().add(visualObject.shape);
         oldCoord = null;
 
-        anchors = createControlAnchorsFor(((Polygon)visualObject).getPoints(), state);
-        pane.getChildren().addAll(anchors);
+        visualObject.anchors = createControlAnchorsFor(((Polygon)visualObject.shape).getPoints(), state);
+        anchorVisibility(false);
+        pane.getChildren().addAll(visualObject.anchors);
     }
 }

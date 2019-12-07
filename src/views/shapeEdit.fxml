@@ -23,11 +23,7 @@
         <HBox spacing="10">
             <children>
                 <Label text="Color" />
-                <ColorPicker fx:id="colorPicker">
-                    <value>
-                        <Color blue="1.0" green="0.0" red="0.0" />
-                    </value>
-                </ColorPicker>
+                <ColorPicker fx:id="colorPicker"/>
             </children>
         </HBox>
         <HBox prefWidth="191.0" spacing="10">

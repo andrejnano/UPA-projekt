@@ -33,7 +33,7 @@ public class Anchor extends Circle {
 
     // make a node movable by dragging it around with the mouse.
     private void enableDrag() {
-        final Delta dragDelta = new Delta();
+        final Coord dragDelta = new Coord();
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
                 state.value = StateEnum.edit;
@@ -75,7 +75,4 @@ public class Anchor extends Circle {
             }
         });
     }
-
-    // records relative x and y co-ordinates.
-    private class Delta { double x, y; }
 }

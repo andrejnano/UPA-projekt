@@ -45,8 +45,6 @@ public class ShapeEditController {
     public boolean finished;
 
     public void bind(Shape shape) {
-
-        System.out.println("!!!binding");
         finished = false;
         this.shape = shape;
         Bindings.bindBidirectional(nameField.textProperty(), shape.name);
@@ -54,15 +52,17 @@ public class ShapeEditController {
 
         System.out.println(shape.visualObject);
 
-        stroke = shape.visualObject.strokeProperty();
-        shape.visualObject.setStrokeWidth(3);
+        Color originalColor = (Color)shape.visualObject.shape.getStroke();
+        colorPicker.setValue(originalColor);
+        stroke = shape.visualObject.shape.strokeProperty();
+        shape.visualObject.shape.setStrokeWidth(5);
         stroke.bind(Bindings.createObjectBinding(() -> {
             Color c = colorPicker.getValue();
             return c;
         }, colorPicker.valueProperty()));
 
         if (shape.type == StateEnum.Polygon) {
-            fill = shape.visualObject.fillProperty();
+            fill = shape.visualObject.shape.fillProperty();
             fill.bind(Bindings.createObjectBinding(() -> {
                 Color c = colorPicker.getValue();
                 return c.deriveColor(1, 1, 1, 0.4);
@@ -73,9 +73,11 @@ public class ShapeEditController {
 
     public void unBind() {
         if (bound) {
+            okButtonClicked();
+            shape.anchorVisibility(false);
             System.out.println("unbinding!!!");
             Bindings.unbindBidirectional(nameField.textProperty(), shape.name);
-            Bindings.unbindBidirectional(descriptionField.textProperty(), shape.type);
+            Bindings.unbindBidirectional(descriptionField.textProperty(), shape.description);
 
             System.out.println(shape.visualObject);
 
@@ -88,8 +90,21 @@ public class ShapeEditController {
 
     @FXML
     private void okButtonClicked() {
-        if (shape.type != StateEnum.Polygon)
+        if (shape.type != StateEnum.Polygon) {
             this.finished = true;
+            shape.finish();
+        }
+    }
+
+    public void edit(Shape shape) {
+        this.shape.anchorVisibility(false);
+        if (finished) {
+            unBind();
+            bind(shape);
+            shape.anchorVisibility(true);
+
+            finished = true;
+        }
     }
 }
 

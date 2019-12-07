@@ -57,13 +57,13 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     @FXML
     private void createArea() {
         createVisualObject(StateEnum.Polygon);
-        idShapeEditController.bind(new Area(pane, state));
+        idShapeEditController.bind(new Area(pane, state, idShapeEditController));
     }
 
     @FXML
     private void createPoint() {
         createVisualObject(StateEnum.Point);
-        idShapeEditController.bind(new Point(pane, state));
+        idShapeEditController.bind(new Point(pane, state, idShapeEditController));
     }
 
     @FXML
@@ -74,7 +74,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     @FXML
     private void createPolyLine() {
         createVisualObject(StateEnum.Polyline);
-        idShapeEditController.bind(new PolyLine(pane, state, shapes));
+        idShapeEditController.bind(new PolyLine(pane, state, shapes, idShapeEditController));
     }
 
     @FXML
@@ -88,7 +88,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         shapes.clear();
 
         if (state.value == StateEnum.Polyline) {
-            idShapeEditController.shape = new PolyLine(pane, state, shapes);
+            idShapeEditController.shape = new PolyLine(pane, state, shapes, idShapeEditController);
         }
     }
 
