@@ -3,44 +3,43 @@ package controllers.canvasShapes;
 import controllers.EnumPtr;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
+
+import java.util.ArrayList;
 
 // simple point in 2D
-public class Point {
-    double r;
-    private Pane pane;
+public class Point extends Shape {
     private Anchor circle;
-    private EnumPtr state;
 
-    public Point(Coord c, Pane p, EnumPtr state) {
-        this.state = state;
-        pane = p;
-        this.r = 2;
 
+    public Point(Pane p, EnumPtr state) {
+        super(p, state);
+        visualObject = new Circle();
+        pane.getChildren().add(visualObject);
+    }
+
+
+    public boolean add(Coord c, ArrayList<Shape> shapes) {
+        Circle centre = (Circle) visualObject;
+        centre.setCenterX(c.x);
+        centre.setCenterY(c.y);
         DoubleProperty xProperty = new SimpleDoubleProperty(c.x);
         DoubleProperty yProperty = new SimpleDoubleProperty(c.y);
-        xProperty.addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> ov, Number oldX, Number x) {
-                c.x = (double) x;
-            }
+        xProperty.addListener((observable, oldX, x) -> {
+            c.x = x.doubleValue();
+            centre.setCenterX(x.doubleValue());
         });
-
-        yProperty.addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> ov, Number oldY, Number y) {
-                c.y = (double) y;;
-            }
+        yProperty.addListener((observable, oldY, y) -> {
+            c.y = y.doubleValue();
+            centre.setCenterY(y.doubleValue());
         });
 
         circle = new Anchor(Color.GOLD, xProperty, yProperty, state);
-        circle.setOnDragDetected(e -> {
-
-        });
-        p.getChildren().add(circle);
+        pane.getChildren().add(circle);
+        shapes.add(this);
+        return true;
     }
 
     public double getX() {
@@ -53,9 +52,6 @@ public class Point {
 
     public void clear() {
         pane.getChildren().remove(circle);
-    }
-
-    public double getR() {
-        return r;
+        pane.getChildren().remove(visualObject);
     }
 }

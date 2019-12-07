@@ -11,8 +11,8 @@ import javafx.scene.shape.StrokeType;
 import java.util.ArrayList;
 
 public class PointInsertor extends Manipulator {
-    int numberOfPoints;
-    Pane pane;
+    protected int numberOfPoints;
+    protected Pane pane;
     protected Coord oldCoord, firstCoord;
     protected ArrayList<Double> xyPoints;
     protected Circle firstPoint;
@@ -21,9 +21,24 @@ public class PointInsertor extends Manipulator {
     protected EnumPtr state;
 
 
+    public PointInsertor() {
+        init();
+    }
+
     public PointInsertor(Pane pane, EnumPtr state) {
         this.state = state;
         this.pane = pane;
+        init();
+    }
+
+    public void clearUnfinished() {
+        pane.getChildren().removeAll(lines);
+        if (firstPoint != null)
+            pane.getChildren().remove(firstPoint);
+        init();
+    }
+
+    private void init() {
         this.numberOfPoints = 0;
         lines = new ArrayList<>();
         oldCoord = null;
@@ -31,12 +46,6 @@ public class PointInsertor extends Manipulator {
 
         firstPoint = null;
         firstCoord = null;
-    }
-
-    public void clearUnfinished() {
-        pane.getChildren().removeAll(lines);
-        if (firstPoint != null)
-            pane.getChildren().remove(firstPoint);
     }
 
     protected void addLine(Coord oldC, Coord c) {

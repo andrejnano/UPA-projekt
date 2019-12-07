@@ -5,9 +5,8 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CanvasController">
-   <children>
-      <AnchorPane prefHeight="600.0" prefWidth="900.0">
-         <children>
+    <BorderPane>
+        <top>
             <ToolBar prefHeight="40.0" prefWidth="900.0">
                 <items>
                     <Button fx:id="createPoint" mnemonicParsing="false" onAction="#createPoint" text="Insert points" />
@@ -26,8 +25,18 @@
                     </Label>
                 </items>
             </ToolBar>
-            <AnchorPane fx:id="pane" AnchorPane.topAnchor="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
-         </children>
-      </AnchorPane>
-   </children>
+        </top>
+        <center>
+            <BorderPane>
+                <center>
+                    <AnchorPane fx:id="pane" prefHeight="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
+                </center>
+                <right>
+                    <AnchorPane fx:id="sideBar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+                        <fx:include fx:id="idShapeEdit" source="shapeEdit.fxml"/>
+                    </AnchorPane>
+                </right>
+            </BorderPane>
+        </center>
+      </BorderPane>
 </AnchorPane>

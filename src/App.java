@@ -31,7 +31,7 @@ public class App extends Application {
         BorderPane root =  FXMLLoader.load(getClass().getResource("views/mainView.fxml"));
 
         // assign it to the scene
-        Scene scene = new Scene(root, 600, 500);
+        Scene scene = new Scene(root);
         primaryStage.setTitle("UPA 2019 - Estate manager");
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -2,44 +2,36 @@ package controllers.canvasShapes;
 
 import controllers.EnumPtr;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
+import java.util.ArrayList;
 
-public class PolyLine extends PointInsertor {
-    private Polyline polyline;
-    public PolyLine(Pane pane, EnumPtr state) {
+public class PolyLine extends Shape {
+    public PolyLine(Pane pane, EnumPtr state, ArrayList<Shape> shapes) {
         super(pane, state);
-        polyline = null;
+        visualObject = new Polyline();
+        pane.getChildren().add(visualObject);
+        shapes.add(this);
     }
 
     public void clear() {
-        pane.getChildren().remove(polyline);
+        pane.getChildren().remove(visualObject);
         pane.getChildren().removeAll(anchors);
     }
 
-    public boolean add(Coord c) {
-        if (firstPoint == null) {
-            firstCoord = c;
-        }
-        addPoint(c);
-        if (polyline != null) {
-            pane.getChildren().removeAll(polyline);
+//    TODO automatic adding new plyline to shapes
+    public boolean add(Coord c, ArrayList<Shape> shapes) {
+        Polyline polyline = (Polyline) visualObject;
+        xyPoints.add(c.x);
+        xyPoints.add(c.y);
+        numberOfPoints++;
+        polyline.getPoints().addAll(c.x, c.y);
+        if (anchors != null) {
             pane.getChildren().removeAll(anchors);
         }
-        addPolyline();
-        return false;
-    }
-
-    private void addPolyline() {
-        pane.getChildren().removeAll(lines);
-        polyline = new Polyline(xyPoints.stream().mapToDouble(Double::doubleValue).toArray());
-        pane.getChildren().add(polyline);
-        oldCoord = null;
-
-        polyline.setStroke(Color.BLUE);
-        polyline.setStrokeWidth(2);
-        anchors = createControlAnchorsFor(polyline.getPoints(), state);
+        anchors = null;
+        anchors = createControlAnchorsFor(((Polyline)visualObject).getPoints(), state);
         pane.getChildren().addAll(anchors);
+        return false;
     }
 
 

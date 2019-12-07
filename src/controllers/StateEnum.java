@@ -1,9 +1,9 @@
 package controllers;
 
 public enum StateEnum {
-    addPolygon,
-    addPoint,
-    addPolyline,
+    Polygon,
+    Point,
+    Polyline,
     edit,
     mouseDrag
 }
