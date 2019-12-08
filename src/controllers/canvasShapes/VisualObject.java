@@ -18,11 +18,13 @@ public class VisualObject {
         this.state = state;
         enableDrag();
     }
+
     // make a node movable by dragging it around with the mouse.
     private void enableDrag() {
         final Coord dragDelta = new Coord();
         shape.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
+                shape.toFront();
                 state.value = StateEnum.edit;
                 // record a delta distance for the drag and drop operation.
                 dragDelta.x = getCenterX() - mouseEvent.getX();
@@ -33,6 +35,9 @@ public class VisualObject {
         shape.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
                 shape.getScene().setCursor(Cursor.HAND);
+                for (Anchor a : anchors) {
+                    a.toFront();
+                }
             }
         });
         shape.setOnMouseDragged(new EventHandler<MouseEvent>() {

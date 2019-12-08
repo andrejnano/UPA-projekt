@@ -13,6 +13,8 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -51,6 +53,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         idShapeEditController.shape = null;
         // set mouse handler
         pane.setOnMousePressed(mouseHandler);
+        pane.setOnScroll(onScrollEventHandler);
     }
 
 
@@ -119,5 +122,51 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
             }
         }
+    };
+
+    private EventHandler<ScrollEvent> onScrollEventHandler = new EventHandler<ScrollEvent>() {
+
+        @Override
+        public void handle(ScrollEvent event) {
+            System.out.println("Scrolllllllllllll");
+            double delta = 1.2;
+
+            double scale = pane.getScaleX(); // currently we only use Y, same value is used for X
+            double oldScale = scale;
+
+            if (event.getDeltaY() < 0)
+                scale /= delta;
+            else
+                scale *= delta;
+
+            scale = clamp( scale, 0, 10);
+
+            double f = (scale / oldScale)-1;
+
+            double dx = (event.getSceneX() - (pane.getBoundsInParent().getWidth()/2 + pane.getBoundsInParent().getMinX()));
+            double dy = (event.getSceneY() - (pane.getBoundsInParent().getHeight()/2 + pane.getBoundsInParent().getMinY()));
+
+            pane.setScaleX( scale);
+            pane.setScaleY( scale);
+
+            // note: pivot value must be untransformed, i. e. without scaling
+//            pane.setPivot(f*dx, f*dy);
+//            pane.
+
+            event.consume();
+
+        }
+
+        public double clamp( double value, double min, double max) {
+
+            if( Double.compare(value, min) < 0)
+                return min;
+
+            if( Double.compare(value, max) > 0)
+                return max;
+
+            return value;
+        }
+
     };
 }
