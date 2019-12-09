@@ -5,13 +5,9 @@ import controllers.canvasUtils.ConvertSpatialObjects;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
-import javafx.scene.Cursor;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,10 +15,6 @@ import java.util.ResourceBundle;
 
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 
 // This controller renders all spatial data objects to canvas & handles
@@ -95,6 +87,11 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         createVisualObject(StateEnum.Point);
         idShapeEditController.bind(new Point(pane, state, idShapeEditController));
     }
+    @FXML
+    private void createMultiPoint() {
+        createVisualObject(StateEnum.MultiPoint);
+        idShapeEditController.bind(new MultiPoint(pane, state, idShapeEditController));
+    }
 
     @FXML
     private void editMode() {
@@ -121,6 +118,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
             idShapeEditController.shape = new PolyLine(pane, state, shapes, idShapeEditController);
         }
     }
+
 
 
     private void createVisualObject(StateEnum s) {

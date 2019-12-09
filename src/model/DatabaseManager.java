@@ -1,5 +1,6 @@
 package model;
 
+import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.pool.OracleDataSource;
 
 import java.io.BufferedReader;

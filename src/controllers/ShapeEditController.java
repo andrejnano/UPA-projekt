@@ -47,11 +47,11 @@ public class ShapeEditController {
         Bindings.bindBidirectional(descriptionField.textProperty(), shape.description);
 
         System.out.println(shape.visualObject);
-
-        Color originalColor = (Color)shape.visualObject.shape.getStroke();
+        Color originalColor = (Color)shape.visualObject.getStroke();
         colorPicker.setValue(originalColor);
-        stroke = shape.visualObject.shape.strokeProperty();
-        shape.visualObject.shape.setStrokeWidth(5);
+        stroke = shape.visualObject.strokeProperty();
+        if (shape.visualObject.shape != null)
+            shape.visualObject.shape.setStrokeWidth(5);
         stroke.bind(Bindings.createObjectBinding(() -> {
             Color c = colorPicker.getValue();
             return c;
@@ -74,7 +74,10 @@ public class ShapeEditController {
             Bindings.unbindBidirectional(nameField.textProperty(), shape.name);
             Bindings.unbindBidirectional(descriptionField.textProperty(), shape.description);
 
-            System.out.println(shape.visualObject);
+//            if (shape.visualObject.shape == null) {
+//                bound = false;
+//                return;
+//            }
 
             if (shape.type == StateEnum.Polygon)
                 fill.unbind();

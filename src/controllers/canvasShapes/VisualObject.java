@@ -2,6 +2,7 @@ package controllers.canvasShapes;
 
 import controllers.EnumPtr;
 import controllers.StateEnum;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
@@ -9,12 +10,15 @@ import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 
 public class VisualObject {
     protected ObservableList<Anchor> anchors;
     protected EnumPtr state;
     public Shape shape;
+    protected Paint stroke;
+    protected ObjectProperty<Paint> strokeProperty;
 
     public VisualObject(Shape s, EnumPtr state) {
         shape = s;
@@ -24,6 +28,9 @@ public class VisualObject {
 
     // make a node movable by dragging it around with the mouse.
     private void enableDrag() {
+        if (shape == null) {
+            return;
+        }
         final Coord dragDelta = new Coord();
         shape.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
@@ -63,20 +70,15 @@ public class VisualObject {
         });
         shape.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
-                if (state.value == StateEnum.edit) {
-                    if (!mouseEvent.isPrimaryButtonDown()) {
-                        shape.getScene().setCursor(Cursor.HAND);
-                        System.out.println("nooooooooooo\n");
-                    }
+                if (state.value == StateEnum.edit && !mouseEvent.isPrimaryButtonDown()) {
+                    shape.getScene().setCursor(Cursor.HAND);
                 }
             }
         });
         shape.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
-                if (state.value == StateEnum.edit) {
-                    if (!mouseEvent.isPrimaryButtonDown()) {
-                        shape.getScene().setCursor(Cursor.DEFAULT);
-                    }
+                if (state.value == StateEnum.edit && !mouseEvent.isPrimaryButtonDown()) {
+                    shape.getScene().setCursor(Cursor.DEFAULT);
                 }
             }
         });
@@ -115,6 +117,22 @@ public class VisualObject {
         for (Anchor a : anchors) {
             double curY = a.getCenterY();
             a.setCenterY(curY + deltaY);
+        }
+    }
+
+    public Paint getStroke() {
+        if (shape == null) {
+            return stroke;
+        } else {
+            return shape.getStroke();
+        }
+    }
+
+    public ObjectProperty<Paint> strokeProperty() {
+        if (shape == null) {
+            return strokeProperty;
+        } else {
+            return shape.strokeProperty();
         }
     }
 }

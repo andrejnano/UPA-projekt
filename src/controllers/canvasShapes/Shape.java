@@ -15,7 +15,7 @@ public abstract class Shape extends PointInsertor {
     public SimpleStringProperty description;
     public VisualObject visualObject;
     public StateEnum type;
-    private ShapeEditController shapeEditController;
+    protected ShapeEditController shapeEditController;
 
     public Shape(Pane p, EnumPtr state, ShapeEditController controller) {
         super(p, state);
@@ -32,6 +32,7 @@ public abstract class Shape extends PointInsertor {
         return type;
     }
     public void finish() {
+        anchorVisibility(false);
         visualObject.shape.setOnMouseClicked(e -> {
             shapeEditController.edit(this);
         });
