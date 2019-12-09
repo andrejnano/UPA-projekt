@@ -67,13 +67,13 @@ public class DatabaseManager {
     public void loadDbFromFile(String filename) {
         List<String> toQuery = new ArrayList<String>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String fileData = "";
+            StringBuilder fileData = new StringBuilder();
             String lineData = "";
             while ((lineData = reader.readLine()) != null) {
                 String[] parts = lineData.split("--" , 2);
-                fileData += parts[0];
+                fileData.append(parts[0]);
             }
-            toQuery = Arrays.asList(fileData.split(";"));
+            toQuery = Arrays.asList(fileData.toString().split(";"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,6 +88,23 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // returns highest id in table
+    public int maxId(String table)
+    {
+        int maxId = 0;
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select max(id) max_id from " + table;
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            if (rset.next()) {
+                maxId = (int) rset.getInt("max_id");
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return maxId+1;
     }
 
     // CanvasShape
