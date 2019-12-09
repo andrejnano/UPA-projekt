@@ -4,21 +4,26 @@ import controllers.canvasShapes.*;
 import controllers.canvasUtils.ConvertSpatialObjects;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.scene.Cursor;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.skin.SplitPaneSkin;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
 
 // This controller renders all spatial data objects to canvas & handles
 // all events associated with them
@@ -28,32 +33,54 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     @FXML
     Label canvasLabel;
     @FXML
-    AnchorPane pane;
+    Pane pane;
+    @FXML
+    ScrollPane scrollPane;
     @FXML
     AnchorPane sideBar;
     @FXML
     ShapeEditController idShapeEditController;
     @FXML
-    VBox idShapeEdit;
+    Pane idShapeEdit;
 
     public EnumPtr state;
-
+    private Coord mouseCoord;
+    private Coord dragDelta;
     // 2D Points that should be rendered to canvas
     private ArrayList<Shape> shapes;
     private Pane sidePane;
+    private double scaleX;
+    private double scaleY;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        mouseCoord = new Coord();
         // simple test to see if controller is correctly connected to view
         sideBar.setVisible(false);
         canvasLabel.setText("This text was set from the CanvasController");
         state = new EnumPtr();
         state.value = StateEnum.edit;
         shapes = new ArrayList<>();
+
+        idShapeEditController.init(scrollPane, state, sideBar);
         idShapeEditController.shape = null;
         // set mouse handler
         pane.setOnMousePressed(mouseHandler);
-        pane.setOnScroll(onScrollEventHandler);
+        pane.setOnMouseMoved(mouseHandler);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setFitToWidth(true);
+
+        dragDelta = new Coord();
+        scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+            if(event.isControlDown())
+            {
+                zoom(event); // zoom the canvas instead of scrolling the actual pane.
+                event.consume();
+            }
+        });
+        scrollPane.setPannable(true);
+        scaleX = 1;
+        scaleY = 1;
     }
 
 
@@ -71,7 +98,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
     @FXML
     private void editMode() {
-        createVisualObject(StateEnum.edit);
+        state.value = StateEnum.edit;
+        scrollPane.setPannable(false);
     }
 
     @FXML
@@ -82,7 +110,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
     @FXML
     private void clearCanvas() {
-//        sideBar.getChildren().remove(sidePane);
         sideBar.setVisible(false);
         clearUnfinished();
         for (Shape s : shapes) {
@@ -97,10 +124,10 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
 
     private void createVisualObject(StateEnum s) {
-//        sideBar.getChildren().add(sidePane);
+        scrollPane.setPannable(false);
         state.value = s;
-        clearUnfinished();
         sideBar.setVisible(true);
+        clearUnfinished();
     }
 
     private void clearUnfinished() {
@@ -119,54 +146,32 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
                 if (state.value != StateEnum.edit && !idShapeEditController.finished && idShapeEditController.shape.add(c, shapes)) {
                     idShapeEditController.finished = true;
                 }
-
+            }
+            if (mouseEvent.getEventType() == MouseEvent.MOUSE_MOVED) {
+                mouseCoord.x = mouseEvent.getX();
+                mouseCoord.y =mouseEvent.getY();
             }
         }
     };
 
-    private EventHandler<ScrollEvent> onScrollEventHandler = new EventHandler<ScrollEvent>() {
 
-        @Override
-        public void handle(ScrollEvent event) {
-            System.out.println("Scrolllllllllllll");
-            double delta = 1.2;
+        public void zoom(ScrollEvent event) {
+            double zoom_fac = 1.05;
 
-            double scale = pane.getScaleX(); // currently we only use Y, same value is used for X
-            double oldScale = scale;
+            if(event.getDeltaY() < 0) {
+                zoom_fac = 2.0 - zoom_fac;
+            }
+            Scale newScale = new Scale();
 
-            if (event.getDeltaY() < 0)
-                scale /= delta;
-            else
-                scale *= delta;
-
-            scale = clamp( scale, 0, 10);
-
-            double f = (scale / oldScale)-1;
-
-            double dx = (event.getSceneX() - (pane.getBoundsInParent().getWidth()/2 + pane.getBoundsInParent().getMinX()));
-            double dy = (event.getSceneY() - (pane.getBoundsInParent().getHeight()/2 + pane.getBoundsInParent().getMinY()));
-
-            pane.setScaleX( scale);
-            pane.setScaleY( scale);
-
-            // note: pivot value must be untransformed, i. e. without scaling
-//            pane.setPivot(f*dx, f*dy);
-//            pane.
-
+            newScale.setPivotX(mouseCoord.x);
+            newScale.setPivotY(mouseCoord.y);
+            scaleX *= zoom_fac;
+            scaleY *= zoom_fac;
+            newScale.setX(zoom_fac);
+            newScale.setY(zoom_fac);
+            pane.getTransforms().add(newScale);
             event.consume();
 
+
         }
-
-        public double clamp( double value, double min, double max) {
-
-            if( Double.compare(value, min) < 0)
-                return min;
-
-            if( Double.compare(value, max) > 0)
-                return max;
-
-            return value;
-        }
-
-    };
 }

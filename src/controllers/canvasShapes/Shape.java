@@ -3,9 +3,6 @@ package controllers.canvasShapes;
 import controllers.EnumPtr;
 import controllers.ShapeEditController;
 import controllers.StateEnum;
-import javafx.event.EventHandler;
-import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.beans.property.SimpleStringProperty;
 import java.util.ArrayList;
@@ -35,7 +32,6 @@ public abstract class Shape extends PointInsertor {
         return type;
     }
     public void finish() {
-        anchorVisibility(true);
         visualObject.shape.setOnMouseClicked(e -> {
             shapeEditController.edit(this);
         });

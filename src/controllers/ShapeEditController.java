@@ -1,29 +1,16 @@
 package controllers;
 
-import controllers.EnumPtr;
-import controllers.canvasShapes.Coord;
-import controllers.canvasShapes.PointInsertor;
 import controllers.canvasShapes.Shape;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
-import static javax.swing.text.StyleConstants.Background;
 
 // some common data of all shapes / geometry objects
 // this is the 'app representation' of a JGeometry object
@@ -43,6 +30,15 @@ public class ShapeEditController {
     private ObjectProperty<Paint> fill;
     private ObjectProperty<Paint> stroke;
     public boolean finished;
+    private ScrollPane scrollPane;
+    private EnumPtr state;
+    private Pane sideBar;
+
+    public void init(ScrollPane scrollPane, EnumPtr state, Pane sideBar) {
+        this.scrollPane = scrollPane;
+        this.state = state;
+        this.sideBar = sideBar;
+    }
 
     public void bind(Shape shape) {
         finished = false;
@@ -73,9 +69,8 @@ public class ShapeEditController {
 
     public void unBind() {
         if (bound) {
-            okButtonClicked();
+            setDefaults();
             shape.anchorVisibility(false);
-            System.out.println("unbinding!!!");
             Bindings.unbindBidirectional(nameField.textProperty(), shape.name);
             Bindings.unbindBidirectional(descriptionField.textProperty(), shape.description);
 
@@ -88,21 +83,30 @@ public class ShapeEditController {
         bound = false;
     }
 
-    @FXML
-    private void okButtonClicked() {
+    private void setDefaults() {
         if (shape.type != StateEnum.Polygon) {
             this.finished = true;
             shape.finish();
         }
+        scrollPane.setPannable(true);
+        shape.anchorVisibility(false);
+    }
+    @FXML
+    private void okButtonClicked() {
+        setDefaults();
+        sideBar.setVisible(false);
+        state.value = StateEnum.mouseDrag;
     }
 
     public void edit(Shape shape) {
-        this.shape.anchorVisibility(false);
-        if (finished) {
+        shape.anchorVisibility(false);
+        if (finished && state.value == StateEnum.edit) {
+            sideBar.setVisible(true);
             unBind();
             bind(shape);
             shape.anchorVisibility(true);
-
+            sideBar.setVisible(true);
+            this.scrollPane.setPannable(false);
             finished = true;
         }
     }

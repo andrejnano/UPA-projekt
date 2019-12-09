@@ -36,7 +36,6 @@ public class Anchor extends Circle {
         final Coord dragDelta = new Coord();
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
-                state.value = StateEnum.edit;
                 // record a delta distance for the drag and drop operation.
                 dragDelta.x = getCenterX() - mouseEvent.getX();
                 dragDelta.y = getCenterY() - mouseEvent.getY();

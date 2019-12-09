@@ -3,33 +3,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.paint.Color?>
-<VBox prefWidth="201.0" spacing="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ShapeEditController">
-    <children>
-        <HBox spacing="10">
-            <children>
-                <Label text="Name" />
-                <TextField fx:id="nameField"/>
-            </children>
+<AnchorPane prefWidth="201.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ShapeEditController" AnchorPane.topAnchor="10">
+<GridPane>
 
-        </HBox>
-        <HBox spacing="10">
-            <children>
-                <Label text="Description" />
-                <TextField fx:id="descriptionField"/>
-            </children>
+                <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-        </HBox>
-        <HBox spacing="10">
-            <children>
-                <Label text="Color" />
-                <ColorPicker fx:id="colorPicker"/>
-            </children>
-        </HBox>
-        <HBox prefWidth="191.0" spacing="10">
-            <children>
-                <Button mnemonicParsing="false" text="OK" onAction="#okButtonClicked" fx:id="okButton"/>
-            </children>
-        </HBox>
-    </children>
-</VBox>
+                <Label text="Description" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="descriptionField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Color" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <ColorPicker fx:id="colorPicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonClicked" text="OK" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+</GridPane>
+</AnchorPane>
