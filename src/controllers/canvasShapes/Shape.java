@@ -45,4 +45,16 @@ public abstract class Shape extends PointInsertor {
             a.setVisible(visibility);
         }
     }
+
+    public Double[] getOrds() {
+        Double[] points = new Double[xyPoints.size()];
+        for (int i = 0; i < xyPoints.size(); ++i) {
+            points[i] = xyPoints.get(i);
+        }
+        return points;
+    }
+
+    public int getOrdSize() {
+        return xyPoints.size();
+    }
 }

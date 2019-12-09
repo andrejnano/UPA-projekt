@@ -15,9 +15,11 @@ import oracle.jdbc.*;
 public class MultimediaHandler {
 
     private Connection connection;
+    private DatabaseManager dbManager;
 
     public MultimediaHandler() {
-        this.connection = DatabaseManager.getInstance().getConnection();
+        this.dbManager = DatabaseManager.getInstance();
+        this.connection = dbManager.getConnection();
     }
 
     // resizes current image
@@ -46,6 +48,7 @@ public class MultimediaHandler {
             while (rset.next()) {
                 similarIDs.add(rset.getInt("id"));
             }
+            rset.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,6 +67,7 @@ public class MultimediaHandler {
         catch (IOException | SQLException e) {
             e.printStackTrace();
         }
+        assert buffer != null;
         return SwingFXUtils.toFXImage(buffer, null);
     }
 
@@ -111,25 +115,10 @@ public class MultimediaHandler {
         }
     }
 
-    // returns highest id in table
-    public int maxId(String table)
-    {
-        int maxId = 0;
-        try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select max(id) max_id from " + table;
-            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
-            if (rset.next())
-                maxId = (int) rset.getInt("max_id");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return maxId;
-    }
-
     // stores image from file to database (insert with new id)
-    public void storeImage(int estateId, String filename)
+    public int storeImage(int estateId, String filename)
     {
-        int id = maxId("pictures");
+        int id = dbManager.maxId("pictures");
         try {
             try (Statement stmt = connection.createStatement()) {
                 String sqlString = "insert into pictures (id, offid, picture) values(" + id + ", " + estateId + ", ordsys.ordimage.init())";
@@ -142,6 +131,7 @@ public class MultimediaHandler {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return id;
     }
 
     // "for update" locks image until commit/rollback is issued
@@ -151,8 +141,9 @@ public class MultimediaHandler {
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select picture from pictures where id = " + id + " for update";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
-            rset.next();
-            imgProxy = (OrdImage) rset.getORAData("picture", OrdImage.getORADataFactory());
+            if (rset.next()) {
+                imgProxy = (OrdImage) rset.getORAData("picture", OrdImage.getORADataFactory());
+            }
             rset.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -162,7 +153,7 @@ public class MultimediaHandler {
 
     // updates stillimage data based on current ordimage
     // check if alias ok (multimedia demo)
-    public void updateStillImage(int id) {
+    private void updateStillImage(int id) {
         try (Statement stmt3 = connection.createStatement()) {
             String sqlString = "update pictures set picture_si=SI_StillImage(picture.getContent()) where id = " + id;
             stmt3.executeUpdate(sqlString);
