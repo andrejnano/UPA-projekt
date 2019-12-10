@@ -43,9 +43,11 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private Pane sidePane;
     private double scaleX;
     private double scaleY;
+    private static CanvasController instance = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        instance = this;
         mouseCoord = new Coord();
         // simple test to see if controller is correctly connected to view
         sideBar.setVisible(false);
@@ -75,6 +77,11 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         scaleY = 1;
     }
 
+    public static CanvasController getInstance() { return instance; }
+    public ArrayList<Shape> getShapes() { return this.shapes; }
+    public Pane getPane() { return this.pane; }
+    public EnumPtr getEnumPtr() { return this.state; }
+    public ShapeEditController getShapeEditController() { return this.idShapeEditController; }
 
     @FXML
     private void createArea() {
