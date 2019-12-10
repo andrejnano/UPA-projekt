@@ -82,20 +82,14 @@ public class SpatialDBO {
     // convert javafx shape to jgeometry for polygon
     public void setShape(Area shape) {
         int[] elemInfo = {1, 1003, 1};
-        double[] ordArray = new double[shape.getOrdSize()];
-        for(int i = 0; i < shape.getOrdSize(); ++i) {
-            ordArray[i] = shape.getOrds()[i];
-        }
+        double[] ordArray = shape.getOrds();
         this.shape = new JGeometry(JGeometry.GTYPE_POLYGON, 0, elemInfo, ordArray);
     }
 
     // convert javafx shape to jgeometry for line
     public void setShape(PolyLine shape) {
         int[] elemInfo = {1, 2, 1};
-        double[] ordArray = new double[shape.getOrdSize()];
-        for(int i = 0; i < shape.getOrdSize(); ++i) {
-            ordArray[i] = shape.getOrds()[i];
-        }
+        double[] ordArray = shape.getOrds();
         this.shape = new JGeometry(JGeometry.GTYPE_CURVE, 0, elemInfo, ordArray);
     }
 
@@ -108,12 +102,7 @@ public class SpatialDBO {
     public void setShape(MultiPoint shape) {
         // each point consists of 2 coords
         int size = shape.visualObject.anchors.size()*2;
-        double[] ordArray = new double[size];
-        for (int i = 0; i < size; i += 2) {
-            Anchor anchor = shape.visualObject.anchors.get(i);
-            ordArray[i] = anchor.getCenterX();
-            ordArray[i+1] = anchor.getCenterY();
-        }
+        double[] ordArray = shape.getOrds();
         int[] elemInfo = {1, 2, size/2};
         this.shape = new JGeometry(JGeometry.GTYPE_MULTIPOINT, 0, elemInfo, ordArray);
 

@@ -49,15 +49,14 @@ public abstract class Shape extends PointInsertor {
         }
     }
 
-    public Double[] getOrds() {
-        Double[] points = new Double[xyPoints.size()];
-        for (int i = 0; i < xyPoints.size(); ++i) {
-            points[i] = xyPoints.get(i);
+    public double[] getOrds() {
+        int size = visualObject.anchors.size()*2;
+        double[] ordArray = new double[size];
+        for (int i = 0; i < size; i += 2) {
+            Anchor anchor = visualObject.anchors.get(i);
+            ordArray[i] = anchor.getCenterX();
+            ordArray[i+1] = anchor.getCenterY();
         }
-        return points;
-    }
-
-    public int getOrdSize() {
-        return xyPoints.size();
+        return ordArray;
     }
 }
