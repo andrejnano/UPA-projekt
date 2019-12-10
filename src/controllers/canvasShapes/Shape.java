@@ -33,6 +33,8 @@ public abstract class Shape extends PointInsertor {
     }
     public void finish() {
         anchorVisibility(false);
+        if (visualObject.shape == null)
+            return;
         visualObject.shape.setOnMouseClicked(e -> {
             shapeEditController.edit(this);
         });

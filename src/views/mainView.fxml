@@ -3,30 +3,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="controllers.MainController">
-
-    <top/>
-
-    <left>
-        <!-- content from databaseView.fxml included here -->
-        <!--
-        TODO: add databaseView
-        <fx:include fx:id="databaseView" source="databaseView.fxml" />
-        -->
-    </left>
-
-    <center>
-        <!-- content from canvasView.fxml included here -->
-        <fx:include fx:id="canvasView" source="canvasView.fxml" />
-    </center>
-
-    <right>
-        <!-- content from offersView.fxml included here -->
-        <fx:include fx:id="offersView" source="offersView.fxml" />
-    </right>
-
-    <!--<bottom>
-       TODO: add offerDetailView
-    </bottom>-->
-
-</BorderPane>
+    <TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="controllers.MainController">
+        <tabs>
+            <Tab text="Admin">
+                <content>
+                    <fx:include source="canvasView.fxml" />
+                </content>
+            </Tab>
+            <Tab text="Search">
+                <content>
+<!--                    <fx:include source="canvasView.fxml" />-->
+                </content>
+            </Tab>
+            <Tab text="Create offer">
+                <content>
+                    <fx:include source="offersView.fxml" />
+                </content>
+            </Tab>
+        </tabs>
+    </TabPane>

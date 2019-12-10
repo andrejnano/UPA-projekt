@@ -4,9 +4,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
 <AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CanvasController">
     <BorderPane>
         <top>
@@ -31,15 +28,15 @@
             </ToolBar>
         </top>
         <center>
-            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" vbarPolicy="NEVER" maxHeight="560.0" maxWidth="600.0">
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" maxHeight="560.0" maxWidth="600.0" vbarPolicy="NEVER">
                 <content>
-                    <Pane fx:id="pane" minHeight="2240" minWidth="2400.0"  maxHeight="2240" maxWidth="2400.0" style="-fx-background-color: white">
+                    <Pane fx:id="pane" maxHeight="2240" maxWidth="2400.0" minHeight="2240" minWidth="2400.0" style="-fx-background-color: white">
                     </Pane>
                 </content>
             </ScrollPane>
         </center>
         <right>
-            <AnchorPane fx:id="sideBar" prefHeight="600.0" maxWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+            <AnchorPane fx:id="sideBar" maxWidth="200.0" prefHeight="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
                 <fx:include fx:id="idShapeEdit" source="shapeEdit.fxml" />
             </AnchorPane>
         </right>
