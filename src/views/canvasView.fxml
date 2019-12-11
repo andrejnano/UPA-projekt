@@ -27,18 +27,18 @@
                      </padding>
                   </Label>
                   <Region prefHeight="30.0" prefWidth="20.0" />
-                       <Button fx:id="viewButton" mnemonicParsing="false" onAction="#viewMode" style="-fx-background-color: #3e38f2; -fx-font-weight: 800;" text="View mode" textFill="WHITE">
+                       <Button fx:id="viewButton" mnemonicParsing="false" onAction="#viewMode" styleClass="canvasToolBarButton" text="View mode">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font></Button>
-                       <Button fx:id="editButton" mnemonicParsing="false" onAction="#editMode" style="-fx-background-color: green;" text="Edit Mode" textFill="WHITE" />
+                       <Button fx:id="editButton" mnemonicParsing="false" onAction="#editMode" styleClass="canvasToolBarButton" text="Edit Mode" />
                   <Region prefHeight="30.0" prefWidth="20.0" />
-                       <Button fx:id="createPointMode" mnemonicParsing="false" onAction="#createPointMode" text="Insert point" />
-                       <Button fx:id="createMultiPointMode" mnemonicParsing="false" onAction="#createMultiPointMode" text="Insert multiPoint" />
-                       <Button fx:id="createPolyLineMode" mnemonicParsing="false" onAction="#createPolyLineMode" text="Insert polyline" />
-                       <Button fx:id="createPolygonButton" mnemonicParsing="false" onAction="#createAreaMode" text="Insert polygon" />
+                       <Button fx:id="createPointMode" mnemonicParsing="false" onAction="#createPointMode" styleClass="canvasToolBarButton" text="Insert point" />
+                       <Button fx:id="createMultiPointMode" mnemonicParsing="false" onAction="#createMultiPointMode" styleClass="canvasToolBarButton" text="Insert multiPoint" />
+                       <Button fx:id="createPolyLineMode" mnemonicParsing="false" onAction="#createPolyLineMode" styleClass="canvasToolBarButton" text="Insert polyline" />
+                       <Button fx:id="createPolygonButton" mnemonicParsing="false" onAction="#createAreaMode" styleClass="canvasToolBarButton" text="Insert polygon" />
                   <Region prefHeight="30.0" prefWidth="20.0" />
-                       <Button fx:id="clearCanvasButton" mnemonicParsing="false" onAction="#clearCanvas" style="-fx-background-color: red;" text="Clear Canvas" textFill="WHITE">
+                       <Button fx:id="clearCanvasButton" mnemonicParsing="false" onAction="#clearCanvas" style="-fx-background-color: red;" styleClass="canvasToolBarButton" text="Clear Canvas" textFill="WHITE">
                            <font>
                                <Font name="System Bold" size="14.0" />
                            </font>
@@ -52,9 +52,9 @@
            <center>
                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="560.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="600.0" style="-fx-background-color: #ccc; -fx-border-style: none none none solid; -fx-border-color: #36393f; -fx-border-width: 4; -fx-border-radius: 0;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
                    <content>
-                       <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1120.0" prefWidth="1200.0" style="-fx-background-color: #fafafa; -fx-border-color: #ccc; -fx-border-width: 1px;">
+                       <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: #fafafa; -fx-border-color: #ccc; -fx-border-width: 0px;">
                      <effect>
-                        <DropShadow />
+                        <DropShadow blurType="TWO_PASS_BOX" height="14.93" radius="6.965" width="14.93" />
                      </effect>
                   </Pane>
                    </content>
@@ -79,21 +79,56 @@
            <bottom>
               <HBox fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="900.0" style="-fx-background-color: #36393f;" BorderPane.alignment="TOP_LEFT">
                  <children>
-                     <Label fx:id="scaleAmountLabel" prefHeight="15.0" prefWidth="131.0" text="Zoom Level: 100%" textFill="#43b480">
-                         <font>
-                             <Font name="System Bold" size="14.0" />
-                         </font>
-                     </Label>
-                     <Label fx:id="mouseCoordinateLabel" prefHeight="14.0" prefWidth="300.0" text="Mouse Position;" textFill="#43b480">
-                         <font>
-                             <Font name="System Italic" size="14.0" />
-                         </font>
-                     </Label>
-                     <Label fx:id="canvasStateLabel" prefHeight="14.0" prefWidth="150.0" text="Current mode:" textFill="#ff3b3b">
-                         <font>
-                             <Font name="System Bold" size="14.0" />
-                         </font>
-                     </Label>
+                  <VBox prefHeight="90.0" prefWidth="376.0">
+                     <children>
+                        <HBox prefHeight="29.0" prefWidth="204.0">
+                           <children>
+                              <Label alignment="CENTER_RIGHT" prefHeight="24.0" prefWidth="98.0" text="Zoom level:" textFill="#aeaeae">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                                 <Label fx:id="scaleAmountLabel" alignment="CENTER" prefHeight="23.0" prefWidth="68.0" text="100%" textFill="#eaf4ff">
+                                     <font>
+                                         <Font name="System Bold" size="18.0" />
+                                     </font>
+                                 </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="67.0" prefWidth="321.0">
+                           <children>
+                              <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="100.0" text="Cursor position:" textFill="#aeaeae">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                                 <Label fx:id="mouseCoordinateLabel" prefHeight="25.0" prefWidth="181.0" text="[x, y]" textFill="WHITE">
+                                     <font>
+                                         <Font name="System Italic" size="14.0" />
+                                     </font>
+                                 <padding>
+                                    <Insets left="15.0" />
+                                 </padding>
+                                 </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Region prefHeight="90.0" prefWidth="37.0" />
+                  <VBox prefHeight="90.0" prefWidth="145.0">
+                     <children>
+                        <Label focusTraversable="false" style="-fx-font-weight: 800;" text="Mode:" textFill="#aeaeae">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                           <Label fx:id="canvasStateLabel" prefHeight="37.0" prefWidth="129.0" text="[MODE]" textFill="#eaf4ff">
+                               <font>
+                                   <Font name="System Bold" size="30.0" />
+                               </font>
+                           </Label>
+                     </children>
+                  </VBox>
                  </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

@@ -14,11 +14,15 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 
 /*
@@ -80,7 +84,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         instance = this;
 
         // todo: not working, draw grid on canvas
-//        drawGridOnCanvas();
+        drawGridOnCanvas();
 
         // Initialize new AppState, this object will be passed down to underlying components/controllers
         appState = new AppState("ADMIN", "VIEW", "NONE");
@@ -150,7 +154,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         sideBar.setVisible(false);
         scrollPane.setPannable(true);
         scrollPane.setCursor(Cursor.HAND);
-        canvasStateLabel.setText("[VIEW MODE]");
+        canvasStateLabel.setText("[VIEW]");
     }
 
     @FXML
@@ -158,7 +162,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         appState.setCanvasState("EDIT");
         sideBar.setVisible(true);
         scrollPane.setPannable(false);
-        canvasStateLabel.setText("[EDIT MODE]");
+        canvasStateLabel.setText("[EDIT]");
     }
 
     // change canvas/editor settings to mode for editing/creating
@@ -168,7 +172,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         scrollPane.setPannable(false);
         sideBar.setVisible(true);
         clearUnfinished();
-        canvasStateLabel.setText("[CREATE MODE]");
+        canvasStateLabel.setText("[CREATE]");
     }
 
     @FXML
@@ -213,7 +217,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_MOVED) {
                 mouseCoordinate.x = mouseEvent.getX();
                 mouseCoordinate.y = mouseEvent.getY();
-                mouseCoordinateLabel.setText("Mouse[X: " + mouseCoordinate.x + "; Y: " +  mouseCoordinate.y + "]");
+                mouseCoordinateLabel.setText("Mouse[X: " + Math.round(mouseCoordinate.x) + "; Y: " +  Math.round(mouseCoordinate.y) + "]");
             }
         }
     };
@@ -230,7 +234,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
         // Apply the transformation
         pane.getTransforms().add(scaleTransform);
-        scaleAmountLabel.setText("ZoomFactor: " + zoomEvent.getTotalZoomFactor());
+        scaleAmountLabel.setText(""+zoomEvent.getTotalZoomFactor());
 
         zoomEvent.consume();
     }
@@ -269,25 +273,42 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         // Apply the transformation
         pane.getTransforms().add(scaleTransform);
         // Update label text with the current zoom level in percentage [0-200%]
-        scaleAmountLabel.setText("ZoomLevel: " + currentZoomLevel*10 + "%");
+        scaleAmountLabel.setText(currentZoomLevel*10 + "%");
 
         scrollEvent.consume();
     }
 
     public void drawGridOnCanvas() {
-            gridCanvas = new Canvas(400, 400);
-            pane.getChildren().add(gridCanvas);
 
-            GraphicsContext gc = gridCanvas.getGraphicsContext2D();
-            gc.clearRect(0, 0, pane.getWidth(), pane.getHeight());
-            gc.setLineWidth(1); // change the line width
+        System.out.println("drawing grid");
 
-            for(int i = 0; i < pane.getWidth(); i += 50) {
-                gc.strokeLine(i, 0, i, pane.getHeight() - (pane.getHeight() % 50));
-            }
+        List<Line> horizontalLines = new ArrayList<>();
+        List<Line> verticalLines = new ArrayList<>();
 
-            for(int i = 0; i < pane.getHeight(); i += 50) {
-                gc.strokeLine(50, i, pane.getWidth(), i);
-            }
+        int rows = 50;
+        int cols = 50;
+
+        double cellSize = pane.getPrefHeight() / rows;
+
+        for(int i=0; i < rows; i++) {
+            horizontalLines.add(new Line(0, i*cellSize ,pane.getPrefWidth(), i*cellSize));
+            horizontalLines.get(i).setStroke(Color.LIGHTGRAY);
+            horizontalLines.get(i).setStrokeWidth(1.0);
+        }
+
+        System.out.println(Arrays.toString(horizontalLines.toArray()));
+
+        for(int i=0; i < cols; i++) {
+            verticalLines.add(new Line(i*cellSize, 0 ,i*cellSize, pane.getPrefHeight()));
+            verticalLines.get(i).setStroke(Color.LIGHTGRAY);
+            verticalLines.get(i).setStrokeWidth(1.0);
+        }
+
+        System.out.println(Arrays.toString(verticalLines.toArray()));
+
+
+        pane.getChildren().addAll(horizontalLines);
+        pane.getChildren().addAll(verticalLines);
+
     }
 }
