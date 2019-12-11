@@ -14,6 +14,12 @@ import javafx.scene.paint.Paint;
 
 // some common data of all shapes / geometry objects
 // this is the 'app representation' of a JGeometry object
+/*
+|--------------------------------------------------------------------------
+| ShapeEditController
+|  - shape metadata editor and viewer, bound to the sidebar form
+|--------------------------------------------------------------------------
+*/
 public class ShapeEditController {
     int id;
     @FXML
@@ -25,39 +31,50 @@ public class ShapeEditController {
     @FXML
     Button okButton;
 
-    Shape shape;
-    private boolean bound;
     private ObjectProperty<Paint> fill;
     private ObjectProperty<Paint> stroke;
-    public boolean finished;
+
     private ScrollPane scrollPane;
-    private EnumPtr state;
     private Pane sideBar;
 
-    public void init(ScrollPane scrollPane, EnumPtr state, Pane sideBar) {
+    public AppState appState;
+
+    Shape shape;
+    private boolean bound;
+
+    public boolean finishedEditingShape;
+
+    public void init(ScrollPane scrollPane, AppState appState, Pane sideBar) {
         this.scrollPane = scrollPane;
-        this.state = state;
+        this.appState = appState;
         this.sideBar = sideBar;
     }
 
     public void bind(Shape shape) {
-        finished = false;
+        finishedEditingShape = false;
+        // assign new shape to the current ShapeEditorController
         this.shape = shape;
+
+        // View < - > ViewModel bidirectional binding of Shape name and description
         Bindings.bindBidirectional(nameField.textProperty(), shape.name);
         Bindings.bindBidirectional(descriptionField.textProperty(), shape.description);
 
-        System.out.println(shape.visualObject);
+        // Color and stroke binding between VisualObject and ShapeEditorController form controls
         Color originalColor = (Color)shape.visualObject.getStroke();
         colorPicker.setValue(originalColor);
+        // Bind color picker < - >
+//        stroke.bind(Bindings.createObjectBinding(() -> { return (Color)colorPicker.getValue(); }, colorPicker.valueProperty()));
         stroke = shape.visualObject.strokeProperty();
+
         if (shape.visualObject.shape != null)
             shape.visualObject.shape.setStrokeWidth(5);
+
         stroke.bind(Bindings.createObjectBinding(() -> {
             Color c = colorPicker.getValue();
             return c;
         }, colorPicker.valueProperty()));
 
-        if (shape.type == StateEnum.Polygon) {
+        if (shape.type.contains("POLYGON")) {
             fill = shape.visualObject.shape.fillProperty();
             fill.bind(Bindings.createObjectBinding(() -> {
                 Color c = colorPicker.getValue();
@@ -79,7 +96,7 @@ public class ShapeEditController {
 //                return;
 //            }
 
-            if (shape.type == StateEnum.Polygon)
+            if (shape.type.contains("POLYGON"))
                 fill.unbind();
             stroke.unbind();
         }
@@ -87,30 +104,31 @@ public class ShapeEditController {
     }
 
     private void setDefaults() {
-        if (shape.type != StateEnum.Polygon) {
-            this.finished = true;
+        if (!shape.type.contains("POLYGON")) {
+            this.finishedEditingShape = true;
             shape.finish();
         }
         scrollPane.setPannable(true);
         shape.anchorVisibility(false);
     }
+
     @FXML
     private void okButtonClicked() {
         setDefaults();
         sideBar.setVisible(false);
-        state.value = StateEnum.mouseDrag;
+        appState.canvas.setState("VIEW");
     }
 
     public void edit(Shape shape) {
         shape.anchorVisibility(false);
-        if (finished && state.value == StateEnum.edit) {
+        if (finishedEditingShape && appState.canvas.getState().contains("EDIT")) {
             sideBar.setVisible(true);
             unBind();
             bind(shape);
             shape.anchorVisibility(true);
             sideBar.setVisible(true);
             this.scrollPane.setPannable(false);
-            finished = true;
+            finishedEditingShape = true;
         }
     }
 }

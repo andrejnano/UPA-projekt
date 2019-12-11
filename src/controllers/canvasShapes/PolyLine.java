@@ -1,6 +1,6 @@
 package controllers.canvasShapes;
 
-import controllers.EnumPtr;
+import controllers.AppState;
 import controllers.ShapeEditController;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -8,9 +8,10 @@ import javafx.scene.shape.Polyline;
 import java.util.ArrayList;
 
 public class PolyLine extends Shape {
-    public PolyLine(Pane pane, EnumPtr state, ArrayList<Shape> shapes, ShapeEditController controller) {
-        super(pane, state, controller);
-        visualObject = new VisualObject(new Polyline(), state);
+
+    public PolyLine(Pane pane, AppState appState, ArrayList<Shape> shapes, ShapeEditController controller) {
+        super(pane, appState, controller);
+        visualObject = new VisualObject(new Polyline(), appState);
         visualObject.shape.setStroke(Color.BLUE);
         pane.getChildren().add(visualObject.shape);
         shapes.add(this);
@@ -21,7 +22,7 @@ public class PolyLine extends Shape {
         pane.getChildren().removeAll(visualObject.anchors);
     }
 
-    public boolean add(Coord c, ArrayList<Shape> shapes) {
+    public boolean add(Coordinate c, ArrayList<Shape> shapes) {
         Polyline polyline = (Polyline) visualObject.shape;
         xyPoints.add(c.x);
         xyPoints.add(c.y);
@@ -31,11 +32,9 @@ public class PolyLine extends Shape {
             pane.getChildren().removeAll(visualObject.anchors);
         }
         visualObject.anchors = null;
-        visualObject.anchors = createControlAnchorsFor(((Polyline)visualObject.shape).getPoints(), state);
+        visualObject.anchors = createControlAnchorsFor(((Polyline)visualObject.shape).getPoints());
         anchorVisibility(false);
         pane.getChildren().addAll(visualObject.anchors);
         return false;
     }
-
-
 }

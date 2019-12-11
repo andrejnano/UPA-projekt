@@ -1,10 +1,13 @@
 package model;
 
 import oracle.jdbc.OraclePreparedStatement;
+import oracle.jdbc.OracleResultSet;
 import oracle.spatial.geometry.JGeometry;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SpatialHandler {
@@ -103,6 +106,118 @@ public class SpatialHandler {
             e.printStackTrace();
         }
         return object;
+    }
+
+    // returns list of estate ids
+    // takes type of object in relation with estate
+    public List<Integer> withObject(String type) {
+        List<Integer> idList = new ArrayList<Integer>();
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select estate.estateId from map_entities estate, map_entities object" +
+                    "where (estate.type = 'land' and object.type = '" + type + "' AND " +
+                    "(SDO_RELATE(estate.shape, object.shape, 'mask=ANYINTERACT') = 'TRUE')";
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            while (rset.next()) {
+                idList.add(rset.getInt(1));
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idList;
+    }
+
+    // returns list of objects in specified area
+    // borders: rectangle x,y x,y
+    public List<Integer> withinCanvas(int[] borders) {
+        List<Integer> idList = new ArrayList<Integer>();
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select object.id from map_entities object" +
+                    "(SDO_FILTER(object.shape, " +
+                    "SDO_GEOMETRY(2003, NULL, NULL," +
+                    "(SDO_ELEM_INFO_ARRAY(1, 1003, 3)" +
+                    "SDO_ORDINATE_ARRAY(" + borders[0] + ", " + borders[1] + ", " + borders[2] + ", " + borders[3] + "))" +
+                    ") = 'TRUE')";
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            while (rset.next()) {
+                idList.add(rset.getInt(1));
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idList;
+    }
+
+    // returns list of estate ids
+    public List<Integer> withinDistance(String type, int distance) {
+        List<Integer> idList = new ArrayList<Integer>();
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select estate.estateId from map_entities estate, map_entities object" +
+                    "where estate.type = 'land' and object.type = '" + type + "' and " +
+                    "(SDO_WITHIN_DISTANCE(estate.shape, object.shape, 'distance=" + distance + "') = 'TRUE')";
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            while (rset.next()) {
+                idList.add(rset.getInt(1));
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idList;
+    }
+
+    // returns area of polygon
+    // land / building
+    public int objectArea(String type, int estateId) {
+        int area = 0;
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select SUM(SDO_GEOM.SDO_AREA(shape, 1)) from map_entities estate" +
+                    "where estate.type = '" + type + "' and estate.estateId = '" + estateId + "'";
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            if (rset.next()) {
+                area = rset.getInt(1);
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return area;
+    }
+
+    // returns distance between objects
+    public int objectDistance(int firstObjId, int secondObjId) {
+        int distance = 0;
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select SDO_GEOM.SDO_DISTANCE(first.shape, second.shape, 1) from map_entities first, map_entities second" +
+                    "where (first.id = '" + firstObjId + "' and second.id = '" + secondObjId + "' )";
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            if (rset.next()) {
+                distance = rset.getInt(1);
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return distance;
+    }
+
+    // returns diameter/length of object
+    // https://docs.oracle.com/database/121/SPATL/sdo_geom-sdo_length.htm#SPATL1120
+    public int objectLength(int id) {
+        int length = 0;
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select SDO_GEOM.SDO_LENGTH(object.shape, meta.diminfo) from map_entities object, user_sdo_geom_metadata meta" +
+                    "where (object.id = '" + id + "' and meta.column_name = 'SHAPE' )";
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            if (rset.next()) {
+                length = rset.getInt(1);
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return length;
     }
 
 }
