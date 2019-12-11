@@ -1,5 +1,6 @@
 package controllers.canvasShapes;
 
+import controllers.AppState;
 import controllers.EnumPtr;
 import controllers.ShapeEditController;
 import controllers.StateEnum;
@@ -9,26 +10,33 @@ import java.util.ArrayList;
 
 // some common data of all shapes / geometry objects
 // this is the 'app representation' of a JGeometry object
+/*
+|--------------------------------------------------------------------------
+| Shape
+|--------------------------------------------------------------------------
+*/
 public abstract class Shape extends PointInsertor {
     int id;
     public SimpleStringProperty name;
     public SimpleStringProperty description;
     public VisualObject visualObject;
-    public StateEnum type;
+    public String type;
     protected ShapeEditController shapeEditController;
+    public AppState appState;
 
-    public Shape(Pane p, EnumPtr state, ShapeEditController controller) {
-        super(p, state);
-        shapeEditController = controller;
-        type = state.value;
-        name = new SimpleStringProperty();
-        description = new SimpleStringProperty();
+    public Shape(Pane p, AppState appState, ShapeEditController controller) {
+        super(p);
+        this.appState = appState;
+        this.shapeEditController = controller;
+        this.type = appState.getCanvasShapeState();
+        this.name = new SimpleStringProperty();
+        this.description = new SimpleStringProperty();
     }
 
     public abstract void clear();
-    public abstract boolean add(Coord c, ArrayList<Shape> areas);
+    public abstract boolean add(Coordinate c, ArrayList<Shape> areas);
 
-    public StateEnum getType() {
+    public String getType() {
         return type;
     }
     public void finish() {

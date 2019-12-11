@@ -1,5 +1,6 @@
 package controllers.canvasShapes;
 
+import controllers.AppState;
 import controllers.EnumPtr;
 import controllers.StateEnum;
 import javafx.beans.property.ObjectProperty;
@@ -13,73 +14,75 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 
+
+/*
+|--------------------------------------------------------------------------
+| Visual Object
+|--------------------------------------------------------------------------
+*/
 public class VisualObject {
     public ObservableList<Anchor> anchors;
-    protected EnumPtr state;
     public Shape shape;
     protected Paint stroke;
     protected ObjectProperty<Paint> strokeProperty;
+    public AppState appState;
 
-    public VisualObject(Shape s, EnumPtr state) {
+    public VisualObject(Shape s, AppState appState) {
         shape = s;
-        this.state = state;
+        this.appState = appState;
         enableDrag();
     }
 
     // make a node movable by dragging it around with the mouse.
     private void enableDrag() {
+
         if (shape == null) {
             return;
         }
-        final Coord dragDelta = new Coord();
-        shape.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
-                if (state.value == StateEnum.edit) {
-                    shape.toFront();
-                    // record a delta distance for the drag and drop operation.
-                    dragDelta.x = getCenterX() - mouseEvent.getX();
-                    dragDelta.y = getCenterY() - mouseEvent.getY();
-                    shape.getScene().setCursor(Cursor.MOVE);
+
+        final Coordinate dragDelta = new Coordinate();
+        shape.setOnMousePressed(mouseEvent -> {
+            if (appState.getCanvasState().contains("EDIT")) {
+                shape.toFront();
+                // record a delta distance for the drag and drop operation.
+                dragDelta.x = getCenterX() - mouseEvent.getX();
+                dragDelta.y = getCenterY() - mouseEvent.getY();
+                shape.getScene().setCursor(Cursor.MOVE);
+            }
+        });
+
+        shape.setOnMouseReleased(mouseEvent -> {
+            if (appState.getCanvasState().contains("EDIT")) {
+                shape.getScene().setCursor(Cursor.HAND);
+                for (Anchor a : anchors) {
+                    a.toFront();
                 }
             }
         });
-        shape.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
-                if (state.value == StateEnum.edit) {
-                    shape.getScene().setCursor(Cursor.HAND);
-                    for (Anchor a : anchors) {
-                        a.toFront();
-                    }
-                }
-            }
-        });
-        shape.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
-                if (state.value == StateEnum.edit) {
+
+        shape.setOnMouseDragged(mouseEvent -> {
+            if (appState.getCanvasState().contains("EDIT")) {
 //                Bounds bounds = shape.getParent().localToScene(shape.getParent().getBoundsInLocal());
-                    double newX = mouseEvent.getX() + dragDelta.x;
-                    if (newX > 0 && newX < ((Pane) shape.getParent()).getMaxWidth()) {
-                        setCenterX(newX);
-                    }
-                    double newY = mouseEvent.getY() + dragDelta.y;
-                    if (newY > 0 && newY < ((Pane) shape.getParent()).getMaxHeight()) {
-                        setCenterY(newY);
-                    }
+                double newX = mouseEvent.getX() + dragDelta.x;
+                if (newX > 0 && newX < ((Pane) shape.getParent()).getMaxWidth()) {
+                    setCenterX(newX);
+                }
+                double newY = mouseEvent.getY() + dragDelta.y;
+                if (newY > 0 && newY < ((Pane) shape.getParent()).getMaxHeight()) {
+                    setCenterY(newY);
                 }
             }
         });
-        shape.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
-                if (state.value == StateEnum.edit && !mouseEvent.isPrimaryButtonDown()) {
-                    shape.getScene().setCursor(Cursor.HAND);
-                }
+
+        shape.setOnMouseEntered(mouseEvent -> {
+            if (appState.getCanvasState().contains("EDIT") && !mouseEvent.isPrimaryButtonDown()) {
+                shape.getScene().setCursor(Cursor.HAND);
             }
         });
-        shape.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
-                if (state.value == StateEnum.edit && !mouseEvent.isPrimaryButtonDown()) {
-                    shape.getScene().setCursor(Cursor.DEFAULT);
-                }
+
+        shape.setOnMouseExited(mouseEvent -> {
+            if (appState.getCanvasState().contains("EDIT") && !mouseEvent.isPrimaryButtonDown()) {
+                shape.getScene().setCursor(Cursor.DEFAULT);
             }
         });
     }

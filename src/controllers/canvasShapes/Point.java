@@ -1,31 +1,35 @@
 package controllers.canvasShapes;
 
+import controllers.AppState;
 import controllers.EnumPtr;
 import controllers.ShapeEditController;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 
-// simple point in 2D
+/*
+|--------------------------------------------------------------------------
+| Point
+|  - simple point in 2D
+|--------------------------------------------------------------------------
+*/
 public class Point extends Shape {
     private Anchor circle;
 
-
-    public Point(Pane p, EnumPtr state, ShapeEditController controller) {
-        super(p, state, controller);
-        visualObject = new VisualObject(new Circle(), state);
+    public Point(Pane p, AppState appState, ShapeEditController controller) {
+        super(p, appState, controller);
+        visualObject = new VisualObject(new Circle(), appState);
         visualObject.shape.setStroke(Color.BLUE);
         pane.getChildren().add(visualObject.shape);
     }
 
-
-    public boolean add(Coord c, ArrayList<Shape> shapes) {
+    public boolean add(Coordinate c, ArrayList<Shape> shapes) {
         Circle centre = (Circle) visualObject.shape;
         centre.setCenterX(c.x);
         centre.setCenterY(c.y);
@@ -41,7 +45,7 @@ public class Point extends Shape {
             centre.setCenterY(y.doubleValue());
         });
 
-        circle = new Anchor(Color.GOLD, xProperty, yProperty, state);
+        circle = new Anchor(Color.GOLD, xProperty, yProperty);
         visualObject.anchors = FXCollections.observableArrayList();
         visualObject.anchors.add(circle);
         anchorVisibility(false);

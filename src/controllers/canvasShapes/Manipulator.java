@@ -1,5 +1,6 @@
 package controllers.canvasShapes;
 
+import controllers.AppState;
 import controllers.EnumPtr;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
@@ -9,7 +10,7 @@ import javafx.scene.paint.Color;
 /** Drag the anchors around to change a polygon's points. */
 public class Manipulator {
     // @return a list of anchors which can be dragged around to modify points in the format [x1, y1, x2, y2...]
-    protected ObservableList<Anchor> createControlAnchorsFor(final ObservableList<Double> points, EnumPtr state) {
+    protected ObservableList<Anchor> createControlAnchorsFor(final ObservableList<Double> points) {
         ObservableList<Anchor> anchors = FXCollections.observableArrayList();
 
         for (int i = 0; i < points.size(); i+=2) {
@@ -30,7 +31,7 @@ public class Manipulator {
                 }
             });
 
-            anchors.add(new Anchor(Color.GOLD, xProperty, yProperty, state));
+            anchors.add(new Anchor(Color.GOLD, xProperty, yProperty));
         }
 
         return anchors;

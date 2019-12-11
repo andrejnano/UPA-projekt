@@ -1,7 +1,7 @@
 package controllers.canvasShapes;
 
+import controllers.AppState;
 import controllers.EnumPtr;
-import javafx.collections.ObservableList;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -10,23 +10,26 @@ import javafx.scene.shape.StrokeType;
 
 import java.util.ArrayList;
 
+
+/*
+|--------------------------------------------------------------------------
+| Point Insertor
+|--------------------------------------------------------------------------
+*/
 public class PointInsertor extends Manipulator {
     protected int numberOfPoints;
     protected Pane pane;
-    protected Coord oldCoord, firstCoord;
+    protected Coordinate oldCoordinate, firstCoordinate;
     protected ArrayList<Double> xyPoints;
     protected Circle firstPoint;
     protected ArrayList<Line> lines;
 //    protected ObservableList<Anchor> anchors;
-    protected EnumPtr state;
-
 
     public PointInsertor() {
         init();
     }
 
-    public PointInsertor(Pane pane, EnumPtr state) {
-        this.state = state;
+    public PointInsertor(Pane pane) {
         this.pane = pane;
         init();
     }
@@ -41,14 +44,14 @@ public class PointInsertor extends Manipulator {
     private void init() {
         this.numberOfPoints = 0;
         lines = new ArrayList<>();
-        oldCoord = null;
+        oldCoordinate = null;
         xyPoints = new ArrayList<>();
 
         firstPoint = null;
-        firstCoord = null;
+        firstCoordinate = null;
     }
 
-    protected void addLine(Coord oldC, Coord c) {
+    protected void addLine(Coordinate oldC, Coordinate c) {
         if (c == null || oldC == null)
             return;
         System.out.println(c.x);
@@ -59,19 +62,19 @@ public class PointInsertor extends Manipulator {
         pane.getChildren().add(l);
     }
 
-    protected void addPoint(Coord c) {
+    protected void addPoint(Coordinate c) {
         xyPoints.add(c.x);
         xyPoints.add(c.y);
-        if (oldCoord != null) {
+        if (oldCoordinate != null) {
             numberOfPoints = 0;
-            addLine(oldCoord, c);
+            addLine(oldCoordinate, c);
         }
-        oldCoord = c;
+        oldCoordinate = c;
         numberOfPoints++;
     }
-    protected void setFirstPoint(Coord c) {
+    protected void setFirstPoint(Coordinate c) {
         double r = 10;
-        firstCoord = c;
+        firstCoordinate = c;
         firstPoint = new Circle(c.x, c.y, r);
         Color color = Color.rgb(0, 200, 0);
         firstPoint.setFill(color.deriveColor(1, 1, 1, 0.5));

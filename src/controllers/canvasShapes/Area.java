@@ -1,5 +1,6 @@
 package controllers.canvasShapes;
 
+import controllers.AppState;
 import controllers.EnumPtr;
 import controllers.ShapeEditController;
 import javafx.scene.layout.Pane;
@@ -10,9 +11,9 @@ import java.util.ArrayList;
 
 public class Area extends Shape {
 
-    public Area(Pane p, EnumPtr state, ShapeEditController controller) {
-        super(p, state, controller);
-        visualObject = new VisualObject(new Polygon(), state);
+    public Area(Pane p, AppState appState, ShapeEditController controller) {
+        super(p, appState, controller);
+        visualObject = new VisualObject(new Polygon(), appState);
         visualObject.shape.setStroke(Color.BLUE);
     }
 
@@ -21,15 +22,15 @@ public class Area extends Shape {
         pane.getChildren().removeAll(visualObject.anchors);
     }
 
-    public boolean add(Coord c, ArrayList<Shape> shapes) {
+    public boolean add(Coordinate c, ArrayList<Shape> shapes) {
         double r = 10;
         if (numberOfPoints > 0) {
-            double sx = firstCoord.x;
-            double sy = firstCoord.y;
+            double sx = firstCoordinate.x;
+            double sy = firstCoordinate.y;
             double x = c.x;
             double y = c.y;
             if ((sx-x)*(sx-x) + (sy-y)*(sy-y) <= r*r) {
-                addLine(oldCoord, firstCoord);
+                addLine(oldCoordinate, firstCoordinate);
                 addPolygon();
                 shapes.add(this);
                 pane.getChildren().remove(firstPoint);
@@ -54,9 +55,9 @@ public class Area extends Shape {
         }
         polygon.getPoints().addAll(points);
         pane.getChildren().add(visualObject.shape);
-        oldCoord = null;
+        oldCoordinate = null;
 
-        visualObject.anchors = createControlAnchorsFor(((Polygon)visualObject.shape).getPoints(), state);
+        visualObject.anchors = createControlAnchorsFor(((Polygon)visualObject.shape).getPoints());
         anchorVisibility(false);
         pane.getChildren().addAll(visualObject.anchors);
     }

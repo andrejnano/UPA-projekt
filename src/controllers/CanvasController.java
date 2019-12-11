@@ -5,6 +5,9 @@ import controllers.canvasUtils.ConvertSpatialObjects;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -14,16 +17,27 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.*;
 import javafx.scene.transform.Scale;
 
-// This controller renders all spatial data objects to canvas & handles
-// all events associated with them
+/*
+|--------------------------------------------------------------------------
+| Canvas Controller
+|  - renders all spatial data objects to canvas & handles all events associated with them
+|--------------------------------------------------------------------------
+*/
 public class CanvasController implements Initializable, ConvertSpatialObjects {
     @FXML
     Button clearCanvasButton;
     @FXML
     Label canvasLabel;
+    @FXML
+    Label scaleAmountLabel;
+    @FXML
+    Label mouseCoordinateLabel;
+    @FXML
+    Label canvasStateLabel;
     @FXML
     Pane pane;
     @FXML
@@ -35,81 +49,128 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     @FXML
     Pane idShapeEdit;
 
-    public EnumPtr state;
-    private Coord mouseCoord;
-    private Coord dragDelta;
+    // Mouse cursor position
+    private Coordinate mouseCoordinate;
+
+    // mouseDragDifference
+    private Coordinate dragDelta;
+
     // 2D Points that should be rendered to canvas
     private ArrayList<Shape> shapes;
+
+    // ??
     private Pane sidePane;
-    private double scaleX;
-    private double scaleY;
+
+    // Canvas zoom/scaling amount (multiplier)
+    final private double canvasScaleDelta = 1.1;
+    final private int maxZoomLevel = 20;
+    final private int minZoomLevel = 0;
+    private int currentZoomLevel = 10;
+
+    Canvas gridCanvas;
+
     private static CanvasController instance = null;
+
+    // application state
+    public AppState appState;
+    // API
+    // AppState appState = new AppState("ADMIN", "EDIT", "NONE")
+    // appState.user.getState() -> returns User.currentState such as "ADMIN" or "SEARCH"
+    // appState.user.setState("ADMIN") -> sets User.currentState to "ADMIN" and returns true if success
+    // appState.canvas.getState() -> returns Canvas.currentState such as "CREATE" or "EDIT"
+    // appState.canvas.setState("EDIT") -> sets Canvas.currentState to "EDIT" and returns true if success
+    // appState.canvas.getShapeState() -> returns Canvas.currentShapeState such as "POLYGON" or "POINT"
+    // appState.canvas.setShapeState("POLYGON") -> sets Canvas.currentShapeState to "POLYGON" and returns true if success
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         instance = this;
-        mouseCoord = new Coord();
-        // simple test to see if controller is correctly connected to view
-        sideBar.setVisible(false);
-        canvasLabel.setText("This text was set from the CanvasController");
-        state = new EnumPtr();
-        state.value = StateEnum.edit;
+
+        // todo: not working, draw grid on canvas
+        drawGridOnCanvas();
+
+        // Initialize new AppState, this object will be passed down to underlying components/controllers
+        appState = new AppState("ADMIN", "VIEW", "NONE");
+        this.viewMode();
+
+        mouseCoordinate = new Coordinate();
         shapes = new ArrayList<>();
 
-        idShapeEditController.init(scrollPane, state, sideBar);
+        sideBar.setVisible(false);
+        idShapeEditController.init(scrollPane, appState, sideBar);
         idShapeEditController.shape = null;
-        // set mouse handler
-        pane.setOnMousePressed(mouseHandler);
-        pane.setOnMouseMoved(mouseHandler);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setFitToWidth(true);
 
-        dragDelta = new Coord();
+        // assign mouse event handlers on canvas
+        pane.setOnMousePressed(canvasMouseHandler);
+        pane.setOnMouseMoved(canvasMouseHandler);
+
+        // ??
+        dragDelta = new Coordinate();
+
+        // CTRL + SCROLL => Zoom
         scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
             if(event.isControlDown())
             {
-                zoom(event); // zoom the canvas instead of scrolling the actual pane.
+                handleScrollEventAsZoom(event);
                 event.consume();
             }
         });
-        scrollPane.setPannable(true);
-        scaleX = 1;
-        scaleY = 1;
+
+        // Multi-touch zoom event handling
+        scrollPane.setOnZoom(new EventHandler<ZoomEvent>() {
+            @Override
+            public void handle(ZoomEvent zoomEvent) {
+                handleZoom(zoomEvent);
+                zoomEvent.consume();
+            }
+        });
     }
 
     public static CanvasController getInstance() { return instance; }
     public ArrayList<Shape> getShapes() { return this.shapes; }
     public Pane getPane() { return this.pane; }
-    public EnumPtr getEnumPtr() { return this.state; }
     public ShapeEditController getShapeEditController() { return this.idShapeEditController; }
 
     @FXML
     private void createArea() {
-        createVisualObject(StateEnum.Polygon);
-        idShapeEditController.bind(new Area(pane, state, idShapeEditController));
+        changeCanvasSettingsForCreate();
+        appState.setCanvasShapeState("POLYGON");
+        idShapeEditController.bind(new Area(pane, appState, idShapeEditController));
     }
 
     @FXML
     private void createPoint() {
-        createVisualObject(StateEnum.Point);
-        idShapeEditController.bind(new Point(pane, state, idShapeEditController));
+        changeCanvasSettingsForCreate();
+        appState.setCanvasShapeState("POINT");
+        idShapeEditController.bind(new Point(pane, appState, idShapeEditController));
     }
     @FXML
     private void createMultiPoint() {
-        createVisualObject(StateEnum.MultiPoint);
-        idShapeEditController.bind(new MultiPoint(pane, state, idShapeEditController));
-    }
-
-    @FXML
-    private void editMode() {
-        state.value = StateEnum.edit;
-        scrollPane.setPannable(false);
+        changeCanvasSettingsForCreate();
+        appState.setCanvasShapeState("MULTIPOINT");
+        idShapeEditController.bind(new MultiPoint(pane, appState, idShapeEditController));
     }
 
     @FXML
     private void createPolyLine() {
-        createVisualObject(StateEnum.Polyline);
-        idShapeEditController.bind(new PolyLine(pane, state, shapes, idShapeEditController));
+        changeCanvasSettingsForCreate();
+        appState.setCanvasShapeState("POLYLINE");
+        idShapeEditController.bind(new PolyLine(pane, appState, shapes, idShapeEditController));
+    }
+
+    @FXML
+    private void viewMode() {
+        appState.setCanvasState("VIEW");
+        scrollPane.setPannable(true);
+        scrollPane.setCursor(Cursor.HAND);
+        canvasStateLabel.setText("[VIEW MODE]");
+    }
+
+    @FXML
+    private void editMode() {
+        appState.setCanvasState("EDIT");
+        scrollPane.setPannable(false);
+        canvasStateLabel.setText("[EDIT MODE]");
     }
 
     @FXML
@@ -121,18 +182,19 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         }
         shapes.clear();
 
-        if (state.value == StateEnum.Polyline) {
-            idShapeEditController.shape = new PolyLine(pane, state, shapes, idShapeEditController);
+        if (appState.getCanvasShapeState().contains("POLYLINE")) {
+            idShapeEditController.shape = new PolyLine(pane, appState, shapes, idShapeEditController);
         }
     }
 
-
-
-    private void createVisualObject(StateEnum s) {
+    // change canvas/editor settings to mode for editing/creating
+    private void changeCanvasSettingsForCreate() {
+        appState.setCanvasState("CREATE");
+        scrollPane.setCursor(Cursor.CROSSHAIR);
         scrollPane.setPannable(false);
-        state.value = s;
         sideBar.setVisible(true);
         clearUnfinished();
+        canvasStateLabel.setText("[CREATE MODE]");
     }
 
     private void clearUnfinished() {
@@ -142,41 +204,102 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         idShapeEditController.unBind();
     }
 
-    EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
-
+    // pane or "canvas" mouse event handler
+    EventHandler<MouseEvent> canvasMouseHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
+            // todo: refactor, not evident what it does
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                Coord c = new Coord(mouseEvent.getX(), mouseEvent.getY());
-                if (state.value != StateEnum.edit && !idShapeEditController.finished && idShapeEditController.shape.add(c, shapes)) {
+
+                if (appState.getCanvasState().contains("VIEW")) { return; }
+                if (appState.getCanvasState().contains("EDIT")) { return; }
+
+                Coordinate c = new Coordinate(mouseEvent.getX(), mouseEvent.getY());
+
+                if (!idShapeEditController.finished && idShapeEditController.shape.add(c, shapes)) {
                     idShapeEditController.finished = true;
                 }
             }
+
+            // update mouse position model [x,y] coordinates
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_MOVED) {
-                mouseCoord.x = mouseEvent.getX();
-                mouseCoord.y =mouseEvent.getY();
+                mouseCoordinate.x = mouseEvent.getX();
+                mouseCoordinate.y = mouseEvent.getY();
+                mouseCoordinateLabel.setText("Mouse[X: " + mouseCoordinate.x + "; Y: " +  mouseCoordinate.y + "]");
             }
         }
     };
 
+    // Handling multi-touch zoom - Two-finger pinching motion
+    public void handleZoom(ZoomEvent zoomEvent) {
+        double scaleAmount = zoomEvent.getZoomFactor();
+        // Construct and configure scale transformation
+        Scale scaleTransform = new Scale();
+        scaleTransform.setPivotX(mouseCoordinate.x);
+        scaleTransform.setPivotY(mouseCoordinate.y);
+        scaleTransform.setX(pane.getScaleX() * scaleAmount);
+        scaleTransform.setY(pane.getScaleY() * scaleAmount);
 
-        public void zoom(ScrollEvent event) {
-            double zoom_fac = 1.05;
+        // Apply the transformation
+        pane.getTransforms().add(scaleTransform);
+        scaleAmountLabel.setText("ZoomFactor: " + zoomEvent.getTotalZoomFactor());
 
-            if(event.getDeltaY() < 0) {
-                zoom_fac = 2.0 - zoom_fac;
-            }
-            Scale newScale = new Scale();
+        zoomEvent.consume();
+    }
+    // Handling scroll + CTRL key event as canvas pane zoom action
+    public void handleScrollEventAsZoom(ScrollEvent scrollEvent) {
 
-            newScale.setPivotX(mouseCoord.x);
-            newScale.setPivotY(mouseCoord.y);
-            scaleX *= zoom_fac;
-            scaleY *= zoom_fac;
-            newScale.setX(zoom_fac);
-            newScale.setY(zoom_fac);
-            pane.getTransforms().add(newScale);
-            event.consume();
+        double scaleAmount;
 
-
+        if (scrollEvent.getDeltaY() == 0) {
+            return;
         }
+
+        // check scrolling direction
+        if (scrollEvent.getDeltaY() > 0 ) {
+            // Upper limit for zooming [200%]
+            if (currentZoomLevel >= maxZoomLevel) {
+                return;
+            }
+            currentZoomLevel++;
+            scaleAmount = canvasScaleDelta;
+        } else {
+            // Lower limit for zooming [0%]
+            if (currentZoomLevel <= minZoomLevel) {
+                return;
+            }
+            currentZoomLevel--;
+            scaleAmount = 1 / canvasScaleDelta;
+        }
+
+        // Construct and configure scale transformation
+        Scale scaleTransform = new Scale();
+        scaleTransform.setPivotX(mouseCoordinate.x);
+        scaleTransform.setPivotY(mouseCoordinate.y);
+        scaleTransform.setX(pane.getScaleX() * scaleAmount);
+        scaleTransform.setY(pane.getScaleY() * scaleAmount);
+        // Apply the transformation
+        pane.getTransforms().add(scaleTransform);
+        // Update label text with the current zoom level in percentage [0-200%]
+        scaleAmountLabel.setText("ZoomLevel: " + currentZoomLevel*10 + "%");
+
+        scrollEvent.consume();
+    }
+
+    public void drawGridOnCanvas() {
+            gridCanvas = new Canvas(400, 400);
+            pane.getChildren().add(gridCanvas);
+
+            GraphicsContext gc = gridCanvas.getGraphicsContext2D();
+            gc.clearRect(0, 0, pane.getWidth(), pane.getHeight());
+            gc.setLineWidth(1); // change the line width
+
+            for(int i = 0; i < pane.getWidth(); i += 50) {
+                gc.strokeLine(i, 0, i, pane.getHeight() - (pane.getHeight() % 50));
+            }
+
+            for(int i = 0; i < pane.getHeight(); i += 50) {
+                gc.strokeLine(50, i, pane.getWidth(), i);
+            }
+    }
 }

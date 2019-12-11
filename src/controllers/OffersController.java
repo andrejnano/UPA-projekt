@@ -18,6 +18,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/*
+|--------------------------------------------------------------------------
+| Offers Controller
+|--------------------------------------------------------------------------
+*/
 public class OffersController implements Initializable{
     @FXML
     ScrollPane scrollPane;

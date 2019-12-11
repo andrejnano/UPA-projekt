@@ -1,7 +1,7 @@
 package controllers.canvasShapes;
 
+import controllers.AppState;
 import controllers.EnumPtr;
-import controllers.StateEnum;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -13,11 +13,10 @@ import javafx.scene.shape.StrokeType;
 // a draggable anchor displayed around a point.
 public class Anchor extends Circle {
     private final DoubleProperty x, y;
-    private EnumPtr state;
+    public AppState appState;
 
-    Anchor(Color color, DoubleProperty x, DoubleProperty y, EnumPtr state) {
+    Anchor(Color color, DoubleProperty x, DoubleProperty y) {
         super(x.get(), y.get(), 6);
-        this.state = state;
         setFill(color.deriveColor(1, 1, 1, 0.5));
         setStroke(color);
         setStrokeWidth(1);
@@ -33,7 +32,7 @@ public class Anchor extends Circle {
 
     // make a node movable by dragging it around with the mouse.
     private void enableDrag() {
-        final Coord dragDelta = new Coord();
+        final Coordinate dragDelta = new Coordinate();
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
                 // record a delta distance for the drag and drop operation.

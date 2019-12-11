@@ -1,16 +1,8 @@
-import controllers.canvasShapes.Point;
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
-
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
 
 // This is the initial starting point for the whole application
 public class App extends Application {
