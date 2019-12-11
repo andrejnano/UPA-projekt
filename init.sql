@@ -40,14 +40,16 @@ DELETE user_sdo_geom_metadata WHERE TABLE_NAME = 'MAP_ENTITIES' AND COLUMN_NAME 
 INSERT INTO user_sdo_geom_metadata
     (TABLE_NAME, COLUMN_NAME, DIMINFO, SRID)
     VALUES (
-	'map_entities',
-	'shape',
-	SDO_DIM_ARRAY( -- 500x500 grid
-	    SDO_DIM_ELEMENT('X', 0, 500, 0.01),
-	    SDO_DIM_ELEMENT('Y', 0, 500, 0.01)
-	),
-	NULL -- SRID
+    'map_entities',
+    'shape',
+    SDO_DIM_ARRAY( -- 500x500 grid
+        SDO_DIM_ELEMENT('X', 0, 500, 0.01),
+        SDO_DIM_ELEMENT('Y', 0, 500, 0.01)
+    ),
+    NULL -- SRID
 );
 
 -- create spatial indexes
 CREATE INDEX index_map_entities_geometry ON map_entities ( shape ) indextype is MDSYS.SPATIAL_INDEX ;
+
+COMMIT;
