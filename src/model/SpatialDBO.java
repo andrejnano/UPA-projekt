@@ -1,5 +1,6 @@
 package model;
 
+import controllers.AppState;
 import controllers.CanvasController;
 import controllers.EnumPtr;
 import controllers.ShapeEditController;
@@ -38,36 +39,36 @@ public class SpatialDBO {
     public void printGeometry() {
         ArrayList<Shape> shapes = CanvasController.getInstance().getShapes();
         Pane p = CanvasController.getInstance().getPane();
-        EnumPtr state = CanvasController.getInstance().getEnumPtr();
+        AppState appState = CanvasController.getInstance().appState;
         ShapeEditController idShapeEditController = CanvasController.getInstance().getShapeEditController();
         switch (this.shape.getType()) {
             case JGeometry.GTYPE_POINT:
                 double[] pointOrds = shape.getPoint();
-                Point point = new Point(p, state, idShapeEditController);
-                Coord c0 = new Coord(pointOrds[1], pointOrds[2]);
+                Point point = new Point(p, appState, idShapeEditController);
+                Coordinate c0 = new Coordinate(pointOrds[1], pointOrds[2]);
                 point.add(c0, shapes);
                 break;
             case JGeometry.GTYPE_CURVE:
                 double[] lineOrds = shape.getOrdinatesArray();
-                PolyLine line = new PolyLine(p, state, shapes, idShapeEditController);
+                PolyLine line = new PolyLine(p, appState, shapes, idShapeEditController);
                 for (int i = 0; i < lineOrds.length; i += 2) {
-                    Coord c1 = new Coord(lineOrds[i], lineOrds[i+1]);
+                    Coordinate c1 = new Coordinate(lineOrds[i], lineOrds[i+1]);
                     line.add(c1, shapes);
                 }
                 break;
             case JGeometry.GTYPE_POLYGON:
                 double[] polygonOrds = shape.getOrdinatesArray();
-                Area polygon = new Area(p, state, idShapeEditController);
+                Area polygon = new Area(p, appState, idShapeEditController);
                 for (int i = 0; i < polygonOrds.length; i += 2) {
-                    Coord c2 = new Coord(polygonOrds[i], polygonOrds[i+1]);
+                    Coordinate c2 = new Coordinate(polygonOrds[i], polygonOrds[i+1]);
                     polygon.add(c2, shapes);
                 }
                 break;
             case JGeometry.GTYPE_MULTIPOINT:
                 double[] multiOrds = shape.getOrdinatesArray();
-                MultiPoint multiPoint = new MultiPoint(p, state, idShapeEditController);
+                MultiPoint multiPoint = new MultiPoint(p, appState, idShapeEditController);
                 for (int i = 0; i < multiOrds.length; i += 2) {
-                    Coord c3 = new Coord(multiOrds[i], multiOrds[i+1]);
+                    Coordinate c3 = new Coordinate(multiOrds[i], multiOrds[i+1]);
                     multiPoint.add(c3, shapes);
                 }
                 break;
@@ -105,6 +106,5 @@ public class SpatialDBO {
         double[] ordArray = shape.getOrds();
         int[] elemInfo = {1, 2, size/2};
         this.shape = new JGeometry(JGeometry.GTYPE_MULTIPOINT, 0, elemInfo, ordArray);
-
     }
 }
