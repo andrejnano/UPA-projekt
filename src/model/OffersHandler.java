@@ -19,11 +19,11 @@ public class OffersHandler {
     }
 
     // stores object from DBO
-    int insertOffer(OffersDBO object) {
-        int id = dbManager.maxId("offers");
+    public int insertOffer(OffersDBO object) {
+        int id = dbManager.maxId("estates");
         try {
             try (Statement stmt = connection.createStatement()) {
-                String sqlString = "insert into offers (id, name, description, price, type, transaction) values(" +
+                String sqlString = "insert into estates (id, name, description, price, type, transaction) values(" +
                         "" + id + ", '" + object.getName() + "', '" + object.getDescription() + "', " + object.getPrice() + ", '" + object.getType() + "', '" + object.getTransaction() + "')";
                 stmt.executeUpdate(sqlString);
             } catch (SQLException e) {
@@ -41,7 +41,7 @@ public class OffersHandler {
         OffersDBO object = new OffersDBO();
         try (Statement stmt = connection.createStatement()) {
             ResultSet rset = stmt.executeQuery(
-                    "select * from offers where id = " + id);
+                    "select * from estates where id = " + id);
             if (rset.next()) {
                 object.setId(id);
                 object.setName(rset.getString("name"));
@@ -63,10 +63,10 @@ public class OffersHandler {
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "";
             if (type.equals("All")) {
-                sqlString = "select offers.id from offers";
+                sqlString = "select estates.id from estates";
             }
             else {
-                sqlString = "select offers.id from offers" +
+                sqlString = "select estates.id from estates" +
                         "where offers.type = '" + type + "' ";
             }
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);

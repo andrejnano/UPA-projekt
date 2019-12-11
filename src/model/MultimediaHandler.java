@@ -121,7 +121,7 @@ public class MultimediaHandler {
         int id = dbManager.maxId("pictures");
         try {
             try (Statement stmt = connection.createStatement()) {
-                String sqlString = "insert into pictures (id, offid, picture) values(" + id + ", " + estateId + ", ordsys.ordimage.init())";
+                String sqlString = "insert into pictures (id, estateId, picture) values(" + id + ", " + estateId + ", ordsys.ordimage.init())";
                 stmt.executeUpdate(sqlString);
             } catch (SQLException e) {
                 e.printStackTrace();

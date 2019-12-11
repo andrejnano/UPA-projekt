@@ -11,8 +11,10 @@ public class Offer {
     public SimpleStringProperty area;
     public SimpleStringProperty description;
     public SimpleStringProperty price;
+    public int id;
 
-    public Offer() {
+    public Offer(int id) {
+        this.id = id;
         propertyType = new SimpleObjectProperty<>();
         transactionType = new SimpleObjectProperty<>();
         area = new SimpleStringProperty();
@@ -29,6 +31,12 @@ public class Offer {
             return true;
         }
         return false;
+    }
+
+    public OffersDBO toDBO() {
+        OffersDBO dbo = new OffersDBO();
+        dbo.init(-1, area.getValue(), description.getValue(), Integer.parseInt(price.getValue()), propertyType.toString(), transactionType.toString());
+        return dbo;
     }
 //    ComboBox transactionType;
 //    Button location;

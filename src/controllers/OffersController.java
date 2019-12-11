@@ -16,7 +16,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
+import model.MultimediaHandler;
 import model.Offer;
+import model.OffersDBO;
+import model.OffersHandler;
 
 import java.io.File;
 import java.net.URL;
@@ -59,12 +62,17 @@ public class OffersController implements Initializable{
     ArrayList<Offer> myOffers;
     Offer curOffer;
     ArrayList<Pane> listItems;
+    String titlePicturePath;
+    ArrayList<String> otherPicturePaths;
+    int nextOfferId;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         curOffer = null;
         myOffers = new ArrayList<Offer>();
         listItems = new ArrayList<Pane>();
+        otherPicturePaths = new ArrayList<String>();
+        nextOfferId = 0;
     }
 
     private void intFieldRegex(TextField field) {
@@ -108,10 +116,11 @@ public class OffersController implements Initializable{
             unBind(curOffer);
         }
         clear();
-        curOffer = new Offer();
+        curOffer = new Offer(nextOfferId);
         bind(curOffer);
         intFieldRegex(areaField);
         intFieldRegex(priceField);
+        nextOfferId++;
     }
 
     private void clear() {
@@ -150,6 +159,7 @@ public class OffersController implements Initializable{
         try {
             URL url = new File(path).toURI().toURL();
             titlePicture.setImage(new Image(url.toString()));
+            titlePicturePath = path;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,6 +175,7 @@ public class OffersController implements Initializable{
             image.setPreserveRatio(true);
             image.setFitHeight(150);
             otherPictures.getChildren().add(image);
+            otherPicturePaths.add(path);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -188,6 +199,7 @@ public class OffersController implements Initializable{
         if (curOffer != null && curOffer.isValid()) {
             myOffers.add(curOffer);
             errorLabel.setTextFill(Color.GREEN);
+            storeImages();
             errorLabel.setText("Insertion successful!");
         } else {
             errorLabel.setTextFill(Color.RED);
@@ -195,10 +207,24 @@ public class OffersController implements Initializable{
         }
     }
 
+    private void storeImages() {
+        MultimediaHandler multiHandler = new MultimediaHandler();
+        OffersHandler offersHandler = new OffersHandler();
+        curOffer.id = offersHandler.insertOffer(curOffer.toDBO());
+        multiHandler.storeImage(curOffer.id, titlePicturePath);
+        for (String path : otherPicturePaths) {
+            System.out.println("CurPath "+ path);
+            multiHandler.storeImage(curOffer.id, path);
+        }
+    }
+
     @FXML
     private void deleteOffer() {
         if (curOffer != null) {
             myOffers.remove(curOffer);
+            clear();
+            editOfferSidebar.setVisible(false);
+            errorLabel.setText("");
 //            myOffersBox.getChildren().remove(curOffer);
         }
     }
