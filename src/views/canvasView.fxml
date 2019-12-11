@@ -15,12 +15,29 @@
            <top>
                <ToolBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="900.0" style="-fx-background-color: #36393f;" BorderPane.alignment="TOP_LEFT">
                    <items>
-                       <Button fx:id="viewButton" mnemonicParsing="false" onAction="#viewMode" style="-fx-background-color: orange;" text="View mode" textFill="WHITE" />
+                  <Label text="Estate Manager" textFill="WHITE">
+                     <font>
+                        <Font name="Helvetica Bold" size="14.0" />
+                     </font>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </Label>
+                  <Region prefHeight="30.0" prefWidth="20.0" />
+                       <Button fx:id="viewButton" mnemonicParsing="false" onAction="#viewMode" style="-fx-background-color: #3e38f2; -fx-font-weight: 800;" text="View mode" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font></Button>
                        <Button fx:id="editButton" mnemonicParsing="false" onAction="#editMode" style="-fx-background-color: green;" text="Edit Mode" textFill="WHITE" />
-                       <Button fx:id="createPoint" mnemonicParsing="false" onAction="#createPoint" text="Insert point" />
-                       <Button fx:id="createMultiPoint" mnemonicParsing="false" onAction="#createMultiPoint" text="Insert multiPoint" />
-                       <Button fx:id="createPolyLine" mnemonicParsing="false" onAction="#createPolyLine" text="Insert polyline" />
-                       <Button fx:id="createPolygonButton" mnemonicParsing="false" onAction="#createArea" text="Insert polygon" />
+                  <Region prefHeight="30.0" prefWidth="20.0" />
+                       <Button fx:id="createPointMode" mnemonicParsing="false" onAction="#createPointMode" text="Insert point" />
+                       <Button fx:id="createMultiPointMode" mnemonicParsing="false" onAction="#createMultiPointMode" text="Insert multiPoint" />
+                       <Button fx:id="createPolyLineMode" mnemonicParsing="false" onAction="#createPolyLineMode" text="Insert polyline" />
+                       <Button fx:id="createPolygonButton" mnemonicParsing="false" onAction="#createAreaMode" text="Insert polygon" />
+                  <Region prefHeight="30.0" prefWidth="20.0" />
                        <Button fx:id="clearCanvasButton" mnemonicParsing="false" onAction="#clearCanvas" style="-fx-background-color: red;" text="Clear Canvas" textFill="WHITE">
                            <font>
                                <Font name="System Bold" size="14.0" />
@@ -33,7 +50,7 @@
                </ToolBar>
            </top>
            <center>
-               <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="560.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="600.0" style="-fx-background-color: #ccc;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
+               <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="560.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="600.0" style="-fx-background-color: #ccc; -fx-border-style: none none none solid; -fx-border-color: #36393f; -fx-border-width: 4; -fx-border-radius: 0;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
                    <content>
                        <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1120.0" prefWidth="1200.0" style="-fx-background-color: #fafafa; -fx-border-color: #ccc; -fx-border-width: 1px;">
                      <effect>
@@ -41,9 +58,6 @@
                      </effect>
                   </Pane>
                    </content>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
                </ScrollPane>
            </center>
            <right>

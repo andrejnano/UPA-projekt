@@ -39,7 +39,7 @@ public class AppState {
 
         public String getState() {
             return this.currentState;
-        };
+        }
 
         public boolean setState(String newState) {
             if (!possibleStates.contains(newState)) {
@@ -79,11 +79,11 @@ public class AppState {
 
         public String getState() {
             return this.currentState;
-        };
+        }
 
         public String getShapeState() {
             return this.currentShapeState;
-        };
+        }
 
         public boolean setState(String newState) {
             if (!this.possibleStates.contains(newState)) {
@@ -94,7 +94,7 @@ public class AppState {
         }
 
         public boolean setShapeState(String newShapeState) {
-            if (!possibleStates.contains(newShapeState)) {
+            if (!possibleShapeStates.contains(newShapeState)) {
                 return false;
             }
             this.currentShapeState = newShapeState;
