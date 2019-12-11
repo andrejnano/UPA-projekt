@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="100.0" prefWidth="200.0">
+         <ImageView id="titlePic">
+         </ImageView>
+         <HBox prefHeight="100.0" prefWidth="200.0">
+            <VBox>
+               <Label fx:id="transactionType"/>
+               <Label fx:id="propertyType"/>
+            </VBox>
+            <VBox>
+               <Label fx:id="area"/>
+               <Label fx:id="mU+00B2"/>
+               <Label fx:id="price"/>
+            </VBox>
+            <Label fx:id="description"/>
+         </HBox>
+      </VBox>
+   </children>
+</AnchorPane>

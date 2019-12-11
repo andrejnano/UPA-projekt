@@ -1,10 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import model.OfferPropertyType?>
+<?import model.OfferTransactionType?>
 
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OffersController">
+   <BorderPane>
+      <top>
+         <ToolBar prefHeight="40.0" prefWidth="900.0">
+            <items>
+               <Button mnemonicParsing="false" onAction="#createOffer" text="New offer" />
+               <Button mnemonicParsing="false" onAction="#myOffers" text="My offers" />
+            </items>
+         </ToolBar>
+      </top>
+      <center>
+         <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" minHeight="560.0" minWidth="550.0" vbarPolicy="NEVER">
+            <content>
+               <Pane fx:id="pane" maxHeight="2240" maxWidth="2400.0" minHeight="2240" minWidth="2400.0" style="-fx-background-color: white">
+               </Pane>
+            </content>
+         </ScrollPane>
+      </center>
+      <right>
+         <Pane>
+            <GridPane fx:id="editOfferSidebar" visible="false">
+               <Label text="Property type" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+               <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="propertyType">
+                  <items>
+                     <FXCollections fx:factory="observableArrayList">
+                        <OfferPropertyType fx:value="FLAT"/>
+                        <OfferPropertyType fx:value="LAND"/>
+                        <OfferPropertyType fx:value="DETACHED"/>
+                        <OfferPropertyType fx:value="TOWNHOUSE"/>
+                        <OfferPropertyType fx:value="BUNGALOW"/>
+                        <OfferPropertyType fx:value="COTTAGE"/>
+                        <OfferPropertyType fx:value="OTHER"/>
+                     </FXCollections>
+                  </items>
+               </ComboBox>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OffersController">
-   <children>
-      <VBox layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0" />
-   </children>
+               <Label text="Transaction type" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+               <ComboBox GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="transactionType">
+                  <items>
+                     <FXCollections fx:factory="observableArrayList">
+                        <OfferTransactionType fx:value="RENT"/>
+                        <OfferTransactionType fx:value="SELL"/>
+                        <OfferTransactionType fx:value="SHARE"/>
+                     </FXCollections>
+                  </items>
+               </ComboBox>
+
+               <Label text="Location" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+               <Button mnemonicParsing="false" onAction="#setLocation" text="Select on map" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+               <Label text="Area (m^2)" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+               <TextField fx:id="areaField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+               <Label text="Description" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+               <TextArea fx:id="descriptionArea" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+               <Label text="Price" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+               <TextField fx:id="priceField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+               <Label text="Title picture" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+               <Button  mnemonicParsing="false" onAction="#loadTitlePic" text="Load file" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+               <Label text="Pictures" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+               <Button  mnemonicParsing="false" onAction="#loadOtherPic" text="Load file" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+               <Button  mnemonicParsing="false" onAction="#saveOffer" text="Save" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+               <Button  mnemonicParsing="false" onAction="#deleteOffer" text="Delete" style="-fx-background-color: red;" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            </GridPane>
+
+            <Pane fx:id="myOffersSidebar" visible="false">
+               <ScrollPane hbarPolicy="NEVER">
+                  <content>
+                     <VBox fx:id="myOffersBox" />
+                  </content>
+               </ScrollPane>
+            </Pane>
+         </Pane>
+      </right>
+   </BorderPane>
 </AnchorPane>
