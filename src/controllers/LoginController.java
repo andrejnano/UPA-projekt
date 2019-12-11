@@ -57,10 +57,12 @@ public class LoginController {
             }
             dbm.connect();
             connectBtn.setText("Disconnect");
+            connected = true;
         }
         else {
             dbm.disconnect();
             connectBtn.setText("Connect");
+            connected = false;
         }
     }
 

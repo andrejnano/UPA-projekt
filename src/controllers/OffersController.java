@@ -208,10 +208,10 @@ public class OffersController implements Initializable{
     }
 
     private void storeImages() {
-        MultimediaHandler multiHandler = new MultimediaHandler();
-        OffersHandler offersHandler = new OffersHandler();
+        MultimediaHandler multiHandler = MultimediaHandler.getInstance();
+        OffersHandler offersHandler = OffersHandler.getInstance();
         curOffer.id = offersHandler.insertOffer(curOffer.toDBO());
-        multiHandler.storeImage(curOffer.id, titlePicturePath);
+        //multiHandler.storeImage(curOffer.id, titlePicturePath);
         for (String path : otherPicturePaths) {
             System.out.println("CurPath "+ path);
             multiHandler.storeImage(curOffer.id, path);

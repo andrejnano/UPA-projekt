@@ -10,26 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OffersHandler {
+
+    private static OffersHandler instance = null;
     private Connection connection;
     private DatabaseManager dbManager;
 
     public OffersHandler() {
+        instance = this;
         this.dbManager = DatabaseManager.getInstance();
         this.connection = dbManager.getConnection();
     }
 
+    public static OffersHandler getInstance() { return instance; }
+
     // stores object from DBO
     public int insertOffer(OffersDBO object) {
         int id = dbManager.maxId("estates");
-        try {
-            try (Statement stmt = connection.createStatement()) {
-                String sqlString = "insert into estates (id, name, description, price, type, transaction) values(" +
-                        "" + id + ", '" + object.getName() + "', '" + object.getDescription() + "', " + object.getPrice() + ", '" + object.getType() + "', '" + object.getTransaction() + "')";
-                stmt.executeUpdate(sqlString);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            connection.commit();
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "insert into estates (id, name, description, price, type, transaction) values(" +
+                    "" + id + ", '" + object.getName() + "', '" + object.getDescription() + "', " + object.getPrice() + ", '" + object.getType() + "', '" + object.getTransaction() + "')";
+            stmt.executeUpdate(sqlString);
         } catch (SQLException e) {
             e.printStackTrace();
         }
