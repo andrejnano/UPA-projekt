@@ -6,14 +6,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 import model.Offer;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -44,14 +49,22 @@ public class OffersController implements Initializable{
     Pane myOffersSidebar;
     @FXML
     VBox myOffersBox;
+    @FXML
+    Label errorLabel;
+    @FXML
+    ImageView titlePicture;
+    @FXML
+    HBox otherPictures;
 
     ArrayList<Offer> myOffers;
     Offer curOffer;
+    ArrayList<Pane> listItems;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         curOffer = null;
         myOffers = new ArrayList<Offer>();
+        listItems = new ArrayList<Pane>();
     }
 
     private void intFieldRegex(TextField field) {
@@ -88,40 +101,73 @@ public class OffersController implements Initializable{
 
     @FXML
     private void createOffer() {
+        errorLabel.setText("");
         myOffersSidebar.setVisible(false);
         editOfferSidebar.setVisible(true);
         if (curOffer != null) {
             unBind(curOffer);
         }
+        clear();
         curOffer = new Offer();
         bind(curOffer);
         intFieldRegex(areaField);
         intFieldRegex(priceField);
-        myOffers.add(curOffer);
+    }
+
+    private void clear() {
+        propertyType.getSelectionModel().clearSelection();
+        transactionType.getSelectionModel().clearSelection();
+        areaField.clear();
+        descriptionArea.clear();
+        priceField.clear();
     }
 
     @FXML
     private void myOffers() {
+        errorLabel.setText("");
         editOfferSidebar.setVisible(false);
         myOffersSidebar.setVisible(true);
 
-//        TODO
-//        try {
-//            AnchorPane offerListItem =  FXMLLoader.load(getClass().getResource("../views/offerListItem.fxml"));
-//            myOffersBox.getChildren().add(offerListItem);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        myOffersBox.getChildren().removeAll(listItems);
+        listItems.clear();
+        for (Offer o: myOffers) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
+                AnchorPane offerListItem = loader.load();
+                OfferListItemCtrl itemController =  loader.getController();
+                itemController.init(o);
+                myOffersBox.getChildren().add(offerListItem);
+                listItems.add(offerListItem);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     private void loadTitlePic() {
-        String destination = chooseFile();
+        String path = chooseFile();
+        try {
+            URL url = new File(path).toURI().toURL();
+            titlePicture.setImage(new Image(url.toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void loadOtherPic() {
-        String destination = chooseFile();
+        String path = chooseFile();
+        try {
+            URL url = new File(path).toURI().toURL();
+            ImageView image = new ImageView();
+            image.setImage(new Image(url.toString()));
+            image.setPreserveRatio(true);
+            image.setFitHeight(150);
+            otherPictures.getChildren().add(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String chooseFile() {
@@ -139,12 +185,22 @@ public class OffersController implements Initializable{
 
     @FXML
     private void saveOffer() {
-
+        if (curOffer != null && curOffer.isValid()) {
+            myOffers.add(curOffer);
+            errorLabel.setTextFill(Color.GREEN);
+            errorLabel.setText("Insertion successful!");
+        } else {
+            errorLabel.setTextFill(Color.RED);
+            errorLabel.setText("Error: some fields in form are empty!");
+        }
     }
 
     @FXML
     private void deleteOffer() {
-
+        if (curOffer != null) {
+            myOffers.remove(curOffer);
+//            myOffersBox.getChildren().remove(curOffer);
+        }
     }
 
 }

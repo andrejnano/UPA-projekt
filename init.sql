@@ -9,7 +9,7 @@ CREATE TABLE estates(
     description VARCHAR(200),
     price NUMBER,
     type VARCHAR(50),
-    transaction VARCHAR(50),
+    transaction VARCHAR(50)
 );
 
 -- other spatial objects such as roads/rivers/..

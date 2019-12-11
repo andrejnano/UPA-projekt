@@ -63,7 +63,7 @@ public class DatabaseManager {
             System.err.println("SQLException: " + sqlException.getMessage());
         }
     }
-    
+
     // input: file in sql, stores file into sql db
     public void loadDbFromFile(String filename) {
         List<String> toQuery = new ArrayList<String>();
@@ -83,7 +83,7 @@ public class DatabaseManager {
                 try {
                     stmt.executeUpdate(query);
                 } catch(SQLException e) {
-                    e.printStackTrace();
+                    System.err.println("ERROR: " + e.getMessage());
                 }
             }
         } catch (SQLException e) {

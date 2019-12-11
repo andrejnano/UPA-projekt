@@ -169,7 +169,7 @@ public class SpatialHandler {
 
     // returns area of polygon
     // land / building
-    public int ObjectArea(String type, int estateId) {
+    public int objectArea(String type, int estateId) {
         int area = 0;
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select SUM(SDO_GEOM.SDO_AREA(shape, 1)) from map_entities estate" +
@@ -186,7 +186,7 @@ public class SpatialHandler {
     }
 
     // returns distance between objects
-    public int ObjectArea(int firstObjId, int secondObjId) {
+    public int objectDistance(int firstObjId, int secondObjId) {
         int distance = 0;
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select SDO_GEOM.SDO_DISTANCE(first.shape, second.shape, 1) from map_entities first, map_entities second" +
@@ -204,7 +204,7 @@ public class SpatialHandler {
 
     // returns diameter/length of object
     // https://docs.oracle.com/database/121/SPATL/sdo_geom-sdo_length.htm#SPATL1120
-    public int ObjectLength(int id) {
+    public int objectLength(int id) {
         int length = 0;
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select SDO_GEOM.SDO_LENGTH(object.shape, meta.diminfo) from map_entities object, user_sdo_geom_metadata meta" +
