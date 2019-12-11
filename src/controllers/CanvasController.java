@@ -14,11 +14,15 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 
 /*
@@ -80,7 +84,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         instance = this;
 
         // todo: not working, draw grid on canvas
-//        drawGridOnCanvas();
+        drawGridOnCanvas();
 
         // Initialize new AppState, this object will be passed down to underlying components/controllers
         appState = new AppState("ADMIN", "VIEW", "NONE");
@@ -275,19 +279,36 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     }
 
     public void drawGridOnCanvas() {
-            gridCanvas = new Canvas(400, 400);
-            pane.getChildren().add(gridCanvas);
 
-            GraphicsContext gc = gridCanvas.getGraphicsContext2D();
-            gc.clearRect(0, 0, pane.getWidth(), pane.getHeight());
-            gc.setLineWidth(1); // change the line width
+        System.out.println("drawing grid");
 
-            for(int i = 0; i < pane.getWidth(); i += 50) {
-                gc.strokeLine(i, 0, i, pane.getHeight() - (pane.getHeight() % 50));
-            }
+        List<Line> horizontalLines = new ArrayList<>();
+        List<Line> verticalLines = new ArrayList<>();
 
-            for(int i = 0; i < pane.getHeight(); i += 50) {
-                gc.strokeLine(50, i, pane.getWidth(), i);
-            }
+        int rows = 50;
+        int cols = 50;
+
+        double cellSize = pane.getPrefHeight() / rows;
+
+        for(int i=0; i < rows; i++) {
+            horizontalLines.add(new Line(0, i*cellSize ,pane.getPrefWidth(), i*cellSize));
+            horizontalLines.get(i).setStroke(Color.LIGHTGRAY);
+            horizontalLines.get(i).setStrokeWidth(1.0);
+        }
+
+        System.out.println(Arrays.toString(horizontalLines.toArray()));
+
+        for(int i=0; i < cols; i++) {
+            verticalLines.add(new Line(i*cellSize, 0 ,i*cellSize, pane.getPrefHeight()));
+            verticalLines.get(i).setStroke(Color.LIGHTGRAY);
+            verticalLines.get(i).setStrokeWidth(1.0);
+        }
+
+        System.out.println(Arrays.toString(verticalLines.toArray()));
+
+
+        pane.getChildren().addAll(horizontalLines);
+        pane.getChildren().addAll(verticalLines);
+
     }
 }

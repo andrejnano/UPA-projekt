@@ -52,7 +52,7 @@
            <center>
                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="560.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="600.0" style="-fx-background-color: #ccc; -fx-border-style: none none none solid; -fx-border-color: #36393f; -fx-border-width: 4; -fx-border-radius: 0;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
                    <content>
-                       <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1120.0" prefWidth="1200.0" style="-fx-background-color: #fafafa; -fx-border-color: #ccc; -fx-border-width: 0px;">
+                       <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: #fafafa; -fx-border-color: #ccc; -fx-border-width: 0px;">
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" height="14.93" radius="6.965" width="14.93" />
                      </effect>
