@@ -2,7 +2,6 @@ package model;
 
 import controllers.AppState;
 import controllers.CanvasController;
-import controllers.EnumPtr;
 import controllers.ShapeEditController;
 import controllers.canvasShapes.*;
 import javafx.scene.layout.Pane;

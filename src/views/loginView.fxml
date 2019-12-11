@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="372.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.loginController">
+<AnchorPane prefHeight="400.0" prefWidth="372.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
     <children>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" />
         <Label layoutX="45.0" layoutY="49.0" text="Host IP" />

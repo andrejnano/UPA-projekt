@@ -24,9 +24,10 @@ public class App extends Application {
         TabPane root =  FXMLLoader.load(getClass().getResource("views/mainView.fxml"));
 
         // assign it to the scene
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 900, 700);
         primaryStage.setTitle("UPA 2019 - Estate manager");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

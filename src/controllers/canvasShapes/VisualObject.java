@@ -1,15 +1,9 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
-import controllers.EnumPtr;
-import controllers.StateEnum;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;

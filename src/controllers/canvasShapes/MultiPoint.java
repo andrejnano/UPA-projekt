@@ -1,9 +1,7 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
-import controllers.EnumPtr;
 import controllers.ShapeEditController;
-import controllers.StateEnum;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;

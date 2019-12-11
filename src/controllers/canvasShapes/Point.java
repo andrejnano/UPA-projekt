@@ -1,10 +1,8 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
-import controllers.EnumPtr;
 import controllers.ShapeEditController;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.MapProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.scene.layout.Pane;

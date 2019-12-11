@@ -1,7 +1,6 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
-import controllers.EnumPtr;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;

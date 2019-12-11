@@ -1,9 +1,7 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
-import controllers.EnumPtr;
 import controllers.ShapeEditController;
-import controllers.StateEnum;
 import javafx.scene.layout.Pane;
 import javafx.beans.property.SimpleStringProperty;
 import java.util.ArrayList;
@@ -39,6 +37,7 @@ public abstract class Shape extends PointInsertor {
     public String getType() {
         return type;
     }
+
     public void finish() {
         anchorVisibility(false);
         if (visualObject.shape == null)

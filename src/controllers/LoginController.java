@@ -11,7 +11,7 @@ import model.DatabaseManager;
 import java.io.File;
 import java.sql.SQLException;
 
-public class loginController {
+public class LoginController {
 
     String initScript = "";
     DatabaseManager dbm = null;

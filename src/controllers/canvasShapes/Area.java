@@ -1,7 +1,6 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
-import controllers.EnumPtr;
 import controllers.ShapeEditController;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

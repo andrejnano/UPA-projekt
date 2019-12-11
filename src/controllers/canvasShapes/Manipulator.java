@@ -1,7 +1,5 @@
 package controllers.canvasShapes;
 
-import controllers.AppState;
-import controllers.EnumPtr;
 import javafx.beans.property.*;
 import javafx.beans.value.*;
 import javafx.collections.*;

@@ -1,7 +1,6 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
-import controllers.EnumPtr;
 import controllers.ShapeEditController;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -9,6 +8,7 @@ import javafx.scene.shape.Polyline;
 import java.util.ArrayList;
 
 public class PolyLine extends Shape {
+
     public PolyLine(Pane pane, AppState appState, ArrayList<Shape> shapes, ShapeEditController controller) {
         super(pane, appState, controller);
         visualObject = new VisualObject(new Polyline(), appState);
@@ -37,6 +37,4 @@ public class PolyLine extends Shape {
         pane.getChildren().addAll(visualObject.anchors);
         return false;
     }
-
-
 }

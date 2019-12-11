@@ -15,5 +15,6 @@
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="admin" level="project" />
     <orderEntry type="library" name="ordim" level="project" />
+    <orderEntry type="library" name="fontawesomefx" level="project" />
   </component>
 </module>

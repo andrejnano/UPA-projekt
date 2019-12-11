@@ -49,6 +49,12 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     @FXML
     Pane idShapeEdit;
 
+    // This controller instance
+    private static CanvasController instance = null;
+
+    // application state
+    public AppState appState;
+
     // Mouse cursor position
     private Coordinate mouseCoordinate;
 
@@ -69,43 +75,26 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
     Canvas gridCanvas;
 
-    private static CanvasController instance = null;
-
-    // application state
-    public AppState appState;
-    // API
-    // AppState appState = new AppState("ADMIN", "EDIT", "NONE")
-    // appState.user.getState() -> returns User.currentState such as "ADMIN" or "SEARCH"
-    // appState.user.setState("ADMIN") -> sets User.currentState to "ADMIN" and returns true if success
-    // appState.canvas.getState() -> returns Canvas.currentState such as "CREATE" or "EDIT"
-    // appState.canvas.setState("EDIT") -> sets Canvas.currentState to "EDIT" and returns true if success
-    // appState.canvas.getShapeState() -> returns Canvas.currentShapeState such as "POLYGON" or "POINT"
-    // appState.canvas.setShapeState("POLYGON") -> sets Canvas.currentShapeState to "POLYGON" and returns true if success
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         instance = this;
 
         // todo: not working, draw grid on canvas
-        drawGridOnCanvas();
+//        drawGridOnCanvas();
 
         // Initialize new AppState, this object will be passed down to underlying components/controllers
         appState = new AppState("ADMIN", "VIEW", "NONE");
         this.viewMode();
 
-        mouseCoordinate = new Coordinate();
         shapes = new ArrayList<>();
 
-        sideBar.setVisible(false);
+        mouseCoordinate = new Coordinate();
         idShapeEditController.init(scrollPane, appState, sideBar);
         idShapeEditController.shape = null;
 
         // assign mouse event handlers on canvas
         pane.setOnMousePressed(canvasMouseHandler);
         pane.setOnMouseMoved(canvasMouseHandler);
-
-        // ??
-        dragDelta = new Coordinate();
 
         // CTRL + SCROLL => Zoom
         scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
@@ -117,12 +106,9 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         });
 
         // Multi-touch zoom event handling
-        scrollPane.setOnZoom(new EventHandler<ZoomEvent>() {
-            @Override
-            public void handle(ZoomEvent zoomEvent) {
-                handleZoom(zoomEvent);
-                zoomEvent.consume();
-            }
+        scrollPane.setOnZoom(zoomEvent -> {
+            handleZoom(zoomEvent);
+            zoomEvent.consume();
         });
     }
 
@@ -161,6 +147,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     @FXML
     private void viewMode() {
         appState.setCanvasState("VIEW");
+        sideBar.setVisible(false);
         scrollPane.setPannable(true);
         scrollPane.setCursor(Cursor.HAND);
         canvasStateLabel.setText("[VIEW MODE]");
@@ -169,6 +156,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     @FXML
     private void editMode() {
         appState.setCanvasState("EDIT");
+        sideBar.setVisible(true);
         scrollPane.setPannable(false);
         canvasStateLabel.setText("[EDIT MODE]");
     }
@@ -198,7 +186,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     }
 
     private void clearUnfinished() {
-        if (idShapeEditController.shape != null && !idShapeEditController.finished) {
+        if (idShapeEditController.shape != null && !idShapeEditController.finishedEditingShape) {
             idShapeEditController.shape.clearUnfinished();
         }
         idShapeEditController.unBind();
@@ -208,16 +196,16 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     EventHandler<MouseEvent> canvasMouseHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-            // todo: refactor, not evident what it does
-            if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
 
+            // Handle mouse-click event on pane
+            if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 if (appState.getCanvasState().contains("VIEW")) { return; }
                 if (appState.getCanvasState().contains("EDIT")) { return; }
 
                 Coordinate c = new Coordinate(mouseEvent.getX(), mouseEvent.getY());
 
-                if (!idShapeEditController.finished && idShapeEditController.shape.add(c, shapes)) {
-                    idShapeEditController.finished = true;
+                if (!idShapeEditController.finishedEditingShape && idShapeEditController.shape.add(c, shapes)) {
+                    idShapeEditController.finishedEditingShape = true;
                 }
             }
 

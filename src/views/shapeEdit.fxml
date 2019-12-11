@@ -1,20 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefWidth="201.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ShapeEditController" AnchorPane.topAnchor="10">
-<GridPane>
-
-                <Label text="Name" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-
-                <Label text="Description" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <TextField fx:id="descriptionField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-
-                <Label text="Color" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                <ColorPicker fx:id="colorPicker" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-
-                <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonClicked" text="OK" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-</GridPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="300.0" AnchorPane.topAnchor="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ShapeEditController">
+   <children>
+   <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="165.0" prefWidth="300.0">
+      <children>
+      
+                      <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="75.0" text="Name" textAlignment="RIGHT" textFill="#e1e1e1" GridPane.columnIndex="0" GridPane.rowIndex="0">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+                      <TextField fx:id="nameField" prefHeight="27.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextField>
+      
+                      <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="75.0" text="Description" textAlignment="RIGHT" textFill="#e1e1e1" GridPane.columnIndex="0" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+                      <TextField fx:id="descriptionField" prefHeight="27.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextField>
+      
+                      <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="75.0" text="Color" textAlignment="RIGHT" textFill="#e1e1e1" GridPane.columnIndex="0" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+                      <ColorPicker fx:id="colorPicker" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="144.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </ColorPicker>
+      
+                      <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonClicked" prefHeight="27.0" prefWidth="223.0" text="OK" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+               </GridPane.margin>
+            </Button>
+      </children>
+         <columnConstraints>
+            <ColumnConstraints maxWidth="108.0" minWidth="67.0" prefWidth="79.0" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="157.0" minWidth="116.0" prefWidth="145.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+   </GridPane>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+   </padding>
 </AnchorPane>
