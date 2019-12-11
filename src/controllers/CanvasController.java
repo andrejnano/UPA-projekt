@@ -150,7 +150,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         sideBar.setVisible(false);
         scrollPane.setPannable(true);
         scrollPane.setCursor(Cursor.HAND);
-        canvasStateLabel.setText("[VIEW MODE]");
+        canvasStateLabel.setText("[VIEW]");
     }
 
     @FXML
@@ -158,7 +158,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         appState.setCanvasState("EDIT");
         sideBar.setVisible(true);
         scrollPane.setPannable(false);
-        canvasStateLabel.setText("[EDIT MODE]");
+        canvasStateLabel.setText("[EDIT]");
     }
 
     // change canvas/editor settings to mode for editing/creating
@@ -168,7 +168,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         scrollPane.setPannable(false);
         sideBar.setVisible(true);
         clearUnfinished();
-        canvasStateLabel.setText("[CREATE MODE]");
+        canvasStateLabel.setText("[CREATE]");
     }
 
     @FXML
@@ -213,7 +213,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_MOVED) {
                 mouseCoordinate.x = mouseEvent.getX();
                 mouseCoordinate.y = mouseEvent.getY();
-                mouseCoordinateLabel.setText("Mouse[X: " + mouseCoordinate.x + "; Y: " +  mouseCoordinate.y + "]");
+                mouseCoordinateLabel.setText("Mouse[X: " + Math.round(mouseCoordinate.x) + "; Y: " +  Math.round(mouseCoordinate.y) + "]");
             }
         }
     };
@@ -230,7 +230,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
         // Apply the transformation
         pane.getTransforms().add(scaleTransform);
-        scaleAmountLabel.setText("ZoomFactor: " + zoomEvent.getTotalZoomFactor());
+        scaleAmountLabel.setText(""+zoomEvent.getTotalZoomFactor());
 
         zoomEvent.consume();
     }
@@ -269,7 +269,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         // Apply the transformation
         pane.getTransforms().add(scaleTransform);
         // Update label text with the current zoom level in percentage [0-200%]
-        scaleAmountLabel.setText("ZoomLevel: " + currentZoomLevel*10 + "%");
+        scaleAmountLabel.setText(currentZoomLevel*10 + "%");
 
         scrollEvent.consume();
     }

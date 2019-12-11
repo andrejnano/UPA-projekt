@@ -1,0 +1,78 @@
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #202225;
+    -fx-effect: null;
+}
+
+
+.tab-pane .tab-header-area .tab  {
+    -fx-background-color: #36393f;
+    -fx-border-style: solid solid none solid;
+    -fx-border-width: 1;
+    -fx-border-color: transparent;
+    -fx-opacity: 1;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-text-fill: #eee;
+}
+
+.tab-pane .tab-header-area .tab:hover  {
+    -fx-opacity: 0.5;
+    -fx-cursor: hand;
+    -fx-text-fill: cyan;
+}
+
+.tab-pane .tab-header-area .tab:selected {
+    -fx-border-style: solid solid none solid;
+    -fx-border-width: 1;
+    -fx-border-color: #aaa;
+    -fx-border-radius: 2 2 0 0;
+    -fx-opacity: 1;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.tab-pane .tab-header-area .tab .tab-label  {
+    -fx-text-fill: #fff;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab-content-area {
+    /*-fx-border-style: solid none none none;*/
+    /*-fx-border-width: 1;*/
+    /*-fx-border-color: cyan;*/
+}
+
+.canvasToolBarButton {
+    -fx-background-color: #777;
+    -fx-text-fill: #fafafa;
+    -fx-opacity: 1;
+    -fx-border-radius: 2px;
+    -fx-border-style: solid solid solid solid;
+    -fx-border-width: 1;
+    -fx-border-color: #aaa;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.canvasToolBarButton:hover {
+    -fx-cursor: hand;
+    -fx-opacity: 0.8;
+}
+.canvasToolBarButton:pressed {
+    -fx-background-color: #fafafa;
+    -fx-text-fill: #222;
+    -fx-opacity: 1;
+    -fx-border-style: solid solid solid solid;
+    -fx-border-width: 1;
+    -fx-border-color: #eee;
+}
+
+#viewButton {-fx-background-color: #3e38f2; -fx-text-fill: #fafafa;}
+#editButton {-fx-background-color: green; -fx-text-fill: #fafafa;}
+#viewButton:focused {-fx-background-color: #fafafa; -fx-text-fill: #3e38f2;}
+#editButton:focused {-fx-background-color: #fafafa; -fx-text-fill: green;}
+
+#scrollPane {
+    -fx-focus-traversable: false;
+}
