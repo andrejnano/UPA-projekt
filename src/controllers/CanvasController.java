@@ -89,7 +89,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         shapes = new ArrayList<>();
 
         mouseCoordinate = new Coordinate();
-        idShapeEditController.init(scrollPane, appState, sideBar);
+        idShapeEditController.init(instance, appState, scrollPane, sideBar);
         idShapeEditController.shape = null;
 
         // assign mouse event handlers on canvas
@@ -118,34 +118,34 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     public ShapeEditController getShapeEditController() { return this.idShapeEditController; }
 
     @FXML
-    private void createArea() {
-        changeCanvasSettingsForCreate();
+    private void createAreaMode() {
+        createMode();
         appState.setCanvasShapeState("POLYGON");
         idShapeEditController.bind(new Area(pane, appState, idShapeEditController));
     }
 
     @FXML
-    private void createPoint() {
-        changeCanvasSettingsForCreate();
+    private void createPointMode() {
+        createMode();
         appState.setCanvasShapeState("POINT");
         idShapeEditController.bind(new Point(pane, appState, idShapeEditController));
     }
     @FXML
-    private void createMultiPoint() {
-        changeCanvasSettingsForCreate();
+    private void createMultiPointMode() {
+        createMode();
         appState.setCanvasShapeState("MULTIPOINT");
         idShapeEditController.bind(new MultiPoint(pane, appState, idShapeEditController));
     }
 
     @FXML
-    private void createPolyLine() {
-        changeCanvasSettingsForCreate();
+    private void createPolyLineMode() {
+        createMode();
         appState.setCanvasShapeState("POLYLINE");
         idShapeEditController.bind(new PolyLine(pane, appState, shapes, idShapeEditController));
     }
 
     @FXML
-    private void viewMode() {
+    void viewMode() {
         appState.setCanvasState("VIEW");
         sideBar.setVisible(false);
         scrollPane.setPannable(true);
@@ -154,11 +154,21 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     }
 
     @FXML
-    private void editMode() {
+    void editMode() {
         appState.setCanvasState("EDIT");
         sideBar.setVisible(true);
         scrollPane.setPannable(false);
         canvasStateLabel.setText("[EDIT MODE]");
+    }
+
+    // change canvas/editor settings to mode for editing/creating
+    private void createMode() {
+        appState.setCanvasState("CREATE");
+        scrollPane.setCursor(Cursor.CROSSHAIR);
+        scrollPane.setPannable(false);
+        sideBar.setVisible(true);
+        clearUnfinished();
+        canvasStateLabel.setText("[CREATE MODE]");
     }
 
     @FXML
@@ -173,16 +183,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         if (appState.getCanvasShapeState().contains("POLYLINE")) {
             idShapeEditController.shape = new PolyLine(pane, appState, shapes, idShapeEditController);
         }
-    }
-
-    // change canvas/editor settings to mode for editing/creating
-    private void changeCanvasSettingsForCreate() {
-        appState.setCanvasState("CREATE");
-        scrollPane.setCursor(Cursor.CROSSHAIR);
-        scrollPane.setPannable(false);
-        sideBar.setVisible(true);
-        clearUnfinished();
-        canvasStateLabel.setText("[CREATE MODE]");
     }
 
     private void clearUnfinished() {

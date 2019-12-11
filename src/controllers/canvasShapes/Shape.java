@@ -27,6 +27,7 @@ public abstract class Shape extends PointInsertor {
         this.appState = appState;
         this.shapeEditController = controller;
         this.type = appState.getCanvasShapeState();
+        System.out.println(appState.getCanvasShapeState());
         this.name = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
     }
@@ -35,7 +36,7 @@ public abstract class Shape extends PointInsertor {
     public abstract boolean add(Coordinate c, ArrayList<Shape> areas);
 
     public String getType() {
-        return type;
+        return type.toString();
     }
 
     public void finish() {

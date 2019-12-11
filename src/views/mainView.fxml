@@ -3,27 +3,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-    <TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="controllers.MainController">
-        <tabs>
-            <Tab text="Settings">
-                <content>
-                    <fx:include source="loginView.fxml" />
-                </content>
-            </Tab>
-            <Tab text="Admin">
-                <content>
-                    <fx:include source="canvasView.fxml" />
-                </content>
-            </Tab>
-            <Tab text="Search">
-                <content>
-<!--                    <fx:include source="canvasView.fxml" />-->
-                </content>
-            </Tab>
-            <Tab text="Create offer">
-                <content>
-                    <fx:include source="offersView.fxml" />
-                </content>
-            </Tab>
-        </tabs>
-    </TabPane>
+<TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="controllers.MainController">
+    <tabs>
+        <Tab text="Settings">
+            <content>
+                <fx:include source="loginView.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Manage offers">
+            <content>
+                <fx:include source="canvasView.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Search for offers">
+            <content>
+                <fx:include source="searchView.fxml" />
+            </content>
+        </Tab>
+        <Tab text="Create offer">
+            <content>
+                <fx:include source="offersView.fxml" />
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

@@ -4,10 +4,7 @@ import controllers.canvasShapes.Shape;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -30,6 +27,10 @@ public class ShapeEditController {
     ColorPicker colorPicker;
     @FXML
     Button okButton;
+    @FXML
+    Label shapeTypeLabel;
+
+    CanvasController canvasController;
 
     private ObjectProperty<Paint> fill;
     private ObjectProperty<Paint> stroke;
@@ -44,10 +45,11 @@ public class ShapeEditController {
 
     public boolean finishedEditingShape;
 
-    public void init(ScrollPane scrollPane, AppState appState, Pane sideBar) {
+    public void init(CanvasController canvasController, AppState appState, ScrollPane scrollPane, Pane sideBar) {
         this.scrollPane = scrollPane;
         this.appState = appState;
         this.sideBar = sideBar;
+        this.canvasController = canvasController;
     }
 
     public void bind(Shape shape) {
@@ -55,6 +57,7 @@ public class ShapeEditController {
         // assign new shape to the current ShapeEditorController
         this.shape = shape;
 
+        shapeTypeLabel.setText(shape.type);
         // View < - > ViewModel bidirectional binding of Shape name and description
         Bindings.bindBidirectional(nameField.textProperty(), shape.name);
         Bindings.bindBidirectional(descriptionField.textProperty(), shape.description);
@@ -62,6 +65,7 @@ public class ShapeEditController {
         // Color and stroke binding between VisualObject and ShapeEditorController form controls
         Color originalColor = (Color)shape.visualObject.getStroke();
         colorPicker.setValue(originalColor);
+
         // Bind color picker < - >
 //        stroke.bind(Bindings.createObjectBinding(() -> { return (Color)colorPicker.getValue(); }, colorPicker.valueProperty()));
         stroke = shape.visualObject.strokeProperty();
@@ -88,13 +92,9 @@ public class ShapeEditController {
         if (bound) {
             setDefaults();
             shape.anchorVisibility(false);
+
             Bindings.unbindBidirectional(nameField.textProperty(), shape.name);
             Bindings.unbindBidirectional(descriptionField.textProperty(), shape.description);
-
-//            if (shape.visualObject.shape == null) {
-//                bound = false;
-//                return;
-//            }
 
             if (shape.type.contains("POLYGON"))
                 fill.unbind();
@@ -108,15 +108,13 @@ public class ShapeEditController {
             this.finishedEditingShape = true;
             shape.finish();
         }
-        scrollPane.setPannable(true);
         shape.anchorVisibility(false);
     }
 
     @FXML
     private void okButtonClicked() {
         setDefaults();
-        sideBar.setVisible(false);
-        appState.canvas.setState("VIEW");
+        canvasController.viewMode();
     }
 
     public void edit(Shape shape) {

@@ -75,7 +75,6 @@ public class OffersController implements Initializable{
         nextOfferId = 0;
     }
 
-
     private void intFieldRegex(TextField field) {
         field.textProperty().addListener((observable, oldVal, newVal) -> {
             if (!newVal.matches("\\d*")) {
@@ -95,7 +94,6 @@ public class OffersController implements Initializable{
         offer.description.bindBidirectional(descriptionArea.textProperty());
         offer.price.bindBidirectional(priceField.textProperty());
     }
-
 
     public void unBind(Offer offer) {
         offer.propertyType.unbindBidirectional(this.propertyType.valueProperty());
