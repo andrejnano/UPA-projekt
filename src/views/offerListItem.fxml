@@ -4,23 +4,29 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.control.Label?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.Separator?>
+<AnchorPane prefHeight="60.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OfferListItemCtrl">
+   <Separator/>
    <children>
-      <VBox prefHeight="100.0" prefWidth="200.0">
+      <HBox>
          <ImageView id="titlePic">
          </ImageView>
-         <HBox prefHeight="100.0" prefWidth="200.0">
-            <VBox>
+<!--         <Separator/>-->
+         <VBox prefHeight="100.0" prefWidth="200.0">
+            <HBox>
                <Label fx:id="transactionType"/>
                <Label fx:id="propertyType"/>
-            </VBox>
-            <VBox>
+            </HBox>
+            <HBox>
+               <Label text="Area: "/>
                <Label fx:id="area"/>
-               <Label fx:id="mU+00B2"/>
+               <Label text=" m&#x00B2;, price: "/>
                <Label fx:id="price"/>
-            </VBox>
+               <Label text=" CZK"/>
+            </HBox>
+            <Label text="Description: "/>
             <Label fx:id="description"/>
-         </HBox>
-      </VBox>
+         </VBox>
+      </HBox>
    </children>
 </AnchorPane>

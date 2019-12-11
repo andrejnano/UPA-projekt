@@ -19,6 +19,17 @@ public class Offer {
         description = new SimpleStringProperty();
         price = new SimpleStringProperty();
     }
+
+    public boolean isValid() {
+        if (propertyType.getValue() != null &&
+                transactionType.getValue() != null &&
+                !area.getValue().isEmpty() &&
+                !description.getValue().isEmpty() &&
+                !price.getValue().isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 //    ComboBox transactionType;
 //    Button location;
 //    TextField areaField;
