@@ -5,6 +5,11 @@
 
     <TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="controllers.MainController">
         <tabs>
+            <Tab text="Settings">
+                <content>
+                    <fx:include source="loginView.fxml" />
+                </content>
+            </Tab>
             <Tab text="Admin">
                 <content>
                     <fx:include source="canvasView.fxml" />

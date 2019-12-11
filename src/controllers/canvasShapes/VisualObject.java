@@ -14,7 +14,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 
 public class VisualObject {
-    protected ObservableList<Anchor> anchors;
+    public ObservableList<Anchor> anchors;
     protected EnumPtr state;
     public Shape shape;
     protected Paint stroke;

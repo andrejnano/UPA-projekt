@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="372.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.loginController">
+    <children>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0" />
+        <Label layoutX="45.0" layoutY="49.0" text="Host IP" />
+        <TextField fx:id="ipField" layoutX="125.0" layoutY="45.0" promptText="ip address" text="gort.fit.vutbr.cz" />
+        <Label layoutX="45.0" layoutY="84.0" text="Port" />
+        <TextField fx:id="portField" layoutX="125.0" layoutY="80.0" text="1521" />
+        <Label layoutX="45.0" layoutY="117.0" text="Service tag" />
+        <TextField fx:id="tagField" layoutX="125.0" layoutY="113.0" text="orclpdb" />
+        <Label layoutX="45.0" layoutY="150.0" text="User" />
+        <TextField fx:id="userField" layoutX="125.0" layoutY="146.0" promptText="login" />
+        <Label layoutX="45.0" layoutY="184.0" text="Password" />
+        <PasswordField fx:id="pwdField" layoutX="125.0" layoutY="180.0" promptText="password" />
+        <Button fx:id="connectBtn" layoutX="125.0" layoutY="217.0" mnemonicParsing="false" text="Connect" onAction="#connectToDb" />
+
+        <Separator layoutX="-14.0" layoutY="259.0" prefHeight="0.0" prefWidth="355.0" />
+
+        <Label layoutX="45.0" layoutY="272.0" text="SQL init" />
+        <TextField fx:id="pathField" layoutX="125.0" layoutY="268.0" promptText="Path to SQL init script" />
+        <Button fx:id="insertBtn" layoutX="125.0" layoutY="306.0" mnemonicParsing="false" text="Insert" onAction="#commitFile" />
+        <Button fx:id="selectBtn" layoutX="274.0" layoutY="268.0" mnemonicParsing="false" text="Search" onAction="#openChooser" />
+   </children>
+</AnchorPane>
