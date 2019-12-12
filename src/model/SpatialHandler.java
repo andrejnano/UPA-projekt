@@ -113,7 +113,7 @@ public class SpatialHandler {
     public List<Integer> withObject(String type) {
         List<Integer> idList = new ArrayList<Integer>();
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select estate.estateId from map_entities estate, map_entities object" +
+            String sqlString = "select estate.estateId from map_entities estate, map_entities object " +
                     "where (estate.type = 'land' and object.type = '" + type + "' AND " +
                     "(SDO_RELATE(estate.shape, object.shape, 'mask=ANYINTERACT') = 'TRUE')";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
@@ -132,10 +132,10 @@ public class SpatialHandler {
     public List<Integer> withinCanvas(int[] borders) {
         List<Integer> idList = new ArrayList<Integer>();
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select object.id from map_entities object" +
+            String sqlString = "select object.id from map_entities object " +
                     "(SDO_FILTER(object.shape, " +
-                    "SDO_GEOMETRY(2003, NULL, NULL," +
-                    "(SDO_ELEM_INFO_ARRAY(1, 1003, 3)" +
+                    "SDO_GEOMETRY(2003, NULL, NULL, " +
+                    "(SDO_ELEM_INFO_ARRAY(1, 1003, 3) " +
                     "SDO_ORDINATE_ARRAY(" + borders[0] + ", " + borders[1] + ", " + borders[2] + ", " + borders[3] + "))" +
                     ") = 'TRUE')";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
@@ -153,8 +153,8 @@ public class SpatialHandler {
     public List<Integer> withinDistance(String type, int distance) {
         List<Integer> idList = new ArrayList<Integer>();
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select estate.estateId from map_entities estate, map_entities object" +
-                    "where estate.type = 'land' and object.type = '" + type + "' and " +
+            String sqlString = "select estate.estateId from map_entities estate, map_entities object " +
+                    "where estate.type = 'land' and object.type = '" + type + "' AND " +
                     "(SDO_WITHIN_DISTANCE(estate.shape, object.shape, 'distance=" + distance + "') = 'TRUE')";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             while (rset.next()) {
@@ -172,7 +172,7 @@ public class SpatialHandler {
     public int objectArea(String type, int estateId) {
         int area = 0;
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select SUM(SDO_GEOM.SDO_AREA(shape, 1)) from map_entities estate" +
+            String sqlString = "select SUM(SDO_GEOM.SDO_AREA(shape, 1)) from map_entities estate " +
                     "where estate.type = '" + type + "' and estate.estateId = '" + estateId + "'";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             if (rset.next()) {
@@ -189,7 +189,7 @@ public class SpatialHandler {
     public int objectDistance(int firstObjId, int secondObjId) {
         int distance = 0;
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select SDO_GEOM.SDO_DISTANCE(first.shape, second.shape, 1) from map_entities first, map_entities second" +
+            String sqlString = "select SDO_GEOM.SDO_DISTANCE(first.shape, second.shape, 1) from map_entities first, map_entities second " +
                     "where (first.id = '" + firstObjId + "' and second.id = '" + secondObjId + "' )";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             if (rset.next()) {
@@ -207,7 +207,7 @@ public class SpatialHandler {
     public int objectLength(int id) {
         int length = 0;
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select SDO_GEOM.SDO_LENGTH(object.shape, meta.diminfo) from map_entities object, user_sdo_geom_metadata meta" +
+            String sqlString = "select SDO_GEOM.SDO_LENGTH(object.shape, meta.diminfo) from map_entities object, user_sdo_geom_metadata meta " +
                     "where (object.id = '" + id + "' and meta.column_name = 'SHAPE' )";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             if (rset.next()) {

@@ -53,6 +53,8 @@ public class DatabaseManager {
         } catch (SQLException sqlException) {
             System.err.println("SQLException: " + sqlException.getMessage());
         }
+        new MultimediaHandler();
+        new OffersHandler();
     }
 
     // close connection to database
