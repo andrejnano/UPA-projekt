@@ -152,7 +152,7 @@ public class OffersController implements Initializable{
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
                 AnchorPane offerListItem = loader.load();
                 OfferListItemCtrl itemController =  loader.getController();
-                itemController.init(o, multiHandler.getPicture(o.getId()));
+                itemController.init(o, multiHandler.getPicture(multiHandler.getFirstImageId(o.getId())));
                 myOffersBox.getChildren().add(offerListItem);
                 listItems.add(offerListItem);
             } catch (Exception e) {

@@ -25,9 +25,9 @@ public class OffersHandler {
 
     // stores OffersDBO object consisting of offer informations into db
     public int insertOffer(OffersDBO object) {
-        int id = dbManager.getNextId("estates");
+        int id = dbManager.getNextId("offers");
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "insert into estates (id, name, description, price, type, transaction, spatialId) values(" +
+            String sqlString = "insert into offers (id, name, description, price, type, transaction, spatialId) values(" +
                     "" + id + ", '" + object.getName() + "', '" + object.getDescription() + "', " + object.getPrice() + ", '" + object.getType() + "', '" + object.getTransaction() + "', " + object.getSpatialId() + ")";
             stmt.executeUpdate(sqlString);
         } catch (SQLException e) {
@@ -122,7 +122,7 @@ public class OffersHandler {
         ArrayList<OffersDBO> offers = new ArrayList<>();
         try (Statement stmt = connection.createStatement()) {
             ResultSet rSet = stmt.executeQuery(
-                    "select * from estates");
+                    "select * from offers");
 
             while (rSet.next()) {
                 OffersDBO object = new OffersDBO();

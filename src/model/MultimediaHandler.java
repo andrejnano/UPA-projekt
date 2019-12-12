@@ -61,6 +61,27 @@ public class MultimediaHandler {
         return similarIDs;
     }
 
+    // returns list of picture ids corresponding with specified offer id
+    public List<Integer> getImageId(int offerId) {
+        List<Integer> id = new ArrayList<Integer>();
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select id from pictures where estateId = " + offerId;
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            while (rset.next()) {
+                id.add(rset.getInt("id"));
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    // returns first stored picture for specified offer
+    public int getFirstImageId(int offerId) {
+        return getImageId(offerId).get(0);
+    }
+
     // returns picture in Image format
     // https://docs.oracle.com/cd/B12037_01/appdev.101/b10829/mm_imgref001.htm
     public Image getPicture(int id) {
