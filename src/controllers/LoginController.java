@@ -53,6 +53,7 @@ public class LoginController {
             try {
                 dbm.setup(ipField.getText(), portField.getText(), tagField.getText(), userField.getText(), pwdField.getText());
             } catch (SQLException e) {
+                // todo: inform on gui
                 System.err.println("SQLException: " + e.getMessage());
             }
             dbm.connect();

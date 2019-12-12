@@ -92,7 +92,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     final private int minZoomLevel = 0;
     private int currentZoomLevel = 10;
 
-
     public final static double gridRows = 50;
     public final static double gridCols = 50;
     public static double gridCellSize;
@@ -114,6 +113,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
         shapes = new ArrayList<>();
 
+        // cursor position tooltip box with coordinate [x,y], displayed on MOUSE PRESSED
         cursorLocationToolTip = new Tooltip();
 
         mouseCoordinate = new Coordinate();

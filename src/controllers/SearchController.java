@@ -47,7 +47,6 @@ public class SearchController implements Initializable {
     public void updateCanvas(List<Offer> offers) {
 
         // for each offer...
-
 //        pane.getChildren().add();
     }
 }

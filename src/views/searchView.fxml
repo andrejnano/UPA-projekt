@@ -10,27 +10,49 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.collections.FXCollections?>
 
-<?import model.OfferPropertyType?>
-<?import model.OfferTransactionType?>
+<!--<?import model.OfferPropertyType?>-->
+<!--<?import model.OfferTransactionType?>-->
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SearchController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SearchController">
     <children>
-        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #2f3136;">
+        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1060.0" style="-fx-background-color: #2f3136;">
             <top>
-
-            </top>
-            <center>
-                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="560.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="600.0" style="-fx-background-color: #ccc; -fx-border-color: #eee; -fx-border-width: 1px;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
-                    <content>
-                        <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1120.0" prefWidth="1200.0" style="-fx-background-color: #fafafa; -fx-border-color: #ccc; -fx-border-width: 1px;">
-                            <effect>
-                                <DropShadow />
-                            </effect>
-                        </Pane>
-                    </content>
+                <ToolBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="1060.0" style="-fx-background-color: #36393f;" BorderPane.alignment="TOP_LEFT">
+                    <items>
+                        <Label alignment="CENTER_RIGHT" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="40.0" text="Mode:" textFill="#aeaeae">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="canvasStateLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="200.0" text="[MODE]" textFill="#eaf4ff">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                            <padding>
+                                <Insets left="15.0" />
+                            </padding>
+                        </Label>
+                        <Region prefHeight="20.0" prefWidth="732.0" />
+                        <Button fx:id="clearCanvasButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Button>
+                    </items>
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
+                </ToolBar>
+            </top>
+            <center>
+                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="640.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="720.0" style="-fx-background-color: #ccc; -fx-border-style: none none none solid; -fx-border-color: #36393f; -fx-border-width: 4; -fx-border-radius: 0;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
+                    <content>
+                        <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: #fafafa; -fx-border-color: #ccc; -fx-border-width: 1px;">
+                            <effect>
+                                <DropShadow blurType="TWO_PASS_BOX" height="14.93" radius="6.965" width="14.93" />
+                            </effect>
+                        </Pane>
+                    </content>
                 </ScrollPane>
             </center>
             <right>
@@ -77,15 +99,15 @@
                                  </Label>
                                  <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                      <items>
-                                         <FXCollections fx:factory="observableArrayList">
-                                             <OfferPropertyType fx:value="FLAT"/>
-                                             <OfferPropertyType fx:value="LAND"/>
-                                             <OfferPropertyType fx:value="DETACHED"/>
-                                             <OfferPropertyType fx:value="TOWNHOUSE"/>
-                                             <OfferPropertyType fx:value="BUNGALOW"/>
-                                             <OfferPropertyType fx:value="COTTAGE"/>
-                                             <OfferPropertyType fx:value="OTHER"/>
-                                         </FXCollections>
+<!--                                         <FXCollections fx:factory="observableArrayList">-->
+<!--                                             <OfferPropertyType fx:value="FLAT"/>-->
+<!--                                             <OfferPropertyType fx:value="LAND"/>-->
+<!--                                             <OfferPropertyType fx:value="DETACHED"/>-->
+<!--                                             <OfferPropertyType fx:value="TOWNHOUSE"/>-->
+<!--                                             <OfferPropertyType fx:value="BUNGALOW"/>-->
+<!--                                             <OfferPropertyType fx:value="COTTAGE"/>-->
+<!--                                             <OfferPropertyType fx:value="OTHER"/>-->
+<!--                                         </FXCollections>-->
                                      </items>
                                      <GridPane.margin>
                                          <Insets bottom="5.0" left="15.0" top="5.0" />
@@ -99,11 +121,11 @@
                                   </Label>
                                  <ComboBox fx:id="transactionType" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                      <items>
-                                         <FXCollections fx:factory="observableArrayList">
-                                             <OfferTransactionType fx:value="RENT"/>
-                                             <OfferTransactionType fx:value="SELL"/>
-                                             <OfferTransactionType fx:value="SHARE"/>
-                                         </FXCollections>
+<!--                                         <FXCollections fx:factory="observableArrayList">-->
+<!--                                             <OfferTransactionType fx:value="RENT"/>-->
+<!--                                             <OfferTransactionType fx:value="SELL"/>-->
+<!--                                             <OfferTransactionType fx:value="SHARE"/>-->
+<!--                                         </FXCollections>-->
                                      </items>
                                  <GridPane.margin>
                                     <Insets bottom="5.0" left="15.0" top="5.0" />

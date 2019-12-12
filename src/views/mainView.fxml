@@ -5,22 +5,22 @@
 
 <TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="controllers.MainController">
     <tabs>
-        <Tab text="Settings">
+        <Tab text="Settings" fx:id="settingsTab">
             <content>
                 <fx:include source="loginView.fxml" />
             </content>
         </Tab>
-        <Tab text="Manage offers">
+        <Tab text="Manage map" fx:id="manageMapTab">
             <content>
                 <fx:include source="canvasView.fxml" />
             </content>
         </Tab>
-        <Tab text="Search for offers">
+        <Tab text="Search for offers" fx:id="searchTab">
             <content>
                 <fx:include source="searchView.fxml" />
             </content>
         </Tab>
-        <Tab text="Create offer">
+        <Tab text="Create offer" fx:id="createTab">
             <content>
                 <fx:include source="offersView.fxml" />
             </content>
