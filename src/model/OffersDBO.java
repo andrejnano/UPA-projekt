@@ -4,7 +4,7 @@ public class OffersDBO {
 
     private static final int defaultId = 0;
 
-    private int id, price;
+    private int id, price, spatialId;
     private String name, description, type, transaction;
 
     public OffersDBO() {
@@ -14,6 +14,7 @@ public class OffersDBO {
         this.type = "";
         this.transaction = "";
         this.price = 0;
+        this.spatialId = defaultId;
     }
 
     // quick init
@@ -28,6 +29,7 @@ public class OffersDBO {
 
     public void setId(int id) { this.id = id; }
     public void setPrice(int price) { this.price = price; }
+    public void setSpatialId(int spatialId) { this.spatialId = spatialId; }
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
     public void setType(String type) { this.type = type; }
@@ -35,6 +37,7 @@ public class OffersDBO {
 
     public int getId() { return this.id; }
     public int getPrice() { return this.price; }
+    public int getSpatialId() { return this.spatialId; }
     public String getName() { return this.name; }
     public String getDescription() { return this.description; }
     public String getType() { return this.type; }

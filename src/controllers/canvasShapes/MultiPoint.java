@@ -1,6 +1,7 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
+import controllers.CanvasController;
 import controllers.ShapeEditController;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -29,19 +30,19 @@ public class MultiPoint extends Shape {
 
     public boolean add(Coordinate c, ArrayList<Shape> shapes) {
 
-        Circle centre = new Circle(c.x, c.y, 3);
+        Circle centre = new Circle(c.getX(), c.getY(), 3);
         centre.setFill(visualObject.stroke);
 
-        DoubleProperty xProperty = new SimpleDoubleProperty(c.x);
-        DoubleProperty yProperty = new SimpleDoubleProperty(c.y);
+        DoubleProperty xProperty = new SimpleDoubleProperty(c.getX());
+        DoubleProperty yProperty = new SimpleDoubleProperty(c.getY());
 
         xProperty.addListener((observable, oldX, x) -> {
-            c.x = x.doubleValue();
+            c.setX(x.doubleValue(), CanvasController.gridCellSize);
             centre.setCenterX(x.doubleValue());
         });
 
         yProperty.addListener((observable, oldY, y) -> {
-            c.y = y.doubleValue();
+            c.setY(y.doubleValue(), CanvasController.gridCellSize);
             centre.setCenterY(y.doubleValue());
         });
 

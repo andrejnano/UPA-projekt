@@ -1,6 +1,7 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
+import controllers.CanvasController;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -35,8 +36,8 @@ public class Anchor extends Circle {
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
                 // record a delta distance for the drag and drop operation.
-                dragDelta.x = getCenterX() - mouseEvent.getX();
-                dragDelta.y = getCenterY() - mouseEvent.getY();
+                dragDelta.setX(getCenterX() - mouseEvent.getX(), CanvasController.gridCellSize);
+                dragDelta.setY(getCenterY() - mouseEvent.getY(), CanvasController.gridCellSize);
                 getScene().setCursor(Cursor.MOVE);
             }
         });
@@ -47,11 +48,11 @@ public class Anchor extends Circle {
         });
         setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
-                double newX = mouseEvent.getX() + dragDelta.x;
+                double newX = mouseEvent.getX() + dragDelta.getX();
                 if (newX > 0 && newX < getScene().getWidth()) {
                     setCenterX(newX);
                 }
-                double newY = mouseEvent.getY() + dragDelta.y;
+                double newY = mouseEvent.getY() + dragDelta.getY();
                 if (newY > 0 && newY < getScene().getHeight()) {
                     setCenterY(newY);
                 }

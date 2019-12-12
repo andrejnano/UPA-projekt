@@ -24,10 +24,10 @@ public class Area extends Shape {
     public boolean add(Coordinate c, ArrayList<Shape> shapes) {
         double r = 5;
         if (numberOfPoints > 0) {
-            double sx = firstCoordinate.x;
-            double sy = firstCoordinate.y;
-            double x = c.x;
-            double y = c.y;
+            double sx = firstCoordinate.getX();
+            double sy = firstCoordinate.getY();
+            double x = c.getX();
+            double y = c.getY();
             if ((sx-x)*(sx-x) + (sy-y)*(sy-y) <= r*r) {
                 addLine(oldCoordinate, firstCoordinate);
                 addPolygon();

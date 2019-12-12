@@ -93,8 +93,8 @@ public class DatabaseManager {
         }
     }
 
-    // returns highest id in table
-    public int maxId(String table)
+    // returns next unused id for specified table
+    public int getNextId(String table)
     {
         int maxId = 0;
         try (Statement stmt = connection.createStatement()) {

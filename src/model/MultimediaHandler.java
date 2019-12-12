@@ -27,6 +27,7 @@ public class MultimediaHandler {
     public static MultimediaHandler getInstance() { return instance; }
 
     // resizes current image
+    // specified by id, takes new dimensions
     public void resizeImage(int id, int x, int y) {
         OrdImage imgProxy = getProxy(id);
         try (OraclePreparedStatement pstmt = (OraclePreparedStatement) connection.prepareStatement(
@@ -41,7 +42,8 @@ public class MultimediaHandler {
         updateStillImage(id);
     }
 
-    // returns ids of similar pictures sorted from most similar
+    // returns ids of similar pictures
+    // sorted from most similar to image specified by id
     public List<Integer> getSimilarities(int id) {
         List<Integer> similarIDs = new ArrayList<Integer>();
         try (Statement stmt = connection.createStatement()) {
@@ -75,7 +77,7 @@ public class MultimediaHandler {
         return SwingFXUtils.toFXImage(buffer, null);
     }
 
-    // sets new estateId for picture
+    // sets new estateId for picture specified by id
     public void setEstateId(int id, int estateId) {
         try (OraclePreparedStatement pstmt = (OraclePreparedStatement) connection.prepareStatement(
                 "update estateId from pictures where id = " + id)) {
@@ -86,8 +88,9 @@ public class MultimediaHandler {
         }
     }
 
-    // updates stored image
-    public void setNewImage(int id, String filename) {
+    // updates stored image in database
+    // for updating stored image only
+    public void updateImage(int id, String filename) {
         try {
             OrdImage imgProxy = getProxy(id);
             try {
@@ -109,7 +112,7 @@ public class MultimediaHandler {
         updateStillImage(id);
     }
 
-    // deletes picture from table
+    // deletes picture from database specified by id
     public void deleteEntry(int id) {
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "delete from pictures where id = " + id;
@@ -119,7 +122,9 @@ public class MultimediaHandler {
         }
     }
 
-    // stores image from file to database (insert with new id)
+    // creates new record for image and stores image from file
+    // returns id of stored image
+    // adds all necessary informations for image
     public int storeImage(int estateId, String filename)
     {
         int id = 0;
@@ -127,14 +132,14 @@ public class MultimediaHandler {
             final boolean previousAutoCommit = connection.getAutoCommit();
             connection.setAutoCommit(false);
             try {
-                id = dbManager.maxId("pictures");
+                id = dbManager.getNextId("pictures");
                 try (Statement stmt = connection.createStatement()) {
                     String sqlString = "insert into pictures (id, estateId, picture) values(" + id + ", " + estateId + ", ordsys.ordimage.init())";
                     stmt.executeUpdate(sqlString);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                setNewImage(id, filename);
+                updateImage(id, filename);
                 connection.commit();
             } finally {
                 connection.setAutoCommit(previousAutoCommit);
@@ -145,8 +150,9 @@ public class MultimediaHandler {
         return id;
     }
 
+    // internal function, loads picture from db into ordImage obejct
     // "for update" locks image until commit/rollback is issued
-    public OrdImage getProxy(int id)
+    private OrdImage getProxy(int id)
     {
         OrdImage imgProxy = null;
         try (Statement stmt = connection.createStatement()) {
@@ -162,6 +168,7 @@ public class MultimediaHandler {
         return imgProxy;
     }
 
+    // internal function
     // updates stillimage data based on current ordimage
     // check if alias ok (multimedia demo)
     private void updateStillImage(int id) {

@@ -3,19 +3,19 @@ DROP TABLE map_entities;
 DROP TABLE pictures;
 
 -- primary application spatial objects
-CREATE TABLE estates(
+CREATE TABLE offers(
     id NUMBER PRIMARY KEY,
     name VARCHAR(30),
     description VARCHAR(200),
     price NUMBER,
     type VARCHAR(50),
-    transaction VARCHAR(50)
+    transaction VARCHAR(50),
+    spatialId NUMBER
 );
 
 -- other spatial objects such as roads/rivers/..
 CREATE TABLE map_entities(
     id NUMBER PRIMARY KEY,
-    estateId NUMBER,
     name VARCHAR(30),
     description VARCHAR(200),
     shape SDO_GEOMETRY,
