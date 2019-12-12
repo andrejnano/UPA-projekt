@@ -13,8 +13,22 @@ public class Offer {
     public SimpleStringProperty price;
     public int id;
 
-    public Offer(int id) {
-        this.id = id;
+    public Offer() {
+        init();
+    }
+
+    public Offer(OffersDBO dbo) {
+        init();
+        id = dbo.getId();
+        propertyType.setValue(OfferPropertyType.valueOf(dbo.getType()));
+        transactionType.setValue(OfferTransactionType.valueOf(dbo.getTransaction()));
+        area.setValue(dbo.getName());
+        description.setValue(dbo.getDescription());
+        price.setValue(((Integer) dbo.getPrice()).toString());
+    }
+
+    private void init() {
+        id = -1;
         propertyType = new SimpleObjectProperty<>();
         transactionType = new SimpleObjectProperty<>();
         area = new SimpleStringProperty();
@@ -35,7 +49,11 @@ public class Offer {
 
     public OffersDBO toDBO() {
         OffersDBO dbo = new OffersDBO();
-        dbo.init(-1, area.getValue(), description.getValue(), Integer.parseInt(price.getValue()), propertyType.toString(), transactionType.toString());
+        dbo.init(-1, area.getValue(),
+                description.getValue(),
+                Integer.parseInt(price.getValue()),
+                propertyType.getValue().toString(),
+                transactionType.getValue().toString());
         return dbo;
     }
 //    ComboBox transactionType;

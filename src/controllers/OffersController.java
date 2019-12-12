@@ -59,20 +59,19 @@ public class OffersController implements Initializable{
     @FXML
     HBox otherPictures;
 
-    ArrayList<Offer> myOffers;
     Offer curOffer;
     ArrayList<Pane> listItems;
     String titlePicturePath;
     ArrayList<String> otherPicturePaths;
-    int nextOfferId;
+    ArrayList<ImageView> otherPicturesImages;
+    MultimediaHandler multiHandler;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         curOffer = null;
-        myOffers = new ArrayList<Offer>();
         listItems = new ArrayList<Pane>();
         otherPicturePaths = new ArrayList<String>();
-        nextOfferId = 0;
+        otherPicturesImages = new ArrayList<>();
     }
 
     private void intFieldRegex(TextField field) {
@@ -116,11 +115,10 @@ public class OffersController implements Initializable{
             unBind(curOffer);
         }
         clear();
-        curOffer = new Offer(nextOfferId);
+        curOffer = new Offer();
         bind(curOffer);
         intFieldRegex(areaField);
         intFieldRegex(priceField);
-        nextOfferId++;
     }
 
     private void clear() {
@@ -129,6 +127,10 @@ public class OffersController implements Initializable{
         areaField.clear();
         descriptionArea.clear();
         priceField.clear();
+        titlePicture.setImage(null);
+        otherPictures.getChildren().removeAll(otherPicturesImages);
+        titlePicturePath = null;
+        otherPicturePaths.clear();
     }
 
     @FXML
@@ -139,12 +141,18 @@ public class OffersController implements Initializable{
 
         myOffersBox.getChildren().removeAll(listItems);
         listItems.clear();
-        for (Offer o: myOffers) {
+
+
+
+        OffersHandler dbHandler = getDbHandler();
+        ArrayList<OffersDBO> offers = dbHandler.getAllOffers();
+
+        for (OffersDBO o: offers) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
                 AnchorPane offerListItem = loader.load();
                 OfferListItemCtrl itemController =  loader.getController();
-                itemController.init(o);
+                itemController.init(o, multiHandler.getPicture(o.getId()));
                 myOffersBox.getChildren().add(offerListItem);
                 listItems.add(offerListItem);
             } catch (Exception e) {
@@ -176,6 +184,7 @@ public class OffersController implements Initializable{
             image.setFitHeight(150);
             otherPictures.getChildren().add(image);
             otherPicturePaths.add(path);
+            otherPicturesImages.add(image);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -197,7 +206,6 @@ public class OffersController implements Initializable{
     @FXML
     private void saveOffer() {
         if (curOffer != null && curOffer.isValid()) {
-            myOffers.add(curOffer);
             errorLabel.setTextFill(Color.GREEN);
             storeImages();
             errorLabel.setText("Insertion successful!");
@@ -208,10 +216,9 @@ public class OffersController implements Initializable{
     }
 
     private void storeImages() {
-        MultimediaHandler multiHandler = MultimediaHandler.getInstance();
-        OffersHandler offersHandler = OffersHandler.getInstance();
-        curOffer.id = offersHandler.insertOffer(curOffer.toDBO());
-        //multiHandler.storeImage(curOffer.id, titlePicturePath);
+        OffersHandler dbHandler = getDbHandler();
+        curOffer.id = dbHandler.insertOffer(curOffer.toDBO());
+        multiHandler.storeImage(curOffer.id, titlePicturePath);
         for (String path : otherPicturePaths) {
             System.out.println("CurPath "+ path);
             multiHandler.storeImage(curOffer.id, path);
@@ -221,12 +228,18 @@ public class OffersController implements Initializable{
     @FXML
     private void deleteOffer() {
         if (curOffer != null) {
-            myOffers.remove(curOffer);
             clear();
             editOfferSidebar.setVisible(false);
             errorLabel.setText("");
-//            myOffersBox.getChildren().remove(curOffer);
+            OffersHandler dbHandler = getDbHandler();
+            if (curOffer.id != -1)
+                dbHandler.deleteOffer(curOffer.id);
         }
+    }
+
+    private OffersHandler getDbHandler() {
+        multiHandler = MultimediaHandler.getInstance();
+        return OffersHandler.getInstance();
     }
 
 }

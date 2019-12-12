@@ -94,4 +94,27 @@ public class OffersHandler {
             e.printStackTrace();
         }
     }
+
+    public ArrayList<OffersDBO> getAllOffers() {
+        ArrayList<OffersDBO> offers = new ArrayList<>();
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rSet = stmt.executeQuery(
+                    "select * from estates");
+
+            while (rSet.next()) {
+                OffersDBO object = new OffersDBO();
+                object.setId(rSet.getInt("id"));
+                object.setName(rSet.getString("name"));
+                object.setDescription(rSet.getString("description"));
+                object.setPrice(rSet.getInt("price"));
+                object.setType(rSet.getString("type"));
+                object.setTransaction(rSet.getString("transaction"));
+                offers.add(object);
+            }
+            rSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return offers;
+    }
 }
