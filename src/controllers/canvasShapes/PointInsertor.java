@@ -52,17 +52,17 @@ public class PointInsertor extends Manipulator {
     protected void addLine(Coordinate oldC, Coordinate c) {
         if (c == null || oldC == null)
             return;
-        System.out.println(c.x);
-        System.out.println(oldC.x);
-        Line l = new Line(oldC.x, oldC.y, c.x, c.y);
+        System.out.println(c.getX());
+        System.out.println(oldC.getX());
+        Line l = new Line(oldC.getX(), oldC.getY(), c.getX(), c.getY());
 
         lines.add(l);
         pane.getChildren().add(l);
     }
 
     protected void addPoint(Coordinate c) {
-        xyPoints.add(c.x);
-        xyPoints.add(c.y);
+        xyPoints.add(c.getX());
+        xyPoints.add(c.getY());
         if (oldCoordinate != null) {
             numberOfPoints = 0;
             addLine(oldCoordinate, c);
@@ -73,7 +73,7 @@ public class PointInsertor extends Manipulator {
     protected void setFirstPoint(Coordinate c) {
         double r = 5;
         firstCoordinate = c;
-        firstPoint = new Circle(c.x, c.y, r);
+        firstPoint = new Circle(c.getX(), c.getY(), r);
         Color color = Color.rgb(0, 200, 0);
         firstPoint.setFill(color.deriveColor(1, 1, 1, 0.5));
         firstPoint.setStroke(color);

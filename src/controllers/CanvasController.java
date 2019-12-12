@@ -92,18 +92,20 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     final private int minZoomLevel = 0;
     private int currentZoomLevel = 10;
 
-    // this will be calculated in drawGridOnCanvas()
-    public double gridCellSize;
+
+    public final static double gridRows = 50;
+    public final static double gridCols = 50;
+    public static double gridCellSize;
 
     Canvas gridCanvas;
-
     Tooltip cursorLocationToolTip;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         instance = this;
 
-        // todo: not working, draw grid on canvas
+        // calculate grid size and paint on canvas pane
+        gridCellSize = pane.getPrefHeight() / gridRows;
         drawGridOnCanvas();
 
         // Initialize new AppState, this object will be passed down to underlying components/controllers
@@ -277,9 +279,9 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
             // update mouse position model [x,y] coordinates
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_MOVED) {
-                mouseCoordinate.x = mouseEvent.getX();
-                mouseCoordinate.y = mouseEvent.getY();
-                mouseCoordinateLabel.setText("Mouse[X: " + Math.round(mouseCoordinate.x) + "; Y: " +  Math.round(mouseCoordinate.y) + "]");
+                mouseCoordinate.setX(mouseEvent.getX());
+                mouseCoordinate.setY(mouseEvent.getY());
+                mouseCoordinateLabel.setText("Mouse[X: " + Math.round(mouseCoordinate.getX()) + "; Y: " +  Math.round(mouseCoordinate.getY()) + "]");
             }
         }
     };
@@ -289,8 +291,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         double scaleAmount = zoomEvent.getZoomFactor();
         // Construct and configure scale transformation
         Scale scaleTransform = new Scale();
-        scaleTransform.setPivotX(mouseCoordinate.x);
-        scaleTransform.setPivotY(mouseCoordinate.y);
+        scaleTransform.setPivotX(mouseCoordinate.getX());
+        scaleTransform.setPivotY(mouseCoordinate.getY());
         scaleTransform.setX(pane.getScaleX() * scaleAmount);
         scaleTransform.setY(pane.getScaleY() * scaleAmount);
 
@@ -328,8 +330,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
         // Construct and configure scale transformation
         Scale scaleTransform = new Scale();
-        scaleTransform.setPivotX(mouseCoordinate.x);
-        scaleTransform.setPivotY(mouseCoordinate.y);
+        scaleTransform.setPivotX(mouseCoordinate.getX());
+        scaleTransform.setPivotY(mouseCoordinate.getY());
         scaleTransform.setX(pane.getScaleX() * scaleAmount);
         scaleTransform.setY(pane.getScaleY() * scaleAmount);
         // Apply the transformation
@@ -347,12 +349,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         List<Line> horizontalLines = new ArrayList<>();
         List<Line> verticalLines = new ArrayList<>();
 
-        int rows = 50;
-        int cols = 50;
 
-        this.gridCellSize = pane.getPrefHeight() / rows;
-
-        for(int i=0; i < rows; i++) {
+        for(int i=0; i < gridRows; i++) {
             horizontalLines.add(new Line(0, i*gridCellSize ,pane.getPrefWidth(), i*gridCellSize));
             horizontalLines.get(i).setStroke(Color.LIGHTGRAY);
             horizontalLines.get(i).setStrokeWidth(1.0);
@@ -360,7 +358,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
         System.out.println(Arrays.toString(horizontalLines.toArray()));
 
-        for(int i=0; i < cols; i++) {
+        for(int i=0; i < gridCols; i++) {
             verticalLines.add(new Line(i*gridCellSize, 0 ,i*gridCellSize, pane.getPrefHeight()));
             verticalLines.get(i).setStroke(Color.LIGHTGRAY);
             verticalLines.get(i).setStrokeWidth(1.0);

@@ -24,10 +24,10 @@ public class PolyLine extends Shape {
 
     public boolean add(Coordinate c, ArrayList<Shape> shapes) {
         Polyline polyline = (Polyline) visualObject.shape;
-        xyPoints.add(c.x);
-        xyPoints.add(c.y);
+        xyPoints.add(c.getX());
+        xyPoints.add(c.getY());
         numberOfPoints++;
-        polyline.getPoints().addAll(c.x, c.y);
+        polyline.getPoints().addAll(c.getX(), c.getY());
         if (visualObject.anchors != null) {
             pane.getChildren().removeAll(visualObject.anchors);
         }
