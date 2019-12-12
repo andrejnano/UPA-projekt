@@ -248,13 +248,16 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
             // Handle mouse-click event on pane
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                scrollPane.setCursor(Cursor.CLOSED_HAND);
-                // display tooltip next to cursor
-                cursorLocationToolTip.setText("[x: "+Math.round(mouseEvent.getX())+", y: "+Math.round(mouseEvent.getY())+"]");
-                Node node = (Node) mouseEvent.getSource();
-                cursorLocationToolTip.show(node, mouseEvent.getScreenX() + 10, mouseEvent.getScreenY() + 20);
 
-                if (appState.getCanvasState().contains("VIEW")) { return; }
+                if (appState.getCanvasState().contains("VIEW")) {
+                    scrollPane.setCursor(Cursor.CLOSED_HAND);
+                    // display tooltip next to cursor
+                    cursorLocationToolTip.setText("[x: "+Math.round(mouseEvent.getX())+", y: "+Math.round(mouseEvent.getY())+"]");
+                    Node node = (Node) mouseEvent.getSource();
+                    cursorLocationToolTip.show(node, mouseEvent.getScreenX() + 10, mouseEvent.getScreenY() + 20);
+                    return;
+                }
+
                 if (appState.getCanvasState().contains("EDIT")) { return; }
 
                 Coordinate c = new Coordinate(mouseEvent.getX(), mouseEvent.getY(), gridCellSize);
@@ -264,22 +267,16 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
                 }
             }
 
-            if (mouseEvent.getEventType() == MouseEvent.DRAG_DETECTED) {
-                scrollPane.setCursor(Cursor.CLOSED_HAND);
-            }
-
-            if (mouseEvent.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-                scrollPane.setCursor(Cursor.OPEN_HAND);
-            }
 
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED) {
-                cursorLocationToolTip.hide();
-                scrollPane.setCursor(Cursor.OPEN_HAND);
+                if (appState.getCanvasState().contains("VIEW")) {
+                    cursorLocationToolTip.hide();
+                    scrollPane.setCursor(Cursor.OPEN_HAND);
+                }
             }
 
             // update mouse position model [x,y] coordinates
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_MOVED) {
-                cursorLocationToolTip.setText("[x: "+Math.round(mouseEvent.getX())+", y: "+Math.round(mouseEvent.getY())+"]");
                 mouseCoordinate.x = mouseEvent.getX();
                 mouseCoordinate.y = mouseEvent.getY();
                 mouseCoordinateLabel.setText("Mouse[X: " + Math.round(mouseCoordinate.x) + "; Y: " +  Math.round(mouseCoordinate.y) + "]");
