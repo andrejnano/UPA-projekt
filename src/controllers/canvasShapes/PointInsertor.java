@@ -71,7 +71,7 @@ public class PointInsertor extends Manipulator {
         numberOfPoints++;
     }
     protected void setFirstPoint(Coordinate c) {
-        double r = 10;
+        double r = 5;
         firstCoordinate = c;
         firstPoint = new Circle(c.x, c.y, r);
         Color color = Color.rgb(0, 200, 0);

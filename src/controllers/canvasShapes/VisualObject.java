@@ -3,7 +3,9 @@ package controllers.canvasShapes;
 import controllers.AppState;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
@@ -35,21 +37,27 @@ public class VisualObject {
         }
 
         final Coordinate dragDelta = new Coordinate();
-        shape.setOnMousePressed(mouseEvent -> {
-            if (appState.getCanvasState().contains("EDIT")) {
-                shape.toFront();
-                // record a delta distance for the drag and drop operation.
-                dragDelta.x = getCenterX() - mouseEvent.getX();
-                dragDelta.y = getCenterY() - mouseEvent.getY();
-                shape.getScene().setCursor(Cursor.MOVE);
+        shape.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (appState.getCanvasState().contains("EDIT")) {
+                    shape.toFront();
+                    // record a delta distance for the drag and drop operation.
+                    dragDelta.x = VisualObject.this.getCenterX() - mouseEvent.getX();
+                    dragDelta.y = VisualObject.this.getCenterY() - mouseEvent.getY();
+                    shape.getScene().setCursor(Cursor.MOVE);
+                }
             }
         });
 
-        shape.setOnMouseReleased(mouseEvent -> {
-            if (appState.getCanvasState().contains("EDIT")) {
-                shape.getScene().setCursor(Cursor.HAND);
-                for (Anchor a : anchors) {
-                    a.toFront();
+        shape.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (appState.getCanvasState().contains("EDIT")) {
+                    shape.getScene().setCursor(Cursor.HAND);
+                    for (Anchor a : anchors) {
+                        a.toFront();
+                    }
                 }
             }
         });
@@ -68,15 +76,21 @@ public class VisualObject {
             }
         });
 
-        shape.setOnMouseEntered(mouseEvent -> {
-            if (appState.getCanvasState().contains("EDIT") && !mouseEvent.isPrimaryButtonDown()) {
-                shape.getScene().setCursor(Cursor.HAND);
+        shape.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (appState.getCanvasState().contains("EDIT") && !mouseEvent.isPrimaryButtonDown()) {
+                    shape.getScene().setCursor(Cursor.HAND);
+                }
             }
         });
 
-        shape.setOnMouseExited(mouseEvent -> {
-            if (appState.getCanvasState().contains("EDIT") && !mouseEvent.isPrimaryButtonDown()) {
-                shape.getScene().setCursor(Cursor.DEFAULT);
+        shape.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if (appState.getCanvasState().contains("EDIT") && !mouseEvent.isPrimaryButtonDown()) {
+                    shape.getScene().setCursor(Cursor.DEFAULT);
+                }
             }
         });
     }

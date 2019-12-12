@@ -9,36 +9,27 @@
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CanvasController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CanvasController">
    <children>
-       <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #2f3136;">
+       <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1060.0" style="-fx-background-color: #2f3136;">
            <top>
-               <ToolBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="900.0" style="-fx-background-color: #36393f;" BorderPane.alignment="TOP_LEFT">
+               <ToolBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="1060.0" style="-fx-background-color: #36393f;" BorderPane.alignment="TOP_LEFT">
                    <items>
-                  <Label text="Estate Manager" textFill="WHITE">
+                  <Label alignment="CENTER_RIGHT" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="40.0" text="Mode:" textFill="#aeaeae">
                      <font>
-                        <Font name="Helvetica Bold" size="14.0" />
+                        <Font size="14.0" />
                      </font>
-                     <effect>
-                        <DropShadow />
-                     </effect>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
                   </Label>
-                  <Region prefHeight="30.0" prefWidth="20.0" />
-                       <Button fx:id="viewButton" mnemonicParsing="false" onAction="#viewMode" styleClass="canvasToolBarButton" text="View mode">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font></Button>
-                       <Button fx:id="editButton" mnemonicParsing="false" onAction="#editMode" styleClass="canvasToolBarButton" text="Edit Mode" />
-                  <Region prefHeight="30.0" prefWidth="20.0" />
-                       <Button fx:id="createPointMode" mnemonicParsing="false" onAction="#createPointMode" styleClass="canvasToolBarButton" text="Insert point" />
-                       <Button fx:id="createMultiPointMode" mnemonicParsing="false" onAction="#createMultiPointMode" styleClass="canvasToolBarButton" text="Insert multiPoint" />
-                       <Button fx:id="createPolyLineMode" mnemonicParsing="false" onAction="#createPolyLineMode" styleClass="canvasToolBarButton" text="Insert polyline" />
-                       <Button fx:id="createPolygonButton" mnemonicParsing="false" onAction="#createAreaMode" styleClass="canvasToolBarButton" text="Insert polygon" />
-                  <Region prefHeight="30.0" prefWidth="20.0" />
-                       <Button fx:id="clearCanvasButton" mnemonicParsing="false" onAction="#clearCanvas" style="-fx-background-color: red;" styleClass="canvasToolBarButton" text="Clear Canvas" textFill="WHITE">
+                     <Label fx:id="canvasStateLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="97.0" text="[MODE]" textFill="#eaf4ff">
+                         <font>
+                             <Font name="System Bold" size="14.0" />
+                         </font>
+                     <padding>
+                        <Insets left="15.0" />
+                     </padding>
+                     </Label>
+                  <Region prefHeight="20.0" prefWidth="856.0" />
+                       <Button fx:id="clearCanvasButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearCanvas" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton" textFill="WHITE">
                            <font>
                                <Font name="System Bold" size="14.0" />
                            </font>
@@ -50,7 +41,7 @@
                </ToolBar>
            </top>
            <center>
-               <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="560.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="600.0" style="-fx-background-color: #ccc; -fx-border-style: none none none solid; -fx-border-color: #36393f; -fx-border-width: 4; -fx-border-radius: 0;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
+               <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="640.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="720.0" style="-fx-background-color: #ccc; -fx-border-style: none none none solid; -fx-border-color: #36393f; -fx-border-width: 4; -fx-border-radius: 0;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
                    <content>
                        <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: #fafafa; -fx-border-color: #ccc; -fx-border-width: 0px;">
                      <effect>
@@ -77,64 +68,107 @@
                </AnchorPane>
            </right>
            <bottom>
-              <HBox fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="900.0" style="-fx-background-color: #36393f;" BorderPane.alignment="TOP_LEFT">
+              <HBox fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="1060.0" style="-fx-background-color: #36393f;" BorderPane.alignment="TOP_LEFT">
                  <children>
-                  <VBox prefHeight="90.0" prefWidth="376.0">
-                     <children>
-                        <HBox prefHeight="29.0" prefWidth="204.0">
-                           <children>
-                              <Label alignment="CENTER_RIGHT" prefHeight="24.0" prefWidth="98.0" text="Zoom level:" textFill="#aeaeae">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                                 <Label fx:id="scaleAmountLabel" alignment="CENTER" prefHeight="23.0" prefWidth="68.0" text="100%" textFill="#eaf4ff">
-                                     <font>
-                                         <Font name="System Bold" size="18.0" />
-                                     </font>
-                                 </Label>
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="67.0" prefWidth="321.0">
-                           <children>
-                              <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="100.0" text="Cursor position:" textFill="#aeaeae">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                              </Label>
-                                 <Label fx:id="mouseCoordinateLabel" prefHeight="25.0" prefWidth="181.0" text="[x, y]" textFill="WHITE">
-                                     <font>
-                                         <Font name="System Italic" size="14.0" />
-                                     </font>
-                                 <padding>
-                                    <Insets left="15.0" />
-                                 </padding>
-                                 </Label>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <Region prefHeight="90.0" prefWidth="37.0" />
-                  <VBox prefHeight="90.0" prefWidth="145.0">
-                     <children>
-                        <Label focusTraversable="false" style="-fx-font-weight: 800;" text="Mode:" textFill="#aeaeae">
-                           <font>
-                              <Font name="System Bold" size="13.0" />
-                           </font>
-                        </Label>
-                           <Label fx:id="canvasStateLabel" prefHeight="37.0" prefWidth="129.0" text="[MODE]" textFill="#eaf4ff">
-                               <font>
-                                   <Font name="System Bold" size="30.0" />
-                               </font>
-                           </Label>
-                     </children>
-                  </VBox>
+                  <Region fx:id="zoomLevelIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="40.0" />
+                  <Label alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" text="Zoom level:" textFill="#aeaeae">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="4.0" />
+                     </padding>
+                  </Label>
+                     <Label fx:id="scaleAmountLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="100.0" text="100%" textFill="#eaf4ff">
+                         <font>
+                             <Font name="System Bold" size="13.0" />
+                         </font>
+                     <padding>
+                        <Insets bottom="4.0" left="8.0" />
+                     </padding>
+                     </Label>
+                  <Label alignment="CENTER_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="100.0" text="Cursor position:" textFill="#aeaeae">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="4.0" />
+                     </padding>
+                  </Label>
+                     <Label fx:id="mouseCoordinateLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="150.0" text="[x, y]" textFill="WHITE">
+                         <font>
+                             <Font name="System Bold" size="13.0" />
+                         </font>
+                     <padding>
+                        <Insets bottom="4.0" left="8.0" />
+                     </padding>
+                     </Label>
+                  <Region prefHeight="20.0" prefWidth="94.0" />
                  </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
               </HBox>
            </bottom>
+         <left>
+            <VBox prefHeight="200.0" prefWidth="40.0" BorderPane.alignment="CENTER">
+               <children>
+                       <Button fx:id="viewButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#viewMode" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                     <tooltip>
+                        <Tooltip text="View mode" />
+                     </tooltip>
+                     <VBox.margin>
+                        <Insets bottom="4.0" top="4.0" />
+                     </VBox.margin></Button>
+                       <Button fx:id="editButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#editMode" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
+                     <tooltip>
+                        <Tooltip text="Edit Mode" />
+                     </tooltip>
+                     <VBox.margin>
+                        <Insets bottom="4.0" top="4.0" />
+                     </VBox.margin>
+                  </Button>
+                       <Button fx:id="createPointButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#createPointMode" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
+                     <tooltip>
+                        <Tooltip text="Insert point" />
+                     </tooltip>
+                     <VBox.margin>
+                        <Insets bottom="4.0" top="4.0" />
+                     </VBox.margin></Button>
+
+                       <Button fx:id="createMultiPointButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#createMultiPointMode" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
+                     <tooltip>
+                        <Tooltip text="Insert multiPoint" />
+                     </tooltip>
+                     <VBox.margin>
+                        <Insets bottom="4.0" top="4.0" />
+                     </VBox.margin></Button>
+                       <Button fx:id="createPolyLineButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#createPolyLineMode" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
+                     <tooltip>
+                        <Tooltip text="Insert polyline" />
+                     </tooltip>
+                     <VBox.margin>
+                        <Insets bottom="4.0" top="4.0" />
+                     </VBox.margin></Button>
+                       <Button fx:id="createPolygonButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#createAreaMode" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
+                     <tooltip>
+                        <Tooltip text="Insert polygon" />
+                     </tooltip>
+                     <VBox.margin>
+                        <Insets bottom="4.0" top="4.0" />
+                     </VBox.margin></Button>
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <padding>
+                  <Insets bottom="4.0" left="4.0" right="4.0" />
+               </padding>
+            </VBox>
+         </left>
          </BorderPane>
    </children>
 </AnchorPane>

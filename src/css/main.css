@@ -44,13 +44,13 @@
 }
 
 .canvasToolBarButton {
-    -fx-background-color: #777;
+    -fx-background-color: transparent;
     -fx-text-fill: #fafafa;
     -fx-opacity: 1;
-    -fx-border-radius: 2px;
-    -fx-border-style: solid solid solid solid;
-    -fx-border-width: 1;
-    -fx-border-color: #aaa;
+    /*-fx-border-radius: 2px;*/
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    /*-fx-border-color: #aaa;*/
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
@@ -60,19 +60,59 @@
     -fx-opacity: 0.8;
 }
 .canvasToolBarButton:pressed {
-    -fx-background-color: #fafafa;
-    -fx-text-fill: #222;
-    -fx-opacity: 1;
-    -fx-border-style: solid solid solid solid;
-    -fx-border-width: 1;
-    -fx-border-color: #eee;
+    /*-fx-background-color: #fafafa;*/
+    /*-fx-text-fill: #222;*/
+    /*-fx-opacity: 1;*/
+    /*-fx-border-style: solid solid solid solid;*/
+    /*-fx-border-width: 1;*/
+    /*-fx-border-color: #eee;*/
 }
-
-#viewButton {-fx-background-color: #3e38f2; -fx-text-fill: #fafafa;}
-#editButton {-fx-background-color: green; -fx-text-fill: #fafafa;}
-#viewButton:focused {-fx-background-color: #fafafa; -fx-text-fill: #3e38f2;}
-#editButton:focused {-fx-background-color: #fafafa; -fx-text-fill: green;}
 
 #scrollPane {
     -fx-focus-traversable: false;
+}
+
+.tooltip {
+    -fx-show-duration: 10s;
+    -fx-show-delay: 0.1s;
+}
+
+.canvasToolBarButton {
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 16px 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.canvasToolBarButton.active {
+    -fx-background-color: #aaa;
+}
+
+#viewButton {
+    -fx-background-image: url("../assets/icons/baseline_pan_tool_white_36dp.png");
+}
+
+#editButton {
+    -fx-background-image: url("../assets/icons/baseline_edit_white_36dp.png");
+}
+
+#createPointButton {
+    -fx-background-image: url("../assets/icons/baseline_adjust_white_36dp.png");
+}
+
+#createMultiPointButton {
+    -fx-background-image: url("../assets/icons/scatter_plot-24px.png");
+}
+
+#createPolyLineButton {
+    -fx-background-image: url("../assets/icons/baseline_timeline_white_36dp.png");
+}
+
+#createPolygonButton {
+    -fx-background-image: url("../assets/icons/baseline_format_shapes_white_36dp.png");
+}
+
+#clearCanvasButton {
+    -fx-background-image: url("../assets/icons/baseline_cancel_white_36dp.png");
 }

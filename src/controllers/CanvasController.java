@@ -11,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
@@ -52,6 +53,18 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     ShapeEditController idShapeEditController;
     @FXML
     Pane idShapeEdit;
+    @FXML
+    Button viewButton;
+    @FXML
+    Button editButton;
+    @FXML
+    Button createPointButton;
+    @FXML
+    Button createMultiPointButton;
+    @FXML
+    Button createPolyLineButton;
+    @FXML
+    Button createPolygonButton;
 
     // This controller instance
     private static CanvasController instance = null;
@@ -76,6 +89,9 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     final private int maxZoomLevel = 20;
     final private int minZoomLevel = 0;
     private int currentZoomLevel = 10;
+
+    // this will be calculated in drawGridOnCanvas()
+    public double gridCellSize;
 
     Canvas gridCanvas;
 
@@ -125,6 +141,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private void createAreaMode() {
         createMode();
         appState.setCanvasShapeState("POLYGON");
+        createPolygonButton.getStyleClass().add("active");
         idShapeEditController.bind(new Area(pane, appState, idShapeEditController));
     }
 
@@ -132,12 +149,14 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private void createPointMode() {
         createMode();
         appState.setCanvasShapeState("POINT");
+        createPointButton.getStyleClass().add("active");
         idShapeEditController.bind(new Point(pane, appState, idShapeEditController));
     }
     @FXML
     private void createMultiPointMode() {
         createMode();
         appState.setCanvasShapeState("MULTIPOINT");
+        createMultiPointButton.getStyleClass().add("active");
         idShapeEditController.bind(new MultiPoint(pane, appState, idShapeEditController));
     }
 
@@ -145,6 +164,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private void createPolyLineMode() {
         createMode();
         appState.setCanvasShapeState("POLYLINE");
+        createPolyLineButton.getStyleClass().add("active");
         idShapeEditController.bind(new PolyLine(pane, appState, shapes, idShapeEditController));
     }
 
@@ -155,6 +175,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         scrollPane.setPannable(true);
         scrollPane.setCursor(Cursor.HAND);
         canvasStateLabel.setText("[VIEW]");
+        removeActiveClassFromAllButtons();
+        viewButton.getStyleClass().add("active");
     }
 
     @FXML
@@ -163,6 +185,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         sideBar.setVisible(true);
         scrollPane.setPannable(false);
         canvasStateLabel.setText("[EDIT]");
+        removeActiveClassFromAllButtons();
+        editButton.getStyleClass().add("active");
     }
 
     // change canvas/editor settings to mode for editing/creating
@@ -173,6 +197,16 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         sideBar.setVisible(true);
         clearUnfinished();
         canvasStateLabel.setText("[CREATE]");
+        removeActiveClassFromAllButtons();
+    }
+
+    private void removeActiveClassFromAllButtons() {
+        viewButton.getStyleClass().remove("active");
+        editButton.getStyleClass().remove("active");
+        createPointButton.getStyleClass().remove("active");
+        createMultiPointButton.getStyleClass().remove("active");
+        createPolyLineButton.getStyleClass().remove("active");
+        createPolygonButton.getStyleClass().remove("active");
     }
 
     @FXML
@@ -206,7 +240,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
                 if (appState.getCanvasState().contains("VIEW")) { return; }
                 if (appState.getCanvasState().contains("EDIT")) { return; }
 
-                Coordinate c = new Coordinate(mouseEvent.getX(), mouseEvent.getY());
+                Coordinate c = new Coordinate(mouseEvent.getX(), mouseEvent.getY(), gridCellSize);
 
                 if (!idShapeEditController.finishedEditingShape && idShapeEditController.shape.add(c, shapes)) {
                     idShapeEditController.finishedEditingShape = true;
@@ -280,7 +314,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
     public void drawGridOnCanvas() {
 
-        System.out.println("drawing grid");
+        System.out.println("Drawing grid on pane");
 
         List<Line> horizontalLines = new ArrayList<>();
         List<Line> verticalLines = new ArrayList<>();
@@ -288,10 +322,10 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         int rows = 50;
         int cols = 50;
 
-        double cellSize = pane.getPrefHeight() / rows;
+        this.gridCellSize = pane.getPrefHeight() / rows;
 
         for(int i=0; i < rows; i++) {
-            horizontalLines.add(new Line(0, i*cellSize ,pane.getPrefWidth(), i*cellSize));
+            horizontalLines.add(new Line(0, i*gridCellSize ,pane.getPrefWidth(), i*gridCellSize));
             horizontalLines.get(i).setStroke(Color.LIGHTGRAY);
             horizontalLines.get(i).setStrokeWidth(1.0);
         }
@@ -299,16 +333,12 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         System.out.println(Arrays.toString(horizontalLines.toArray()));
 
         for(int i=0; i < cols; i++) {
-            verticalLines.add(new Line(i*cellSize, 0 ,i*cellSize, pane.getPrefHeight()));
+            verticalLines.add(new Line(i*gridCellSize, 0 ,i*gridCellSize, pane.getPrefHeight()));
             verticalLines.get(i).setStroke(Color.LIGHTGRAY);
             verticalLines.get(i).setStrokeWidth(1.0);
         }
 
-        System.out.println(Arrays.toString(verticalLines.toArray()));
-
-
         pane.getChildren().addAll(horizontalLines);
         pane.getChildren().addAll(verticalLines);
-
     }
 }

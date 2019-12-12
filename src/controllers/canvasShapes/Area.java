@@ -22,7 +22,7 @@ public class Area extends Shape {
     }
 
     public boolean add(Coordinate c, ArrayList<Shape> shapes) {
-        double r = 10;
+        double r = 5;
         if (numberOfPoints > 0) {
             double sx = firstCoordinate.x;
             double sy = firstCoordinate.y;
