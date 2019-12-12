@@ -6,11 +6,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
@@ -95,6 +97,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
     Canvas gridCanvas;
 
+    Tooltip cursorLocationToolTip;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         instance = this;
@@ -108,12 +112,15 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
         shapes = new ArrayList<>();
 
+        cursorLocationToolTip = new Tooltip();
+
         mouseCoordinate = new Coordinate();
         idShapeEditController.init(instance, appState, scrollPane, sideBar);
         idShapeEditController.shape = null;
 
         // assign mouse event handlers on canvas
         pane.setOnMousePressed(canvasMouseHandler);
+        pane.setOnMouseReleased(canvasMouseHandler);
         pane.setOnMouseMoved(canvasMouseHandler);
 
         // CTRL + SCROLL => Zoom
@@ -141,6 +148,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private void createAreaMode() {
         createMode();
         appState.setCanvasShapeState("POLYGON");
+        canvasStateLabel.setText(appState.getCanvasState() + " " + appState.getCanvasShapeState());
         createPolygonButton.getStyleClass().add("active");
         idShapeEditController.bind(new Area(pane, appState, idShapeEditController));
     }
@@ -149,6 +157,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private void createPointMode() {
         createMode();
         appState.setCanvasShapeState("POINT");
+        canvasStateLabel.setText(appState.getCanvasState() + " " + appState.getCanvasShapeState());
         createPointButton.getStyleClass().add("active");
         idShapeEditController.bind(new Point(pane, appState, idShapeEditController));
     }
@@ -156,6 +165,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private void createMultiPointMode() {
         createMode();
         appState.setCanvasShapeState("MULTIPOINT");
+        canvasStateLabel.setText(appState.getCanvasState() + " " + appState.getCanvasShapeState());
         createMultiPointButton.getStyleClass().add("active");
         idShapeEditController.bind(new MultiPoint(pane, appState, idShapeEditController));
     }
@@ -164,6 +174,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private void createPolyLineMode() {
         createMode();
         appState.setCanvasShapeState("POLYLINE");
+        canvasStateLabel.setText(appState.getCanvasState() + " " + appState.getCanvasShapeState());
         createPolyLineButton.getStyleClass().add("active");
         idShapeEditController.bind(new PolyLine(pane, appState, shapes, idShapeEditController));
     }
@@ -173,8 +184,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         appState.setCanvasState("VIEW");
         sideBar.setVisible(false);
         scrollPane.setPannable(true);
-        scrollPane.setCursor(Cursor.HAND);
-        canvasStateLabel.setText("[VIEW]");
+        scrollPane.setCursor(Cursor.OPEN_HAND);
+        canvasStateLabel.setText("VIEW");
         removeActiveClassFromAllButtons();
         viewButton.getStyleClass().add("active");
     }
@@ -184,7 +195,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         appState.setCanvasState("EDIT");
         sideBar.setVisible(true);
         scrollPane.setPannable(false);
-        canvasStateLabel.setText("[EDIT]");
+        scrollPane.setCursor(Cursor.MOVE);
+        canvasStateLabel.setText("EDIT");
         removeActiveClassFromAllButtons();
         editButton.getStyleClass().add("active");
     }
@@ -196,7 +208,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         scrollPane.setPannable(false);
         sideBar.setVisible(true);
         clearUnfinished();
-        canvasStateLabel.setText("[CREATE]");
         removeActiveClassFromAllButtons();
     }
 
@@ -237,6 +248,12 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
             // Handle mouse-click event on pane
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
+                scrollPane.setCursor(Cursor.CLOSED_HAND);
+                // display tooltip next to cursor
+                cursorLocationToolTip.setText("[x: "+Math.round(mouseEvent.getX())+", y: "+Math.round(mouseEvent.getY())+"]");
+                Node node = (Node) mouseEvent.getSource();
+                cursorLocationToolTip.show(node, mouseEvent.getScreenX() + 10, mouseEvent.getScreenY() + 20);
+
                 if (appState.getCanvasState().contains("VIEW")) { return; }
                 if (appState.getCanvasState().contains("EDIT")) { return; }
 
@@ -247,8 +264,22 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
                 }
             }
 
+            if (mouseEvent.getEventType() == MouseEvent.DRAG_DETECTED) {
+                scrollPane.setCursor(Cursor.CLOSED_HAND);
+            }
+
+            if (mouseEvent.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+                scrollPane.setCursor(Cursor.OPEN_HAND);
+            }
+
+            if (mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                cursorLocationToolTip.hide();
+                scrollPane.setCursor(Cursor.OPEN_HAND);
+            }
+
             // update mouse position model [x,y] coordinates
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_MOVED) {
+                cursorLocationToolTip.setText("[x: "+Math.round(mouseEvent.getX())+", y: "+Math.round(mouseEvent.getY())+"]");
                 mouseCoordinate.x = mouseEvent.getX();
                 mouseCoordinate.y = mouseEvent.getY();
                 mouseCoordinateLabel.setText("Mouse[X: " + Math.round(mouseCoordinate.x) + "; Y: " +  Math.round(mouseCoordinate.y) + "]");
