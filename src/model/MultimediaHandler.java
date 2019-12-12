@@ -46,7 +46,7 @@ public class MultimediaHandler {
         List<Integer> similarIDs = new ArrayList<Integer>();
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select src." + id + " as source, dst.id as destination, si_scorebyftrlist(new si_featurelist(" +
-                    "src.picture_ac, 0.3, src.picture_ch, 0.3, src.picture_pc, 0.1, src.picture_tx, 0.3)," +
+                    "src.picture_ac, 0.3, src.picture_ch, 0.3, src.picture_pc, 0.1, src.picture_tx, 0.3), " +
                     "dst.picture_si) as similarity from pictures src, pictures dst where src.id <> dst.id and src.id = " + id + " order by similarity asc";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             while (rset.next()) {
@@ -168,11 +168,11 @@ public class MultimediaHandler {
         try (Statement stmt3 = connection.createStatement()) {
             String sqlString = "update pictures p SET p.picture_si=SI_StillImage(p.picture.getContent()) WHERE p.id = " + id;
             stmt3.executeUpdate(sqlString);
-            String sqlString2 = "update pictures SET" +
-                    " picture_ac=SI_AverageColor(picture_si)," +
-                    " picture_ch=SI_ColorHistogram(picture_si)," +
-                    " picture_pc=SI_PositionalColor(picture_si)," +
-                    " picture_tx=SI_Texture(picture_si) WHERE id = " + id;
+            String sqlString2 = "update pictures SET " +
+                    "picture_ac=SI_AverageColor(picture_si), " +
+                    "picture_ch=SI_ColorHistogram(picture_si), " +
+                    "picture_pc=SI_PositionalColor(picture_si), " +
+                    "picture_tx=SI_Texture(picture_si) WHERE id = " + id;
             stmt3.executeUpdate(sqlString2);
         } catch (SQLException e) {
             e.printStackTrace();

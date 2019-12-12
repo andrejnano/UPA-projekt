@@ -58,16 +58,21 @@ public class OffersHandler {
     }
 
     // returns list of ids of offers of specified type
-    public List<Integer> getOffers(String type) {
+    public List<Integer> getOffers(String type, String name) {
         List<Integer> idList = new ArrayList<Integer>();
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "";
-            if (type.equals("All")) {
-                sqlString = "select estates.id from estates";
-            }
-            else {
-                sqlString = "select estates.id from estates" +
-                        "where offers.type = '" + type + "' ";
+            if (type.isEmpty() & name.isEmpty()) {
+                sqlString = "select estates.id from estates ";
+            } else if (!type.isEmpty() & name.isEmpty()) {
+                sqlString = "select estates.id from estates " +
+                        "where estates.type = '" + type + "' ";
+            } else if (type.isEmpty() & !name.isEmpty()) {
+                sqlString = "select estates.id from estates " +
+                        "where estates.name = '" + name + "' ";
+            } else {
+                sqlString = "select estates.id from estates " +
+                        "where estates.type = '" + type + "' AND estates.name = '" + name + "' ";
             }
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             while (rset.next()) {
@@ -78,5 +83,15 @@ public class OffersHandler {
             e.printStackTrace();
         }
         return idList;
+    }
+
+    // deletes offer from table
+    public void deleteOffer(int id) {
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "delete from estates where id = " + id;
+            stmt.executeUpdate(sqlString);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
