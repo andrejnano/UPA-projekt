@@ -104,30 +104,31 @@ public class SpatialDBO {
     public void setShape(Shape canvasShape, String type) {
         switch (type) {
             case "POLYGON":
-                int[] elemInfo1 = {1, 1003, 1};
                 double[] ordArray1 = canvasShape.getOrds();
-                double[] firstCoord = Arrays.copyOfRange(ordArray1, 0, 2);
-                // finishes polygon cycle
-                double[] ordArrayPolygon = DoubleStream.concat(Arrays.stream(ordArray1), Arrays.stream(firstCoord)).toArray();
-                // checks if interior polygon set in correct order
+                // checks polygon type - clockwise/counterclockwise
                 double sum = 0;
-                for (int i = 0; i < ordArrayPolygon.length-2; i += 2) {
-                    double value = (ordArrayPolygon[i] - ordArrayPolygon[i+2]) *
-                            (ordArrayPolygon[i+1] - ordArrayPolygon[i+3]);
+                for (int i = 0; i < ordArray1.length-2; i += 2) {
+                    double value = (ordArray1[i] - ordArray1[i+2]) *
+                            (ordArray1[i+1] - ordArray1[i+3]);
                     sum += value;
                 }
-                // counterclockwise converts to clockwise
+                // reverses ordArray for counterclockwise polygons
                 if (sum < 0) {
-                    for(int i = 0; i < ordArrayPolygon.length/2; i+=2) {
-                        double temp1 = ordArrayPolygon[i];
-                        double temp2 = ordArrayPolygon[i+1];
-                        ordArrayPolygon[i] = ordArrayPolygon[ordArrayPolygon.length-i-2];
-                        ordArrayPolygon[i+1] = ordArrayPolygon[ordArrayPolygon.length-i-1];
-                        ordArrayPolygon[ordArrayPolygon.length-i-2] = temp1;
-                        ordArrayPolygon[ordArrayPolygon.length-i-1] = temp2;
+                    for(int i = 0; i < ordArray1.length/2; i+=2) {
+                        double temp1 = ordArray1[i];
+                        double temp2 = ordArray1[i+1];
+                        ordArray1[i] = ordArray1[ordArray1.length-i-2];
+                        ordArray1[i+1] = ordArray1[ordArray1.length-i-1];
+                        ordArray1[ordArray1.length-i-2] = temp1;
+                        ordArray1[ordArray1.length-i-1] = temp2;
                     }
                 }
-                this.shape = new JGeometry(JGeometry.GTYPE_POLYGON, 0, elemInfo1, ordArrayPolygon);
+                /*for (int i = 0; i < ordArrayPolygon.length; i++) {
+                    System.out.println(ordArrayPolygon[i] + " ");
+                }
+                System.out.println();*/
+                // TODO: check if inserted shape is valid
+                this.shape = JGeometry.createLinearPolygon(ordArray1, 2, 0);
                 break;
             case "POINT":
                 double[] coords = canvasShape.getOrds();
