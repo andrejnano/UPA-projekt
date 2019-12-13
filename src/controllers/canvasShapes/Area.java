@@ -43,7 +43,7 @@ public class Area extends Shape {
         return false;
     }
 
-    private void addPolygon() {
+    public void addPolygon() {
         pane.getChildren().removeAll(lines);
         Polygon polygon = (Polygon) visualObject.shape;
 

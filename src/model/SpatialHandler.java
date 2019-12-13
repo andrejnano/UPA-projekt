@@ -32,7 +32,8 @@ public class SpatialHandler {
                     "select shape from map_entities where id = " + id);
             if (rset.next()) {
                 Struct obj = (Struct) rset.getObject(1);
-                jgeom = JGeometry.loadJS(obj);
+                if (obj != null)
+                    jgeom = JGeometry.loadJS(obj);
             }
             rset.close();
         } catch (SQLException e) {
@@ -119,7 +120,7 @@ public class SpatialHandler {
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select land_entity.id from map_entities land_entity, map_entities object " +
                     "where (land_entity.type = 'land' and object.type = '" + type + "' AND " +
-                    "(SDO_RELATE(land_entity.shape, object.shape, 'mask=ANYINTERACT') = 'TRUE')";
+                    "(SDO_RELATE(land_entity.shape, object.shape, 'mask=ANYINTERACT')) = 'TRUE')";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             while (rset.next()) {
                 spatialIdList.add(rset.getInt(1));
@@ -136,18 +137,33 @@ public class SpatialHandler {
         return idList;
     }
 
+    public List<Integer> selectAllObjects() {
+        List<Integer> idList = new ArrayList<Integer>();
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select object.id from map_entities object";
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            while (rset.next()) {
+                idList.add(rset.getInt(1));
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idList;
+    }
+
     // returns list of object ids within specified area uses SDO_FILTER
     // requires loadObject for each id
     // borders: rectangle x,y x,y
     public List<Integer> selectWithinCanvas(int[] borders) {
         List<Integer> idList = new ArrayList<Integer>();
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select object.id from map_entities object " +
-                    "(SDO_FILTER(object.shape, " +
+            String sqlString = "select object.id from map_entities object where " +
+                    "SDO_FILTER(object.shape, " +
                     "SDO_GEOMETRY(2003, NULL, NULL, " +
-                    "(SDO_ELEM_INFO_ARRAY(1, 1003, 3) " +
+                    "SDO_ELEM_INFO_ARRAY(1, 1003, 3), " +
                     "SDO_ORDINATE_ARRAY(" + borders[0] + ", " + borders[1] + ", " + borders[2] + ", " + borders[3] + "))" +
-                    ") = 'TRUE')";
+                    ") = 'TRUE'";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             while (rset.next()) {
                 idList.add(rset.getInt(1));

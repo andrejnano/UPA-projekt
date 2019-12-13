@@ -27,6 +27,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
+import model.DatabaseManager;
+import model.SpatialDBO;
+import model.SpatialHandler;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,7 +95,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     final private int minZoomLevel = 0;
     private int currentZoomLevel = 10;
 
-
     public final static double gridRows = 50;
     public final static double gridCols = 50;
     public static double gridCellSize;
@@ -114,6 +116,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
         shapes = new ArrayList<>();
 
+        // cursor position tooltip box with coordinate [x,y], displayed on MOUSE PRESSED
         cursorLocationToolTip = new Tooltip();
 
         mouseCoordinate = new Coordinate();
@@ -234,6 +237,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         if (appState.getCanvasShapeState().contains("POLYLINE")) {
             idShapeEditController.shape = new PolyLine(pane, appState, shapes, idShapeEditController);
         }
+
+        fillCanvas();
     }
 
     private void clearUnfinished() {
@@ -345,7 +350,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     public void drawGridOnCanvas() {
 
         System.out.println("Drawing grid on pane");
-
         List<Line> horizontalLines = new ArrayList<>();
         List<Line> verticalLines = new ArrayList<>();
 
@@ -366,5 +370,25 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
         pane.getChildren().addAll(horizontalLines);
         pane.getChildren().addAll(verticalLines);
+    }
+
+    public void fillCanvas() {
+        if (!DatabaseManager.getInstance().isConnected())
+            return;
+        SpatialHandler sh = SpatialHandler.getInstance();
+        // temporary, load whole canvas
+        //int[] borders = {0, 1000, 0, 1000};
+        //List<Integer> objectIds = sh.selectWithinCanvas(borders);
+        List<Integer> objectIds = sh.selectAllObjects();
+        for(int objectId: objectIds) {
+            SpatialDBO object = sh.loadObject(objectId);
+            if (object.getShape() != null) {
+                Shape canvasShape = object.setGeometry();
+                canvasShape.name.set(object.getName());
+                canvasShape.description.set(object.getDescription());
+                canvasShape.entityType.set(object.getType());
+                canvasShape.id = object.getId();
+            }
+        }
     }
 }

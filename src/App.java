@@ -3,6 +3,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import model.DatabaseManager;
 
 // This is the initial starting point for the whole application
 public class App extends Application {
@@ -22,6 +23,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         TabPane root =  FXMLLoader.load(getClass().getResource("views/mainView.fxml"));
+        new DatabaseManager();
 
         // assign it to the scene
         Scene scene = new Scene(root, 1060, 735);

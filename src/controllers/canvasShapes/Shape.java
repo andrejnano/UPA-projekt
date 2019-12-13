@@ -5,6 +5,7 @@ import controllers.ShapeEditController;
 import javafx.scene.layout.Pane;
 import javafx.beans.property.SimpleStringProperty;
 import java.util.ArrayList;
+import java.util.List;
 
 // some common data of all shapes / geometry objects
 // this is the 'app representation' of a JGeometry object
@@ -14,9 +15,11 @@ import java.util.ArrayList;
 |--------------------------------------------------------------------------
 */
 public abstract class Shape extends PointInsertor {
-    int id;
+    public int id;
     public SimpleStringProperty name;
     public SimpleStringProperty description;
+    // TODO: add entityType (land/tree/lake/street)
+    public SimpleStringProperty entityType;
     public VisualObject visualObject;
     public String type;
     protected ShapeEditController shapeEditController;
@@ -30,11 +33,13 @@ public abstract class Shape extends PointInsertor {
         System.out.println(appState.getCanvasShapeState());
         this.name = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
+        this.entityType = new SimpleStringProperty();
     }
 
     public abstract void clear();
     public abstract boolean add(Coordinate c, ArrayList<Shape> areas);
 
+    public Shape getShape() { return this; }
     public String getType() {
         return type.toString();
     }
@@ -58,12 +63,15 @@ public abstract class Shape extends PointInsertor {
     }
 
     public double[] getOrds() {
-        int size = visualObject.anchors.size()*2;
-        double[] ordArray = new double[size];
-        for (int i = 0; i < size; i += 2) {
+        List<Double> ordList = new ArrayList<Double>();
+        for (int i = 0; i < visualObject.anchors.size(); ++i) {
             Anchor anchor = visualObject.anchors.get(i);
-            ordArray[i] = anchor.getCenterX();
-            ordArray[i+1] = anchor.getCenterY();
+            ordList.add(anchor.getCenterX());
+            ordList.add(anchor.getCenterY());
+        }
+        double[] ordArray = new double[ordList.size()];
+        for(int i = 0; i < ordArray.length; ++i) {
+            ordArray[i] = ordList.get(i);
         }
         return ordArray;
     }

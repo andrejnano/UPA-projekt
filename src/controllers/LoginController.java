@@ -48,11 +48,12 @@ public class LoginController {
     @FXML
     public void connectToDb() {
         if (!connected) {
-            DatabaseManager dbm = new DatabaseManager();
+            DatabaseManager dbm = DatabaseManager.getInstance();
             this.dbm = dbm;
             try {
                 dbm.setup(ipField.getText(), portField.getText(), tagField.getText(), userField.getText(), pwdField.getText());
             } catch (SQLException e) {
+                // todo: inform on gui
                 System.err.println("SQLException: " + e.getMessage());
             }
             dbm.connect();

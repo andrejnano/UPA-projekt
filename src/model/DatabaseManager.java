@@ -17,6 +17,7 @@ public class DatabaseManager {
     private static DatabaseManager instance = null;
     private OracleDataSource ods;
     private Connection connection;
+    private boolean connected = false;
 
     public DatabaseManager() {
         instance = this;
@@ -25,6 +26,7 @@ public class DatabaseManager {
     public static DatabaseManager getInstance() { return instance; }
 
     public Connection getConnection() { return connection; }
+    public boolean isConnected() { return connected; }
 
     // Configure OracleDataSource to a Database Server¶
     public void setup(String host, String port, String serviceName, String user, String password) throws SQLException {
@@ -53,8 +55,10 @@ public class DatabaseManager {
         } catch (SQLException sqlException) {
             System.err.println("SQLException: " + sqlException.getMessage());
         }
+        this.connected = true;
         new MultimediaHandler();
         new OffersHandler();
+        new SpatialHandler();
     }
 
     // close connection to database
@@ -64,6 +68,7 @@ public class DatabaseManager {
         } catch (SQLException sqlException) {
             System.err.println("SQLException: " + sqlException.getMessage());
         }
+        this.connected = false;
     }
 
     // input: file in sql, stores file into sql db

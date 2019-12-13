@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import model.SpatialDBO;
+import model.SpatialHandler;
 
 // some common data of all shapes / geometry objects
 // this is the 'app representation' of a JGeometry object
@@ -114,6 +116,7 @@ public class ShapeEditController {
     @FXML
     private void okButtonClicked() {
         setDefaults();
+        setSpatial();
         canvasController.viewMode();
     }
 
@@ -128,6 +131,16 @@ public class ShapeEditController {
             this.scrollPane.setPannable(false);
             finishedEditingShape = true;
         }
+    }
+
+    private void setSpatial() {
+        SpatialDBO object = new SpatialDBO();
+        object.setName(shape.name.get());
+        object.setDescription(shape.description.get());
+        object.setType(shape.entityType.get());
+        object.setId(shape.id);
+        object.setShape(shape, shape.type);
+        SpatialHandler.getInstance().insertObject(object);
     }
 }
 

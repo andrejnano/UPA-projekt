@@ -35,17 +35,21 @@ public class SpatialDBO {
     public void setDescription(String description) { this.description = description; }
     public void setType(String type) { this.type = type; }
 
-    public void printGeometry() {
+    // prints to canvas
+    public Shape setGeometry() {
         ArrayList<Shape> shapes = CanvasController.getInstance().getShapes();
         Pane p = CanvasController.getInstance().getPane();
         AppState appState = CanvasController.getInstance().appState;
         ShapeEditController idShapeEditController = CanvasController.getInstance().getShapeEditController();
+        Shape canvasShape = null;
         switch (this.shape.getType()) {
             case JGeometry.GTYPE_POINT:
                 double[] pointOrds = shape.getPoint();
                 Point point = new Point(p, appState, idShapeEditController);
-                Coordinate c0 = new Coordinate(pointOrds[1], pointOrds[2]);
+                Coordinate c0 = new Coordinate(pointOrds[0], pointOrds[1]);
                 point.add(c0, shapes);
+                canvasShape = point.getShape();
+                canvasShape.type = "POINT";
                 break;
             case JGeometry.GTYPE_CURVE:
                 double[] lineOrds = shape.getOrdinatesArray();
@@ -54,24 +58,34 @@ public class SpatialDBO {
                     Coordinate c1 = new Coordinate(lineOrds[i], lineOrds[i+1]);
                     line.add(c1, shapes);
                 }
+                canvasShape = line.getShape();
+                canvasShape.type = "POLYLINE";
                 break;
             case JGeometry.GTYPE_POLYGON:
                 double[] polygonOrds = shape.getOrdinatesArray();
                 Area polygon = new Area(p, appState, idShapeEditController);
+
                 for (int i = 0; i < polygonOrds.length; i += 2) {
                     Coordinate c2 = new Coordinate(polygonOrds[i], polygonOrds[i+1]);
                     polygon.add(c2, shapes);
                 }
+                polygon.addPolygon();
+                canvasShape = polygon.getShape();
+                canvasShape.type = "POLYGON";
                 break;
             case JGeometry.GTYPE_MULTIPOINT:
                 double[] multiOrds = shape.getOrdinatesArray();
                 MultiPoint multiPoint = new MultiPoint(p, appState, idShapeEditController);
+
                 for (int i = 0; i < multiOrds.length; i += 2) {
                     Coordinate c3 = new Coordinate(multiOrds[i], multiOrds[i+1]);
                     multiPoint.add(c3, shapes);
                 }
+                canvasShape = multiPoint.getShape();
+                canvasShape.type = "MULTIPOINT";
                 break;
         }
+        return canvasShape;
     }
 
     // store existing jgeometry object
@@ -79,31 +93,30 @@ public class SpatialDBO {
         this.shape = shape;
     }
 
-    // convert javafx shape to jgeometry for polygon
-    public void setShape(Area shape) {
-        int[] elemInfo = {1, 1003, 1};
-        double[] ordArray = shape.getOrds();
-        this.shape = new JGeometry(JGeometry.GTYPE_POLYGON, 0, elemInfo, ordArray);
-    }
-
-    // convert javafx shape to jgeometry for line
-    public void setShape(PolyLine shape) {
-        int[] elemInfo = {1, 2, 1};
-        double[] ordArray = shape.getOrds();
-        this.shape = new JGeometry(JGeometry.GTYPE_CURVE, 0, elemInfo, ordArray);
-    }
-
-    // convert javafx shape to jgeometry for point
-    public void setShape(Point shape) {
-        this.shape = new JGeometry(shape.getX(), shape.getY(), 0);
-    }
-
-    // add fourth gtype
-    public void setShape(MultiPoint shape) {
-        // each point consists of 2 coords
-        int size = shape.visualObject.anchors.size()*2;
-        double[] ordArray = shape.getOrds();
-        int[] elemInfo = {1, 2, size/2};
-        this.shape = new JGeometry(JGeometry.GTYPE_MULTIPOINT, 0, elemInfo, ordArray);
+    // convert javafx shape to jgeometry
+    // bugs: not validated in db
+    // multipoint returns error with more than 2 points
+    public void setShape(Shape canvasShape, String type) {
+        switch (type) {
+            case "POLYGON":
+                int[] elemInfo1 = {1, 1003, 1};
+                double[] ordArray1 = canvasShape.getOrds();
+                this.shape = new JGeometry(JGeometry.GTYPE_POLYGON, 0, elemInfo1, ordArray1);
+                break;
+            case "POINT":
+                double[] coords = canvasShape.getOrds();
+                this.shape = new JGeometry(coords[0], coords[1], 0);
+                break;
+            case "POLYLINE":
+                int[] elemInfo2 = {1, 2, 1};
+                double[] ordArray2 = canvasShape.getOrds();
+                this.shape = new JGeometry(JGeometry.GTYPE_CURVE, 0, elemInfo2, ordArray2);
+                break;
+            case "MULTIPOINT":
+                double[] ordArray3 = canvasShape.getOrds();
+                int[] elemInfo3 = {1, 2, canvasShape.visualObject.anchors.size()};
+                this.shape = new JGeometry(JGeometry.GTYPE_MULTIPOINT, 0, elemInfo3, ordArray3);
+                break;
+        }
     }
 }
