@@ -5,8 +5,14 @@ import controllers.CanvasController;
 import controllers.ShapeEditController;
 import controllers.canvasShapes.*;
 import javafx.scene.layout.Pane;
+import jj2000.j2k.util.ArrayUtil;
 import oracle.spatial.geometry.JGeometry;
 import java.util.ArrayList;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 public class SpatialDBO {
 
@@ -69,7 +75,6 @@ public class SpatialDBO {
                     Coordinate c2 = new Coordinate(polygonOrds[i], polygonOrds[i+1]);
                     polygon.add(c2, shapes);
                 }
-                polygon.addPolygon();
                 canvasShape = polygon.getShape();
                 canvasShape.type = "POLYGON";
                 break;
@@ -101,7 +106,28 @@ public class SpatialDBO {
             case "POLYGON":
                 int[] elemInfo1 = {1, 1003, 1};
                 double[] ordArray1 = canvasShape.getOrds();
-                this.shape = new JGeometry(JGeometry.GTYPE_POLYGON, 0, elemInfo1, ordArray1);
+                double[] firstCoord = Arrays.copyOfRange(ordArray1, 0, 2);
+                // finishes polygon cycle
+                double[] ordArrayPolygon = DoubleStream.concat(Arrays.stream(ordArray1), Arrays.stream(firstCoord)).toArray();
+                // checks if interior polygon set in correct order
+                double sum = 0;
+                for (int i = 0; i < ordArrayPolygon.length-2; i += 2) {
+                    double value = (ordArrayPolygon[i] - ordArrayPolygon[i+2]) *
+                            (ordArrayPolygon[i+1] - ordArrayPolygon[i+3]);
+                    sum += value;
+                }
+                // counterclockwise converts to clockwise
+                if (sum < 0) {
+                    for(int i = 0; i < ordArrayPolygon.length/2; i+=2) {
+                        double temp1 = ordArrayPolygon[i];
+                        double temp2 = ordArrayPolygon[i+1];
+                        ordArrayPolygon[i] = ordArrayPolygon[ordArrayPolygon.length-i-2];
+                        ordArrayPolygon[i+1] = ordArrayPolygon[ordArrayPolygon.length-i-1];
+                        ordArrayPolygon[ordArrayPolygon.length-i-2] = temp1;
+                        ordArrayPolygon[ordArrayPolygon.length-i-1] = temp2;
+                    }
+                }
+                this.shape = new JGeometry(JGeometry.GTYPE_POLYGON, 0, elemInfo1, ordArrayPolygon);
                 break;
             case "POINT":
                 double[] coords = canvasShape.getOrds();
@@ -114,7 +140,7 @@ public class SpatialDBO {
                 break;
             case "MULTIPOINT":
                 double[] ordArray3 = canvasShape.getOrds();
-                int[] elemInfo3 = {1, 2, canvasShape.visualObject.anchors.size()};
+                int[] elemInfo3 = {1, 1, ordArray3.length/2};
                 this.shape = new JGeometry(JGeometry.GTYPE_MULTIPOINT, 0, elemInfo3, ordArray3);
                 break;
         }

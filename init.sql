@@ -43,8 +43,8 @@ INSERT INTO user_sdo_geom_metadata
     'map_entities',
     'shape',
     SDO_DIM_ARRAY( -- 1000*1000 grid
-        SDO_DIM_ELEMENT('X', 0, 1000, 1),
-        SDO_DIM_ELEMENT('Y', 0, 1000, 1)
+        SDO_DIM_ELEMENT('X', 0, 1000, 0.1),
+        SDO_DIM_ELEMENT('Y', 0, 1000, 0.1)
     ),
     NULL -- SRID
 );

@@ -52,13 +52,13 @@ public class DatabaseManager {
         try {
             connection = ods.getConnection();
             System.out.println("Connected to DB.");
+            this.connected = true;
+            new MultimediaHandler();
+            new OffersHandler();
+            new SpatialHandler();
         } catch (SQLException sqlException) {
             System.err.println("SQLException: " + sqlException.getMessage());
         }
-        this.connected = true;
-        new MultimediaHandler();
-        new OffersHandler();
-        new SpatialHandler();
     }
 
     // close connection to database

@@ -32,6 +32,14 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(event -> {
+                    if (DatabaseManager.getInstance().isConnected()) {
+                        System.out.println("Closing database connection");
+                        DatabaseManager.getInstance().disconnect();
+                    }
+                }
+        );
     }
 
 }
