@@ -10,8 +10,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.collections.FXCollections?>
 
-<!--<?import model.OfferPropertyType?>-->
-<!--<?import model.OfferTransactionType?>-->
+<?import model.OfferPropertyType?>
+<?import model.OfferTransactionType?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SearchController">
     <children>
@@ -45,7 +45,7 @@
                 </ToolBar>
             </top>
             <center>
-                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="640.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="720.0" style="-fx-background-color: #ccc; -fx-border-style: none none none solid; -fx-border-color: #36393f; -fx-border-width: 4; -fx-border-radius: 0;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
+                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="500.0" prefViewportHeight="560.0" prefViewportWidth="600.0" prefWidth="720.0" style="-fx-background-color: #ccc; -fx-border-style: none none none solid; -fx-border-color: #36393f; -fx-border-width: 4; -fx-border-radius: 0;" vbarPolicy="NEVER" BorderPane.alignment="TOP_LEFT">
                     <content>
                         <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: #fafafa; -fx-border-color: #ccc; -fx-border-width: 1px;">
                             <effect>
@@ -97,17 +97,17 @@
                                          <Font name="System Bold" size="14.0" />
                                      </font>
                                  </Label>
-                                 <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <ComboBox fx:id="propertyType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                      <items>
-<!--                                         <FXCollections fx:factory="observableArrayList">-->
-<!--                                             <OfferPropertyType fx:value="FLAT"/>-->
-<!--                                             <OfferPropertyType fx:value="LAND"/>-->
-<!--                                             <OfferPropertyType fx:value="DETACHED"/>-->
-<!--                                             <OfferPropertyType fx:value="TOWNHOUSE"/>-->
-<!--                                             <OfferPropertyType fx:value="BUNGALOW"/>-->
-<!--                                             <OfferPropertyType fx:value="COTTAGE"/>-->
-<!--                                             <OfferPropertyType fx:value="OTHER"/>-->
-<!--                                         </FXCollections>-->
+                                         <FXCollections fx:factory="observableArrayList">
+                                             <OfferPropertyType fx:value="FLAT"/>
+                                             <OfferPropertyType fx:value="LAND"/>
+                                             <OfferPropertyType fx:value="DETACHED"/>
+                                             <OfferPropertyType fx:value="TOWNHOUSE"/>
+                                             <OfferPropertyType fx:value="BUNGALOW"/>
+                                             <OfferPropertyType fx:value="COTTAGE"/>
+                                             <OfferPropertyType fx:value="OTHER"/>
+                                         </FXCollections>
                                      </items>
                                      <GridPane.margin>
                                          <Insets bottom="5.0" left="15.0" top="5.0" />
@@ -121,11 +121,11 @@
                                   </Label>
                                  <ComboBox fx:id="transactionType" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                      <items>
-<!--                                         <FXCollections fx:factory="observableArrayList">-->
-<!--                                             <OfferTransactionType fx:value="RENT"/>-->
-<!--                                             <OfferTransactionType fx:value="SELL"/>-->
-<!--                                             <OfferTransactionType fx:value="SHARE"/>-->
-<!--                                         </FXCollections>-->
+                                         <FXCollections fx:factory="observableArrayList">
+                                             <OfferTransactionType fx:value="RENT"/>
+                                             <OfferTransactionType fx:value="SELL"/>
+                                             <OfferTransactionType fx:value="SHARE"/>
+                                         </FXCollections>
                                      </items>
                                  <GridPane.margin>
                                     <Insets bottom="5.0" left="15.0" top="5.0" />
@@ -149,7 +149,7 @@
                                         <Font name="System Bold" size="14.0" />
                                      </font>
                                   </Label>
-                                  <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                  <CheckBox fx:id="closeToCenter" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                      <padding>
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                      </padding>
@@ -163,7 +163,7 @@
                                         <Font name="System Bold" size="14.0" />
                                      </font>
                                   </Label>
-                                  <CheckBox layoutX="125.0" layoutY="156.0" mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                  <CheckBox fx:id="closeToLake" layoutX="125.0" layoutY="156.0" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                      <padding>
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                      </padding>
@@ -206,7 +206,21 @@
                 </AnchorPane>
             </right>
             <bottom>
-
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="1060.0">
+               <children>
+                  <Label text="Results" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+                   <ScrollPane style="-fx-background-color: #2f3136;" fitToHeight="true" vmin="0" vmax="0" fitToWidth="true" vbarPolicy="NEVER" maxHeight="150.0" maxWidth="1060" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefViewportHeight="150.0" prefViewportWidth="1060.0" prefWidth="1060.0">
+                       <HBox fx:id="results" style="-fx-background-color: #2f3136;" maxHeight="150" maxWidth="10000" prefHeight="150.0" prefWidth="10000.0" styleClass="searchResults" />
+                   </ScrollPane>
+               </children>
+            </VBox>
             </bottom>
         </BorderPane>
     </children>

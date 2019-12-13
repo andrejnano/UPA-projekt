@@ -95,11 +95,13 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     final private int minZoomLevel = 0;
     private int currentZoomLevel = 10;
 
+    // number of rows and columns in the canvas grid
     public final static double gridRows = 50;
     public final static double gridCols = 50;
     public static double gridCellSize;
-
     Canvas gridCanvas;
+
+    // mouse coordinates tooltip next to cursor
     Tooltip cursorLocationToolTip;
 
     @Override
@@ -112,14 +114,20 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
         // Initialize new AppState, this object will be passed down to underlying components/controllers
         appState = new AppState("ADMIN", "VIEW", "NONE");
+
+        // setup canvas as view mode
         this.viewMode();
 
+        // Collection of shapes in the canvas
         shapes = new ArrayList<>();
 
         // cursor position tooltip box with coordinate [x,y], displayed on MOUSE PRESSED
         cursorLocationToolTip = new Tooltip();
 
+        // mouse cursor coordinate model [x,y]
         mouseCoordinate = new Coordinate();
+
+        // initialize Shape Editor on the right side bar
         idShapeEditController.init(instance, appState, scrollPane, sideBar);
         idShapeEditController.shape = null;
 
@@ -128,7 +136,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         pane.setOnMouseReleased(canvasMouseHandler);
         pane.setOnMouseMoved(canvasMouseHandler);
 
-        // CTRL + SCROLL => Zoom
+        // For scrolling while holding CTRL => perform Zoom
         scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
             if(event.isControlDown())
             {
@@ -137,7 +145,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
             }
         });
 
-        // Multi-touch zoom event handling
+        // Multi-touch zoom
         scrollPane.setOnZoom(zoomEvent -> {
             handleZoom(zoomEvent);
             zoomEvent.consume();
@@ -166,6 +174,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         createPointButton.getStyleClass().add("active");
         idShapeEditController.bind(new Point(pane, appState, idShapeEditController));
     }
+
     @FXML
     private void createMultiPointMode() {
         createMode();
@@ -229,9 +238,11 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private void clearCanvas() {
         sideBar.setVisible(false);
         clearUnfinished();
+
         for (Shape s : shapes) {
             s.clear();
         }
+
         shapes.clear();
 
         if (appState.getCanvasShapeState().contains("POLYLINE")) {
@@ -339,39 +350,35 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         scaleTransform.setPivotY(mouseCoordinate.getY());
         scaleTransform.setX(pane.getScaleX() * scaleAmount);
         scaleTransform.setY(pane.getScaleY() * scaleAmount);
+
         // Apply the transformation
         pane.getTransforms().add(scaleTransform);
+
         // Update label text with the current zoom level in percentage [0-200%]
         scaleAmountLabel.setText(currentZoomLevel*10 + "%");
 
         scrollEvent.consume();
     }
 
+    // Draws base grid on canvas
     public void drawGridOnCanvas() {
-
-        System.out.println("Drawing grid on pane");
         List<Line> horizontalLines = new ArrayList<>();
         List<Line> verticalLines = new ArrayList<>();
-
-
         for(int i=0; i < gridRows; i++) {
             horizontalLines.add(new Line(0, i*gridCellSize ,pane.getPrefWidth(), i*gridCellSize));
             horizontalLines.get(i).setStroke(Color.LIGHTGRAY);
             horizontalLines.get(i).setStrokeWidth(1.0);
         }
-
-        System.out.println(Arrays.toString(horizontalLines.toArray()));
-
         for(int i=0; i < gridCols; i++) {
             verticalLines.add(new Line(i*gridCellSize, 0 ,i*gridCellSize, pane.getPrefHeight()));
             verticalLines.get(i).setStroke(Color.LIGHTGRAY);
             verticalLines.get(i).setStrokeWidth(1.0);
         }
-
         pane.getChildren().addAll(horizontalLines);
         pane.getChildren().addAll(verticalLines);
     }
 
+    // fills canvas with all objects
     public void fillCanvas() {
         if (!DatabaseManager.getInstance().isConnected())
             return;

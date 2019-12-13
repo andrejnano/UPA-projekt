@@ -101,6 +101,7 @@ public class OffersController implements Initializable{
         offer.description.unbindBidirectional(descriptionArea.textProperty());
         offer.price.unbindBidirectional(priceField.textProperty());
     }
+
     @FXML
     private void setLocation() {
 
@@ -141,8 +142,6 @@ public class OffersController implements Initializable{
 
         myOffersBox.getChildren().removeAll(listItems);
         listItems.clear();
-
-
 
         OffersHandler dbHandler = getDbHandler();
         ArrayList<OffersDBO> offers = dbHandler.getAllOffers();

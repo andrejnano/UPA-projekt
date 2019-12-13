@@ -58,6 +58,17 @@ public class OffersHandler {
         return object;
     }
 
+    // loads multiple offers DBOs from a list of ids
+    public List<OffersDBO> loadOffers(List<Integer> ids) {
+        List<OffersDBO> offers = new ArrayList<OffersDBO>();
+
+        for(int id: ids) {
+            offers.add(loadOffer(id));
+        }
+
+        return offers;
+    }
+
     // returns list of ids of offers of specified type
     //
     // select by type   - getOffers("type", "")

@@ -5,7 +5,6 @@ import controllers.CanvasController;
 import controllers.ShapeEditController;
 import controllers.canvasShapes.*;
 import javafx.scene.layout.Pane;
-import jj2000.j2k.util.ArrayUtil;
 import oracle.spatial.geometry.JGeometry;
 import java.util.ArrayList;
 import java.lang.reflect.Array;

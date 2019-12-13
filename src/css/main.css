@@ -116,3 +116,11 @@
 #clearCanvasButton {
     -fx-background-image: url("../assets/icons/baseline_cancel_white_36dp.png");
 }
+
+.searchResults {
+    /*-fx-text-fill: #fafafa;*/
+}
+
+.searchResults .label {
+    -fx-text-fill: #fff;
+}
