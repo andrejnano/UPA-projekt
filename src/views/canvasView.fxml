@@ -131,7 +131,7 @@
                         <Insets bottom="4.0" top="4.0" />
                      </VBox.margin>
                   </Button>
-                       <Button fx:id="createPointButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#createPointMode" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
+                       <Button  fx:id="createPointButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#createPointMode" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
                      <tooltip>
                         <Tooltip text="Insert point" />
                      </tooltip>

@@ -46,8 +46,8 @@ public class VisualObject {
                     shape.toFront();
 
                     // record a delta distance for the drag and drop operation.
-                    dragDelta.setX(VisualObject.this.getCenterX() - mouseEvent.getX(), CanvasController.gridCellSize);
-                    dragDelta.setY(VisualObject.this.getCenterY() - mouseEvent.getY(), CanvasController.gridCellSize);
+                    dragDelta.setX(VisualObject.this.getCenterX() - mouseEvent.getX());
+                    dragDelta.setY(VisualObject.this.getCenterY() - mouseEvent.getY());
 
                     shape.getScene().setCursor(Cursor.MOVE);
                 }
