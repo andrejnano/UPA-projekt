@@ -1,13 +1,12 @@
 package controllers;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -15,15 +14,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.converter.NumberStringConverter;
-import model.MultimediaHandler;
-import model.Offer;
-import model.OffersDBO;
-import model.OffersHandler;
+import model.*;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /*
@@ -47,9 +43,9 @@ public class OffersController implements Initializable{
     @FXML
     TextField priceField;
     @FXML
-    Pane editOfferSidebar;
+    public Pane editOfferSidebar;
     @FXML
-    Pane myOffersSidebar;
+    public Pane myOffersSidebar;
     @FXML
     VBox myOffersBox;
     @FXML
@@ -61,45 +57,76 @@ public class OffersController implements Initializable{
 
     Offer curOffer;
     ArrayList<Pane> listItems;
-    String titlePicturePath;
-    ArrayList<String> otherPicturePaths;
-    ArrayList<ImageView> otherPicturesImages;
+    PictureFile titlePictureFile;
+    ArrayList<PictureFile> otherPictureFiles;
     MultimediaHandler multiHandler;
+    boolean bound;
+    boolean updateOffer;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         curOffer = null;
         listItems = new ArrayList<Pane>();
-        otherPicturePaths = new ArrayList<String>();
-        otherPicturesImages = new ArrayList<>();
+        otherPictureFiles= new ArrayList<>();
+        titlePictureFile = new PictureFile();
+        titlePictureFile.image = titlePicture;
+        bound = false;
+        updateOffer = false;
     }
 
     private void intFieldRegex(TextField field) {
         field.textProperty().addListener((observable, oldVal, newVal) -> {
             if (!newVal.matches("\\d*")) {
-//                field.setStyle("-fx-border-color: default;");
                 field.setText(newVal.replaceAll("[^\\d]", ""));
             }
-//            else {
-//                field.setStyle("-fx-border-color: red;");
-//            }
         });
     }
 
     public void bind(Offer offer) {
-        offer.propertyType.bindBidirectional(this.propertyType.valueProperty());
-        offer.transactionType.bindBidirectional(this.transactionType.valueProperty());
-        offer.area.bindBidirectional(areaField.textProperty());
-        offer.description.bindBidirectional(descriptionArea.textProperty());
-        offer.price.bindBidirectional(priceField.textProperty());
+        curOffer = offer;
+        otherPictureFiles.clear();
+        titlePictureFile = new PictureFile();
+        titlePictureFile.image = titlePicture;
+        updateOffer = true;
+
+        this.propertyType.valueProperty().bindBidirectional(offer.propertyType);
+        this.transactionType.valueProperty().bindBidirectional(offer.transactionType);
+        areaField.textProperty().bindBidirectional(offer.area);
+        descriptionArea.textProperty().bindBidirectional(offer.description);
+        priceField.textProperty().bindBidirectional(offer.price);
+
+
+        multiHandler = MultimediaHandler.getInstance();
+        List<Integer> ids =  multiHandler.getImageId(curOffer.id);
+        for (int i = 0; i < ids.size(); i++) {
+            if (i == 0) {
+                titlePicture.setImage(multiHandler.getPicture(ids.get(i)));
+                titlePictureFile.id = ids.get(i);
+            } else {
+                ImageView view = emptyImageView();
+                view.setImage(multiHandler.getPicture(ids.get(i)));
+                final PictureFile pictureFile = new PictureFile();
+                pictureFile.id = ids.get(i);
+                pictureFile.image = view;
+                view.setOnMouseClicked(e -> {
+                    pictureEdit(pictureFile);
+                });
+                otherPictureFiles.add(pictureFile);
+                otherPictures.getChildren().add(view);
+            }
+        }
+        bound = true;
     }
 
-    public void unBind(Offer offer) {
-        offer.propertyType.unbindBidirectional(this.propertyType.valueProperty());
-        offer.transactionType.unbindBidirectional(this.transactionType.valueProperty());
-        offer.area.unbindBidirectional(areaField.textProperty());
-        offer.description.unbindBidirectional(descriptionArea.textProperty());
-        offer.price.unbindBidirectional(priceField.textProperty());
+    public void unBind() {
+        if (bound) {
+            this.propertyType.valueProperty().bindBidirectional(curOffer.propertyType);
+            this.transactionType.valueProperty().bindBidirectional(curOffer.transactionType);
+            areaField.textProperty().bindBidirectional(curOffer.area);
+            descriptionArea.textProperty().bindBidirectional(curOffer.description);
+            priceField.textProperty().bindBidirectional(curOffer.price);
+        }
+        bound = false;
     }
 
     @FXML
@@ -113,7 +140,7 @@ public class OffersController implements Initializable{
         myOffersSidebar.setVisible(false);
         editOfferSidebar.setVisible(true);
         if (curOffer != null) {
-            unBind(curOffer);
+            unBind();
         }
         clear();
         curOffer = new Offer();
@@ -122,16 +149,18 @@ public class OffersController implements Initializable{
         intFieldRegex(priceField);
     }
 
-    private void clear() {
+    public void clear() {
         propertyType.getSelectionModel().clearSelection();
         transactionType.getSelectionModel().clearSelection();
         areaField.clear();
         descriptionArea.clear();
         priceField.clear();
         titlePicture.setImage(null);
-        otherPictures.getChildren().removeAll(otherPicturesImages);
-        titlePicturePath = null;
-        otherPicturePaths.clear();
+        for (PictureFile pf : otherPictureFiles) {
+            otherPictures.getChildren().remove(pf.image);
+        }
+        titlePictureFile = new PictureFile();
+        otherPictureFiles.clear();
     }
 
     @FXML
@@ -151,7 +180,11 @@ public class OffersController implements Initializable{
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
                 AnchorPane offerListItem = loader.load();
                 OfferListItemCtrl itemController =  loader.getController();
-                itemController.init(o, multiHandler.getPicture(multiHandler.getFirstImageId(o.getId())));
+
+                multiHandler = MultimediaHandler.getInstance();
+                int imageId = multiHandler.getFirstImageId(o.getId());
+                Image image = (imageId == -1) ? null : multiHandler.getPicture(imageId);
+                itemController.init(o, image, this);
                 myOffersBox.getChildren().add(offerListItem);
                 listItems.add(offerListItem);
             } catch (Exception e) {
@@ -162,11 +195,11 @@ public class OffersController implements Initializable{
 
     @FXML
     private void loadTitlePic() {
-        String path = chooseFile();
+        String path = PictureFile.chooseFile();
         try {
             URL url = new File(path).toURI().toURL();
             titlePicture.setImage(new Image(url.toString()));
-            titlePicturePath = path;
+            titlePictureFile.path = path;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -174,32 +207,26 @@ public class OffersController implements Initializable{
 
     @FXML
     private void loadOtherPic() {
-        String path = chooseFile();
+        String path = PictureFile.chooseFile();
         try {
             URL url = new File(path).toURI().toURL();
-            ImageView image = new ImageView();
+            ImageView image = emptyImageView();
             image.setImage(new Image(url.toString()));
-            image.setPreserveRatio(true);
-            image.setFitHeight(150);
             otherPictures.getChildren().add(image);
-            otherPicturePaths.add(path);
-            otherPicturesImages.add(image);
+            PictureFile pictureFile = new PictureFile();
+            pictureFile.path = path;
+            pictureFile.image = image;
+            otherPictureFiles.add(pictureFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private String chooseFile() {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open image file");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png"),
-                    new FileChooser.ExtensionFilter("All Files", "*.*"));
-            return fileChooser.showOpenDialog(new Stage()).getAbsolutePath();
-        } catch (Exception e) {
-            return null;
-        }
+    private ImageView emptyImageView() {
+        ImageView view = new ImageView();
+        view.setPreserveRatio(true);
+        view.setFitHeight(150);
+        return view;
     }
 
     @FXML
@@ -216,11 +243,17 @@ public class OffersController implements Initializable{
 
     private void storeImages() {
         OffersHandler dbHandler = getDbHandler();
-        curOffer.id = dbHandler.insertOffer(curOffer.toDBO());
-        multiHandler.storeImage(curOffer.id, titlePicturePath);
-        for (String path : otherPicturePaths) {
-            System.out.println("CurPath "+ path);
-            multiHandler.storeImage(curOffer.id, path);
+        if (curOffer.id == -1)
+            curOffer.id = dbHandler.insertOffer(curOffer.toDBO());
+        else
+            dbHandler.updateOffer(curOffer.toDBO());
+        if (titlePictureFile.path != null)
+            multiHandler.storeImage(curOffer.id, titlePictureFile.path);
+        for (PictureFile pf : otherPictureFiles) {
+            // TODO update
+            if (pf.path != null) {
+                multiHandler.storeImage(curOffer.id, pf.path);
+            }
         }
     }
 
@@ -231,8 +264,15 @@ public class OffersController implements Initializable{
             editOfferSidebar.setVisible(false);
             errorLabel.setText("");
             OffersHandler dbHandler = getDbHandler();
-            if (curOffer.id != -1)
+            if (curOffer.id != -1) {
                 dbHandler.deleteOffer(curOffer.id);
+                if (titlePictureFile.id != -1)
+                    multiHandler.deleteEntry(titlePictureFile.id);
+                for (PictureFile pf : otherPictureFiles) {
+                    if (pf.id != -1)
+                        multiHandler.deleteEntry(pf.id);
+                }
+            }
         }
     }
 
@@ -241,4 +281,26 @@ public class OffersController implements Initializable{
         return OffersHandler.getInstance();
     }
 
+
+    @FXML
+    private void editTitlePicture() {
+        pictureEdit(titlePictureFile);
+    }
+
+    private void pictureEdit(PictureFile pictureFile) {
+        try {
+            Dialog dialog = new Dialog();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/pictureEditView.fxml"));
+            DialogPane dialogPane = loader.load();
+            PictureEditController pictureController =  loader.getController();
+
+            dialog.setDialogPane(dialogPane);
+            dialog.show();
+            pictureController.init(pictureFile, curOffer.id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+

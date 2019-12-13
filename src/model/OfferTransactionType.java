@@ -11,6 +11,13 @@ public enum OfferTransactionType {
         this.label = label;
     }
 
+    public static OfferTransactionType getByLabel(String transaction) {
+        for(OfferTransactionType e : OfferTransactionType.values()){
+            if(transaction.equals(e.label)) return e;
+        }
+        return null;
+    }
+
     public String toString() {
         return label;
     }

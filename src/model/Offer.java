@@ -4,6 +4,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.image.Image;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Offer {
     public ObjectProperty<OfferPropertyType> propertyType;
@@ -20,8 +24,10 @@ public class Offer {
     public Offer(OffersDBO dbo) {
         init();
         id = dbo.getId();
-        propertyType.setValue(OfferPropertyType.valueOf(dbo.getType()));
-        transactionType.setValue(OfferTransactionType.valueOf(dbo.getTransaction()));
+        System.out.println(dbo.getType());
+        OfferPropertyType ot = OfferPropertyType.getByLabel(dbo.getType());
+        propertyType.setValue(ot);
+        transactionType.setValue(OfferTransactionType.getByLabel(dbo.getTransaction()));
         area.setValue(dbo.getName());
         description.setValue(dbo.getDescription());
         price.setValue(((Integer) dbo.getPrice()).toString());
@@ -56,9 +62,4 @@ public class Offer {
                 transactionType.getValue().toString());
         return dbo;
     }
-//    ComboBox transactionType;
-//    Button location;
-//    TextField areaField;
-//    TextArea descriptionArea;
-//    TextField priceField;
 }
