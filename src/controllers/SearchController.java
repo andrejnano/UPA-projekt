@@ -1,11 +1,14 @@
 package controllers;
 
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -89,27 +92,22 @@ public class SearchController implements Initializable {
             // configure a single result
             VBox singleResult = new VBox();
             singleResult.setPadding(new Insets(5, 10, 5, 10));
-            singleResult.setStyle("-fx-background-color: #6F7480; -fx-border-color: #DEE8FF; -fx-border-width: 2px; -fx-border-radius: 3px;");
+            singleResult.getStyleClass().add("resultBox");
 
             // name
             Label name = new Label("Name: " + offer.getName());
-//            name.setStyle("-fx-text-fill: green");
             singleResult.getChildren().add(name);
 
             // id
             Label id = new Label("ID: " + Integer.toString(offer.getId()));
-//            id.setStyle("-fx-text-fill: green");
             singleResult.getChildren().add(new Label("ID: " + Integer.toString(offer.getId())));
-
 
             // price
             Label price = new Label("Price: " + Integer.toString(offer.getPrice()));
-//            price.setStyle("-fx-text-fill: green");
             singleResult.getChildren().add(price);
 
             // description
             Label description = new Label("Description: " + offer.getDescription());
-//            description.setStyle("-fx-text-fill: green");
             description.setWrapText(true);
             description.setPrefWidth(300);
             description.setMinWidth(300);
@@ -117,13 +115,23 @@ public class SearchController implements Initializable {
 
             // type
             Label type = new Label("Type: " + offer.getType());
-//            type.setStyle("-fx-text-fill: green");
             singleResult.getChildren().add(type);
 
             // transaction
             Label transaction = new Label("Transaction: " + offer.getTransaction());
-//            transaction.setStyle("-fx-text-fill: green");
             singleResult.getChildren().add(transaction);
+
+            // Add selection click  handler
+            singleResult.setOnMousePressed(mouseEvent -> {
+                System.out.println("mouse clicked on result " + id);
+                // remove "selectedResult" style from all results
+                for (Node result: results.getChildren()
+                     ) {
+                    result.getStyleClass().remove("selectedResult");
+                }
+                // add "selectedResult" for this one
+                singleResult.getStyleClass().add("selectedResult");
+            });
 
             // add the whole result to HBOX of results
             results.getChildren().add(singleResult);

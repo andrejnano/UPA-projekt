@@ -124,3 +124,20 @@
 .searchResults .label {
     -fx-text-fill: #fff;
 }
+
+.resultBox {
+    -fx-background-color: #6F7480;
+    -fx-border-color: #DEE8FF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 3px;
+    -fx-opacity: 0.5;
+}
+
+.resultBox:hover {
+    -fx-cursor: hand;
+}
+
+.resultBox.selectedResult {
+    -fx-opacity: 1;
+    -fx-border-color: #ccc;
+}
