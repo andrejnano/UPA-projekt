@@ -1,17 +1,26 @@
 package controllers;
 
+import controllers.canvasShapes.Coordinate;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.*;
@@ -36,6 +45,10 @@ public class OffersController implements Initializable{
     ComboBox propertyType;
     @FXML
     ComboBox transactionType;
+    @FXML
+    Label scaleAmountLabel;
+    @FXML
+    Label mouseCoordinateLabel;
     @FXML
     TextField areaField;
     @FXML
@@ -63,6 +76,24 @@ public class OffersController implements Initializable{
     boolean bound;
     boolean updateOffer;
 
+    // Mouse cursor position
+    private Coordinate mouseCoordinate;
+
+    // Canvas zoom/scaling amount (multiplier)
+    final private double canvasScaleDelta = 1.1;
+    final private int maxZoomLevel = 20;
+    final private int minZoomLevel = 0;
+    private int currentZoomLevel = 10;
+
+    // number of rows and columns in the canvas grid
+    public final static double gridRows = 50;
+    public final static double gridCols = 50;
+    public static double gridCellSize;
+    Canvas gridCanvas;
+
+    // mouse coordinates tooltip next to cursor
+    Tooltip cursorLocationToolTip;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         curOffer = null;
@@ -72,6 +103,40 @@ public class OffersController implements Initializable{
         titlePictureFile.image = titlePicture;
         bound = false;
         updateOffer = false;
+
+        propertyType.getSelectionModel().selectFirst();
+        transactionType.getSelectionModel().selectFirst();
+
+        // calculate grid size and paint on canvas pane
+        gridCellSize = pane.getPrefHeight() / gridRows;
+        drawGridOnCanvas();
+
+
+        // cursor position tooltip box with coordinate [x,y], displayed on MOUSE PRESSED
+        cursorLocationToolTip = new Tooltip();
+
+        // mouse cursor coordinate model [x,y]
+        mouseCoordinate = new Coordinate();
+
+        // assign mouse event handlers on canvas
+        pane.setOnMousePressed(canvasMouseHandler);
+        pane.setOnMouseReleased(canvasMouseHandler);
+        pane.setOnMouseMoved(canvasMouseHandler);
+
+        // For scrolling while holding CTRL => perform Zoom
+        scrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
+            if(event.isControlDown())
+            {
+                handleScrollEventAsZoom(event);
+                event.consume();
+            }
+        });
+
+        // Multi-touch zoom
+        scrollPane.setOnZoom(zoomEvent -> {
+            handleZoom(zoomEvent);
+            zoomEvent.consume();
+        });
     }
 
     private void intFieldRegex(TextField field) {
@@ -302,5 +367,114 @@ public class OffersController implements Initializable{
         }
     }
 
+
+
+    // pane or "canvas" mouse event handler
+    EventHandler<MouseEvent> canvasMouseHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+
+            // Handle mouse-click event on pane
+            if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
+
+                scrollPane.setCursor(Cursor.CLOSED_HAND);
+                // display tooltip next to cursor
+                cursorLocationToolTip.setText("[x: "+Math.round(mouseEvent.getX())+", y: "+Math.round(mouseEvent.getY())+"]");
+                Node node = (Node) mouseEvent.getSource();
+                cursorLocationToolTip.show(node, mouseEvent.getScreenX() + 10, mouseEvent.getScreenY() + 20);
+                return;
+            }
+
+            if (mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                cursorLocationToolTip.hide();
+                scrollPane.setCursor(Cursor.OPEN_HAND);
+            }
+
+            // update mouse position model [x,y] coordinates
+            if (mouseEvent.getEventType() == MouseEvent.MOUSE_MOVED) {
+                mouseCoordinate.setX(mouseEvent.getX());
+                mouseCoordinate.setY(mouseEvent.getY());
+                mouseCoordinateLabel.setText("Mouse[X: " + Math.round(mouseCoordinate.getX()) + "; Y: " +  Math.round(mouseCoordinate.getY()) + "]");
+            }
+        }
+    };
+
+    // Handling multi-touch zoom - Two-finger pinching motion
+    public void handleZoom(ZoomEvent zoomEvent) {
+        double scaleAmount = zoomEvent.getZoomFactor();
+        // Construct and configure scale transformation
+        Scale scaleTransform = new Scale();
+        scaleTransform.setPivotX(mouseCoordinate.getX());
+        scaleTransform.setPivotY(mouseCoordinate.getY());
+        scaleTransform.setX(pane.getScaleX() * scaleAmount);
+        scaleTransform.setY(pane.getScaleY() * scaleAmount);
+
+        // Apply the transformation
+        pane.getTransforms().add(scaleTransform);
+        scaleAmountLabel.setText(""+zoomEvent.getTotalZoomFactor());
+
+        zoomEvent.consume();
+    }
+
+    // Handling scroll + CTRL key event as canvas pane zoom action
+    public void handleScrollEventAsZoom(ScrollEvent scrollEvent) {
+
+        double scaleAmount;
+
+        if (scrollEvent.getDeltaY() == 0) {
+            return;
+        }
+
+        // check scrolling direction
+        if (scrollEvent.getDeltaY() > 0 ) {
+            // Upper limit for zooming [200%]
+            if (currentZoomLevel >= maxZoomLevel) {
+                return;
+            }
+            currentZoomLevel++;
+            scaleAmount = canvasScaleDelta;
+        } else {
+            // Lower limit for zooming [0%]
+            if (currentZoomLevel <= minZoomLevel) {
+                return;
+            }
+            currentZoomLevel--;
+            scaleAmount = 1 / canvasScaleDelta;
+        }
+
+        // Construct and configure scale transformation
+        Scale scaleTransform = new Scale();
+        scaleTransform.setPivotX(mouseCoordinate.getX());
+        scaleTransform.setPivotY(mouseCoordinate.getY());
+        scaleTransform.setX(pane.getScaleX() * scaleAmount);
+        scaleTransform.setY(pane.getScaleY() * scaleAmount);
+
+        // Apply the transformation
+        pane.getTransforms().add(scaleTransform);
+
+        // Update label text with the current zoom level in percentage [0-200%]
+        scaleAmountLabel.setText(currentZoomLevel*10 + "%");
+
+        scrollEvent.consume();
+    }
+
+    // Draws base grid on canvas
+    public void drawGridOnCanvas() {
+        List<Line> horizontalLines = new ArrayList<>();
+        List<Line> verticalLines = new ArrayList<>();
+        for(int i=0; i < gridRows; i++) {
+            horizontalLines.add(new Line(0, i*gridCellSize ,pane.getPrefWidth(), i*gridCellSize));
+            horizontalLines.get(i).setStroke(Color.LIGHTGRAY);
+            horizontalLines.get(i).setStrokeWidth(1.0);
+        }
+        for(int i=0; i < gridCols; i++) {
+            verticalLines.add(new Line(i*gridCellSize, 0 ,i*gridCellSize, pane.getPrefHeight()));
+            verticalLines.get(i).setStroke(Color.LIGHTGRAY);
+            verticalLines.get(i).setStrokeWidth(1.0);
+        }
+        pane.getChildren().addAll(horizontalLines);
+        pane.getChildren().addAll(verticalLines);
+    }
 }
+
 
