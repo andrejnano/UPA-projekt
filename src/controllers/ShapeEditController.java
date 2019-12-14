@@ -32,6 +32,8 @@ public class ShapeEditController {
     Button okButton;
     @FXML
     Label shapeTypeLabel;
+    @FXML
+    ComboBox entityType;
 
     CanvasController canvasController;
 
@@ -43,6 +45,8 @@ public class ShapeEditController {
 
     public AppState appState;
 
+    String DbType = "None";
+
     Shape shape;
     private boolean bound;
 
@@ -53,7 +57,10 @@ public class ShapeEditController {
         this.appState = appState;
         this.sideBar = sideBar;
         this.canvasController = canvasController;
+        this.entityType.getSelectionModel().selectLast();
     }
+
+    public void setDbType(String value) { this.DbType = value; }
 
     public void bind(Shape shape) {
         finishedEditingShape = false;
@@ -68,6 +75,12 @@ public class ShapeEditController {
         // Color and stroke binding between VisualObject and ShapeEditorController form controls
         Color originalColor = (Color)shape.visualObject.getStroke();
         colorPicker.setValue(originalColor);
+        if (this.DbType.equals("None")) {
+            colorPicker.setValue(originalColor);
+        } else {
+            colorPicker.setValue(getTypeColor(this.DbType));
+            this.DbType = "None";
+        }
 
         // Bind color picker < - >
 //        stroke.bind(Bindings.createObjectBinding(() -> { return (Color)colorPicker.getValue(); }, colorPicker.valueProperty()));
@@ -117,6 +130,8 @@ public class ShapeEditController {
     @FXML
     private void okButtonClicked() {
         setDefaults();
+        unBind();
+        bind(shape);
         setSpatial();
         canvasController.viewMode();
     }
@@ -134,14 +149,31 @@ public class ShapeEditController {
         }
     }
 
+    public Color getTypeColor(String entityType) {
+        switch (entityType) {
+            case "Street":
+                return Color.BLACK;
+            case "Lake":
+                return Color.BLUE;
+            case "Tree":
+                return Color.GREEN;
+            case "Bus":
+                return Color.RED;
+            case "Building":
+                return Color.GRAY;
+            default:
+                return Color.LIGHTGRAY;
+        }
+    }
+
     private void setSpatial() {
         SpatialDBO object = new SpatialDBO();
         object.setName(shape.name.get());
         object.setDescription(shape.description.get());
-        object.setType(shape.entityType.get());
         object.setId(shape.id);
         object.setShape(shape, shape.type);
         object.setSpatialType(shape.type);
+        object.setType(entityType.getSelectionModel().getSelectedItem().toString());
         int id = SpatialHandler.getInstance().insertObject(object);
     }
 

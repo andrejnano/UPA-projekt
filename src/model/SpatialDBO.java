@@ -98,6 +98,12 @@ public class SpatialDBO {
                 canvasShape.type = "MULTIPOINT";
                 break;
         }
+
+        if (canvasShape != null) {
+            idShapeEditController.setDbType(this.type);
+            idShapeEditController.unBind();
+            idShapeEditController.bind(canvasShape);
+        }
         return canvasShape;
     }
 
