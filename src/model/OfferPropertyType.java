@@ -18,4 +18,13 @@ public enum OfferPropertyType {
     public String toString() {
         return label;
     }
+
+    public static OfferPropertyType getByLabel(String code){
+        for(OfferPropertyType e : OfferPropertyType.values()){
+            if(code.equals(e.label)) {
+                return e;
+            }
+        }
+        return null;
+    }
 }

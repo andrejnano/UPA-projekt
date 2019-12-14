@@ -79,7 +79,10 @@ public class MultimediaHandler {
 
     // returns first stored picture for specified offer
     public int getFirstImageId(int offerId) {
-        return getImageId(offerId).get(0);
+        List<Integer> images = getImageId(offerId);
+        if (images != null && images.size() > 0)
+            return images.get(0);
+        return -1;
     }
 
     // returns picture in Image format

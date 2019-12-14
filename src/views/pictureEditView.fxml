@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane fx:id="dialogPane" contentText="Edit picture" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PictureEditController">
+    <content>
+       <VBox>
+            <GridPane HBox.hgrow="ALWAYS">
+                <Button mnemonicParsing="false" onAction="#replaceImage" text="Replace image" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Button mnemonicParsing="false" onAction="#rotateLeft" text="Rotate left" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                <Button mnemonicParsing="false" onAction="#rotateRight" text="Rotate right" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+
+                <Button mnemonicParsing="false" onAction="#deleteImage" text="Delete image" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Button mnemonicParsing="false" onAction="#mirror" text="Mirror" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Button mnemonicParsing="false" onAction="#flip" text="Flip" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            </GridPane>
+            <ImageView fitHeight="400" preserveRatio="true" fx:id="picture"/>
+            <Button mnemonicParsing="false" text="Save" onAction="#save"/>
+       </VBox>
+   </content>
+</DialogPane>

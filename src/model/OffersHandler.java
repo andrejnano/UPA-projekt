@@ -36,6 +36,21 @@ public class OffersHandler {
         return id;
     }
 
+    // stores OffersDBO object consisting of offer informations into db
+    public void updateOffer(OffersDBO object) {
+        int id = dbManager.getNextId("offers");
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "update offers set " +
+                    "name='" + object.getName() + "', description='" + object.getDescription() + "', " +
+                    "price=" + object.getPrice() + ", type='" + object.getType() + "', " +
+                    "transaction='" + object.getTransaction() + "', spatialId=" + object.getSpatialId() + " " +
+                    "where id=" + object.getId();
+            stmt.executeUpdate(sqlString);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // loads informations about offer into OffersDBO from database
     public OffersDBO loadOffer(int id) {
         OffersDBO object = new OffersDBO();

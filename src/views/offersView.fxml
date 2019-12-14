@@ -72,7 +72,7 @@
                      <Button  mnemonicParsing="false" onAction="#loadTitlePic" text="Load file" GridPane.columnIndex="0"/>
                   </VBox>
                   <GridPane minHeight="150" maxHeight="150" GridPane.columnIndex="1" GridPane.rowIndex="6" >
-                     <ImageView fx:id="titlePicture" preserveRatio="true" fitHeight="160"/>
+                     <ImageView fx:id="titlePicture" preserveRatio="true" fitHeight="160" onMouseClicked="#editTitlePicture"/>
                   </GridPane>
 
                   <VBox GridPane.columnIndex="0" GridPane.rowIndex="7" >
