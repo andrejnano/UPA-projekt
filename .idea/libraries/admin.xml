@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="admin">
+    <CLASSES>
+      <root url="file://C:/Program Files/java/oracle_db_home/ord/im/admin" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

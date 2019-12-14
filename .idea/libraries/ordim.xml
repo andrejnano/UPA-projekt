@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ordim">
+    <CLASSES>
+      <root url="jar://C:/Program Files/java/oracle_db_home/ordim.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
