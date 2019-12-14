@@ -9,8 +9,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import model.CanvasEntityType;
 import model.SpatialDBO;
 import model.SpatialHandler;
+import model.spatialObjType.AreaType;
+import model.spatialObjType.PointType;
+import model.spatialObjType.PolylineType;
 
 // some common data of all shapes / geometry objects
 // this is the 'app representation' of a JGeometry object
@@ -27,13 +31,19 @@ public class ShapeEditController {
     @FXML
     TextField descriptionField;
     @FXML
-    ColorPicker colorPicker;
-    @FXML
     Button okButton;
     @FXML
     Label shapeTypeLabel;
     @FXML
     ComboBox entityType;
+
+    @FXML
+    ComboBox polylineType;
+    @FXML
+    ComboBox areaType;
+    @FXML
+    ComboBox pointType;
+
 
     CanvasController canvasController;
 
@@ -57,13 +67,12 @@ public class ShapeEditController {
         this.appState = appState;
         this.sideBar = sideBar;
         this.canvasController = canvasController;
-        this.entityType.getSelectionModel().selectLast();
     }
 
     public void setDbType(String value) { this.DbType = value; }
 
     public void bind(Shape shape) {
-        finishedEditingShape = false;
+//        finishedEditingShape = false;
         // assign new shape to the current ShapeEditorController
         this.shape = shape;
 
@@ -76,34 +85,63 @@ public class ShapeEditController {
 
         // Color and stroke binding between VisualObject and ShapeEditorController form controls
         Color originalColor = (Color)shape.visualObject.getStroke();
-        colorPicker.setValue(originalColor);
-        if (this.DbType.equals("None")) {
-            colorPicker.setValue(originalColor);
-        } else {
-            colorPicker.setValue(getTypeColor(this.DbType));
-            this.DbType = "None";
+//        colorPicker.setValue(originalColor);
+//        if (this.DbType.equals("None")) {
+//            colorPicker.setValue(originalColor);
+//        } else {
+//            colorPicker.setValue(getTypeColor(this.DbType));
+//            this.DbType = "None";
+//        }
+//        fxCollections
+//        spatialObjectType.setItems();
+        shapeTypeHide();
+        stroke = shape.visualObject.strokeProperty();
+        int width = 5;
+        switch (shape.type) {
+            case "POINT" :
+            case "MULTIPOINT" :
+                pointType.setVisible(true);
+                pointType.valueProperty().addListener((observable, oldVal, newVal) -> {
+                    ((PointType)newVal).toColor(shape.visualObject);
+                });
+                break;
+            case "POLYLINE" :
+                polylineType.setVisible(true);
+                polylineType.valueProperty().addListener((observable, oldVal, newVal) -> {
+                    ((PolylineType)newVal).toColor(shape.visualObject);
+                });
+                break;
+            case "POLYGON" :
+                areaType.setVisible(true);
+                areaType.valueProperty().addListener((observable, oldVal, newVal) -> {
+                    ((AreaType)newVal).toColor(shape.visualObject);
+                });
         }
-
         // Bind color picker < - >
 //        stroke.bind(Bindings.createObjectBinding(() -> { return (Color)colorPicker.getValue(); }, colorPicker.valueProperty()));
-        stroke = shape.visualObject.strokeProperty();
 
         if (shape.visualObject.shape != null)
-            shape.visualObject.shape.setStrokeWidth(5);
-
-        stroke.bind(Bindings.createObjectBinding(() -> {
-            Color c = colorPicker.getValue();
-            return c;
-        }, colorPicker.valueProperty()));
-
-        if (shape.type.contains("POLYGON")) {
-            fill = shape.visualObject.shape.fillProperty();
-            fill.bind(Bindings.createObjectBinding(() -> {
-                Color c = colorPicker.getValue();
-                return c.deriveColor(1, 1, 1, 0.4);
-            }, colorPicker.valueProperty()));
-        }
+            shape.visualObject.shape.setStrokeWidth(width);
+//
+//        stroke.bind(Bindings.createObjectBinding(() -> {
+//            Color c = colorPicker.getValue();
+//            return c;
+//        }, colorPicker.valueProperty()));
+//
+//        if (shape.type.contains("POLYGON")) {
+//            fill = shape.visualObject.shape.fillProperty();
+//            fill.bind(Bindings.createObjectBinding(() -> {
+//                Color c = colorPicker.getValue();
+//                return c.deriveColor(1, 1, 1, 0.4);
+//            }, colorPicker.valueProperty()));
+//        }
         bound = true;
+    }
+
+    private void shapeTypeHide() {
+        pointType.setVisible(false);
+        polylineType.setVisible(false);
+        areaType.setVisible(false);
     }
 
     public void unBind() {
@@ -114,9 +152,11 @@ public class ShapeEditController {
             Bindings.unbindBidirectional(nameField.textProperty(), shape.name);
             Bindings.unbindBidirectional(descriptionField.textProperty(), shape.description);
 
-            if (shape.type.contains("POLYGON"))
-                fill.unbind();
-            stroke.unbind();
+            try {
+                if (shape.type.contains("POLYGON"))
+                    fill.unbind();
+                stroke.unbind();
+            } catch (Exception e) {}
         }
         bound = false;
     }

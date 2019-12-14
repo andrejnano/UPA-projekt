@@ -10,8 +10,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.collections.FXCollections?>
 
-<?import model.OfferPropertyType?>
-<?import model.OfferTransactionType?>
+<?import model.offerType.OfferPropertyType?>
+<?import model.offerType.OfferTransactionType?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SearchController">
     <children>

@@ -280,7 +280,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
                 Coordinate c = new Coordinate(mouseEvent.getX(), mouseEvent.getY(), gridCellSize);
 
-                if (!idShapeEditController.finishedEditingShape && idShapeEditController.shape.add(c, shapes)) {
+                if (idShapeEditController.shape.add(c, shapes) && !idShapeEditController.finishedEditingShape) {
                     idShapeEditController.finishedEditingShape = true;
                 }
             }

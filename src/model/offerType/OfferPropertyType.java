@@ -1,4 +1,4 @@
-package model;
+package model.offerType;
 
 public enum OfferPropertyType {
     FLAT("Flat"),

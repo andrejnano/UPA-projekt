@@ -166,20 +166,24 @@ public class OffersController implements Initializable{
         multiHandler = MultimediaHandler.getInstance();
         List<Integer> ids =  multiHandler.getImageId(curOffer.id);
         for (int i = 0; i < ids.size(); i++) {
-            if (i == 0) {
-                titlePicture.setImage(multiHandler.getPicture(ids.get(i)));
-                titlePictureFile.id = ids.get(i);
-            } else {
-                ImageView view = emptyImageView();
-                view.setImage(multiHandler.getPicture(ids.get(i)));
-                final PictureFile pictureFile = new PictureFile();
-                pictureFile.id = ids.get(i);
-                pictureFile.image = view;
-                view.setOnMouseClicked(e -> {
-                    pictureEdit(pictureFile);
-                });
-                otherPictureFiles.add(pictureFile);
-                otherPictures.getChildren().add(view);
+            try {
+                if (i == 0) {
+                    titlePicture.setImage(multiHandler.getPicture(ids.get(i)));
+                    titlePictureFile.id = ids.get(i);
+                } else {
+                    ImageView view = emptyImageView();
+                    view.setImage(multiHandler.getPicture(ids.get(i)));
+                    final PictureFile pictureFile = new PictureFile();
+                    pictureFile.id = ids.get(i);
+                    pictureFile.image = view;
+                    view.setOnMouseClicked(e -> {
+                        pictureEdit(pictureFile);
+                    });
+                    otherPictureFiles.add(pictureFile);
+                    otherPictures.getChildren().add(view);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -291,7 +295,7 @@ public class OffersController implements Initializable{
     private ImageView emptyImageView() {
         ImageView view = new ImageView();
         view.setPreserveRatio(true);
-        view.setFitHeight(150);
+        view.setFitHeight(90);
         return view;
     }
 

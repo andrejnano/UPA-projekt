@@ -7,8 +7,8 @@
 <?import java.lang.*?>
 <?import javafx.collections.FXCollections?>
 
-<?import model.OfferPropertyType?>
-<?import model.OfferTransactionType?>
+<?import model.offerType.OfferPropertyType?>
+<?import model.offerType.OfferTransactionType?>
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.effect.DropShadow?>
@@ -62,7 +62,7 @@
                   <Insets />
                </BorderPane.margin>
                <children>
-                  <VBox layoutX="-7.0" prefHeight="700.0" prefWidth="300.0">
+                  <VBox layoutX="-7.0" prefHeight="700.0" prefWidth="300.0"  fx:id="editOfferSidebar" >
                      <children>
                         <Label fx:id="errorLabel" textFill="RED" />
                         <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" text="Create new offer" textAlignment="CENTER" textFill="WHITE">
@@ -76,7 +76,7 @@
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
                         </Label>
-                        <GridPane fx:id="editOfferSidebar" prefHeight="570.0" prefWidth="300.0">
+                        <GridPane prefHeight="570.0" prefWidth="300.0">
                            <children>
                               <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Property type" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="0">
                                  <padding>
@@ -187,7 +187,7 @@
                                  </children>
                               </VBox>
          
-                              <ImageView fx:id="titlePicture" fitHeight="160" onMouseClicked="#editTitlePicture" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <ImageView fx:id="titlePicture" fitHeight="100" onMouseClicked="#editTitlePicture" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                               <VBox alignment="CENTER" GridPane.rowIndex="7">
                                  <children>
                
@@ -204,23 +204,14 @@
                               </VBox>
          
                               <ScrollPane maxHeight="170" maxWidth="480" vbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.rowIndex="7">
-            <content>
+                                 <content>
                                     <HBox fx:id="otherPictures" maxHeight="150" minHeight="150" />
-            </content>
+                                 </content>
                               </ScrollPane>
          
                               <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#saveOffer" prefWidth="75.0" text="Save" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
                               <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#deleteOffer" prefWidth="75.0" style="-fx-background-color: red;" text="Delete" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-            
-                              <Pane fx:id="myOffersSidebar" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6">
-               <children>
-                                    <ScrollPane hbarPolicy="NEVER" maxHeight="560.0">
-                                       <content>
-                                          <VBox fx:id="myOffersBox" />
-                                       </content>
-                                    </ScrollPane>
-               </children>
-                              </Pane>
+
                            </children>
                            <columnConstraints>
                               <ColumnConstraints />
@@ -240,6 +231,15 @@
                         </GridPane>
                      </children>
                   </VBox>
+                  <Pane fx:id="myOffersSidebar" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                     <children>
+                        <ScrollPane hbarPolicy="NEVER" maxHeight="560.0">
+                           <content>
+                              <VBox fx:id="myOffersBox" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </Pane>
                </children>
             </AnchorPane>
          </right>

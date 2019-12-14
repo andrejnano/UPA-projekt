@@ -8,6 +8,9 @@
 <?import javafx.collections.FXCollections?>
 <?import model.CanvasEntityType?>
 
+<?import model.spatialObjType.AreaType?>
+<?import model.spatialObjType.PolylineType?>
+<?import model.spatialObjType.PointType?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="300.0" AnchorPane.topAnchor="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ShapeEditController">
    <children>
        <VBox>
@@ -46,32 +49,68 @@
                            <Font size="14.0" />
                        </font>
                    </Label>
-                   <ComboBox fx:id="entityType" prefHeight="27.0" prefWidth="146" GridPane.columnIndex="1" GridPane.rowIndex="2">
+
+                   <ComboBox fx:id="polylineType" maxWidth="-Infinity" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.valignment="CENTER" visible="false" prefWidth="223.0" >
                        <items>
                            <FXCollections fx:factory="observableArrayList">
-                               <CanvasEntityType fx:value="LAKE"/>
-                               <CanvasEntityType fx:value="TREE"/>
-                               <CanvasEntityType fx:value="STREET"/>
-                               <CanvasEntityType fx:value="BUSSTOP"/>
-                               <CanvasEntityType fx:value="BUILDING"/>
-                               <CanvasEntityType fx:value="OTHER"/>
+                               <PolylineType fx:value="ROAD" />
+                               <PolylineType fx:value="HIGHWAY" />
+                               <PolylineType fx:value="PATH" />
+                               <PolylineType fx:value="TRAM" />
+                               <PolylineType fx:value="POWERLINE" />
+                               <PolylineType fx:value="RIVER" />
                            </FXCollections>
                        </items>
-                       <GridPane.margin>
-                           <Insets bottom="5.0" left="5.0" top="5.0" />
-                       </GridPane.margin>
-                   </ComboBox>
-
-                   <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="75.0" text="Color" textAlignment="RIGHT" textFill="#e1e1e1" GridPane.columnIndex="0" GridPane.rowIndex="3">
-                       <font>
-                           <Font name="System Bold" size="14.0" />
-                       </font>
-                   </Label>
-                   <ColorPicker fx:id="colorPicker" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="144.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                       <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                       </padding>
                        <GridPane.margin>
                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                        </GridPane.margin>
-                   </ColorPicker>
+                   </ComboBox>
+
+
+                   <ComboBox fx:id="areaType" maxWidth="-Infinity" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.valignment="CENTER" visible="false" prefWidth="223.0" >
+                       <items>
+                           <FXCollections fx:factory="observableArrayList">
+                               <AreaType fx:value="LAKE" />
+                               <AreaType fx:value="FOREST" />
+                               <AreaType fx:value="FIELD" />
+                               <AreaType fx:value="PARK" />
+                               <AreaType fx:value="PARKING" />
+                               <AreaType fx:value="SQUARE" />
+                               <AreaType fx:value="CENTRE" />
+                               <AreaType fx:value="SHOPPING" />
+                               <AreaType fx:value="Playground" />
+                           </FXCollections>
+                       </items>
+                       <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                       </padding>
+                       <GridPane.margin>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </ComboBox>
+
+                   <ComboBox fx:id="pointType" maxWidth="-Infinity" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.valignment="CENTER" visible="false" prefWidth="223.0" >
+                       <items>
+                           <FXCollections fx:factory="observableArrayList">
+                               <PointType fx:value="BUS" />
+                               <PointType fx:value="TRAM" />
+                               <PointType fx:value="COFFEE" />
+                               <PointType fx:value="CINEMA" />
+                               <PointType fx:value="SHOP" />
+                               <PointType fx:value="WIFI" />
+                               <PointType fx:value="CHURCH" />
+                           </FXCollections>
+                       </items>
+                       <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                       </padding>
+                       <GridPane.margin>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                       </GridPane.margin>
+                   </ComboBox>
 
                    <Button fx:id="okButton" mnemonicParsing="false" onAction="#okButtonClicked" prefHeight="27.0" prefWidth="223.0" text="OK" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="4">
                        <GridPane.margin>

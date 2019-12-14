@@ -1,0 +1,42 @@
+package model.spatialObjType;
+
+import controllers.canvasShapes.VisualObject;
+import javafx.beans.property.ObjectProperty;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+
+public enum PointType {
+    BUS("Bus stop", Color.BLUE, 4),
+    TRAM("Tram stop", Color.RED, 4),
+    COFFEE("Coffee", Color.BROWN, 6),
+    CINEMA("Cinema", Color.GOLD, 6),
+    SHOP("Small shop", Color.GREEN, 6),
+    WIFI("Wi-fi AP", Color.LIGHTBLUE, 6),
+    CHURCH("Church", Color.LIGHTGREEN, 8);
+
+    private String label;
+    private Color color;
+    private int width;
+
+    PointType(String label, Color color, int width) {
+        this.label = label;
+        this.color = color;
+        this.width = width;
+    }
+
+    public static PointType getByLabel(String transaction) {
+        for(PointType e : PointType.values()){
+            if(transaction.equals(e.label)) return e;
+        }
+        return null;
+    }
+
+    public String toString() {
+        return label;
+    }
+
+    public void toColor (VisualObject visualObj) {
+        visualObj.shape.setStroke(color);
+        visualObj.shape.setStrokeWidth(width);
+    }
+}

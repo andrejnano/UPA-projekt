@@ -1,13 +1,10 @@
 package model;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.image.Image;
-
-import java.util.ArrayList;
-import java.util.List;
+import model.offerType.OfferPropertyType;
+import model.offerType.OfferTransactionType;
 
 public class Offer {
     public ObjectProperty<OfferPropertyType> propertyType;

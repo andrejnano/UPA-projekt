@@ -28,7 +28,7 @@ public class MultimediaHandler {
 
     // resizes current image
     // specified by id, takes new dimensions
-    public void resizeImage(int id, int x, int y) {
+    public void resizeImage(int id, int x, int y)  throws SQLException {
         OrdImage imgProxy = getProxy(id);
         try (OraclePreparedStatement pstmt = (OraclePreparedStatement) connection.prepareStatement(
                 "update pictures set picture = ? where id = " + id)) {
@@ -45,11 +45,8 @@ public class MultimediaHandler {
     public Image getProcessedPhotoFromDatabase(int id, String process) throws SQLException, IOException
     {
         OrdImage imgProxy = this.getProxy(id);
-        if(imgProxy == null)
-        {
-            return null;
-        }
-        imgProxy.process(process);
+        OrdImage dstImgProxy = this.getProxy(id);
+        imgProxy.processCopy(process, dstImgProxy);
         BufferedImage bufferedImg = ImageIO.read(new ByteArrayInputStream(imgProxy.getDataInByteArray()));
         Image image = SwingFXUtils.toFXImage(bufferedImg, null);
         return image;
@@ -100,7 +97,7 @@ public class MultimediaHandler {
 
     // returns picture in Image format
     // https://docs.oracle.com/cd/B12037_01/appdev.101/b10829/mm_imgref001.htm
-    public Image getPicture(int id) {
+    public Image getPicture(int id) throws SQLException {
         OrdImage imgProxy = getProxy(id);
         BufferedImage buffer = null;
         try {
@@ -186,21 +183,55 @@ public class MultimediaHandler {
         }
         return id;
     }
+//
+//    // internal function, loads picture from db into ordImage obejct
+//    // "for update" locks image until commit/rollback is issued
+//    private OrdImage getProxy(int id)
+//    {
+//        OrdImage imgProxy = null;
+//        try (Statement stmt = connection.createStatement()) {
+//            String sqlString = "select picture from pictures where id = " + id + " for update";
+//            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+//            if (rset.next()) {
+//                imgProxy = (OrdImage) rset.getORAData("picture", OrdImage.getORADataFactory());
+//            }
+//            rset.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return imgProxy;
+//    }
 
-    // internal function, loads picture from db into ordImage obejct
-    // "for update" locks image until commit/rollback is issued
-    private OrdImage getProxy(int id)
+    /**
+     * Get proxy for future manipulation
+     * @param id
+     * @return image proxy
+     * @throws SQLException
+     */
+    public OrdImage getProxy(int id) throws SQLException
     {
         OrdImage imgProxy = null;
-        try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select picture from pictures where id = " + id + " for update";
-            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
-            if (rset.next()) {
-                imgProxy = (OrdImage) rset.getORAData("picture", OrdImage.getORADataFactory());
+        OraclePreparedStatement pstmtSelect = (OraclePreparedStatement) this.connection.prepareStatement(
+                "select picture from pictures where id=" + id + " for update"
+        );
+        try
+        {
+            OracleResultSet rset = (OracleResultSet) pstmtSelect.executeQuery();
+            try
+            {
+                if (rset.next())
+                {
+                    imgProxy = (OrdImage) rset.getORAData("picture", OrdImage.getORADataFactory());
+                }
             }
-            rset.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            finally
+            {
+                rset.close();
+            }
+        }
+        finally
+        {
+            pstmtSelect.close();
         }
         return imgProxy;
     }
