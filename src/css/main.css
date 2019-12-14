@@ -149,6 +149,25 @@
     -fx-background-image: url("../assets/icons/baseline_radio_button_unchecked_white_36dp.png");
 }
 
+#newOfferButton {
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 16px 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url("../assets/icons/baseline_post_add_white_36dp.png");
+}
+
+#myOffersButton {
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 16px 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url("../assets/icons/baseline_view_list_white_36dp.png");
+}
+
+
 .searchResults {
     /*-fx-text-fill: #fafafa;*/
 }
