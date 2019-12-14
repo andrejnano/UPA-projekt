@@ -93,6 +93,7 @@ public class SpatialHandler {
 
     // loads object from database into SpatialDBO object
     public SpatialDBO loadObject(int id) {
+        System.out.println("at least got here...");
         SpatialDBO object = new SpatialDBO();
         try (Statement stmt = connection.createStatement()) {
             ResultSet rset = stmt.executeQuery(

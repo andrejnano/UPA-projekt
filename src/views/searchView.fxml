@@ -208,16 +208,49 @@
             <bottom>
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="1060.0">
                <children>
-                  <Label text="Results" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
-                     </padding>
-                  </Label>
+                   <HBox fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="1060.0" style="-fx-background-color: #36393f;" BorderPane.alignment="TOP_LEFT">
+                       <children>
+                           <Region fx:id="zoomLevelIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="40.0" />
+                           <Label alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" text="Zoom level:" textFill="#aeaeae">
+                               <font>
+                                   <Font name="System Bold" size="13.0" />
+                               </font>
+                               <padding>
+                                   <Insets bottom="4.0" />
+                               </padding>
+                           </Label>
+                           <Label fx:id="scaleAmountLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="100.0" text="100%" textFill="#eaf4ff">
+                               <font>
+                                   <Font name="System Bold" size="13.0" />
+                               </font>
+                               <padding>
+                                   <Insets bottom="4.0" left="8.0" />
+                               </padding>
+                           </Label>
+                           <Label alignment="CENTER_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="100.0" text="Cursor position:" textFill="#aeaeae">
+                               <font>
+                                   <Font name="System Bold" size="13.0" />
+                               </font>
+                               <padding>
+                                   <Insets bottom="4.0" />
+                               </padding>
+                           </Label>
+                           <Label fx:id="mouseCoordinateLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="150.0" text="[x, y]" textFill="WHITE">
+                               <font>
+                                   <Font name="System Bold" size="13.0" />
+                               </font>
+                               <padding>
+                                   <Insets bottom="4.0" left="8.0" />
+                               </padding>
+                           </Label>
+                           <Region prefHeight="20.0" prefWidth="94.0" />
+                       </children>
+                       <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                       </padding>
+                   </HBox>
                    <ScrollPane style="-fx-background-color: #2f3136;" fitToHeight="true" vmin="0" vmax="0" fitToWidth="true" vbarPolicy="NEVER" maxHeight="150.0" maxWidth="1060" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefViewportHeight="150.0" prefViewportWidth="1060.0" prefWidth="1060.0">
-                       <HBox fx:id="results" style="-fx-background-color: #2f3136;" maxHeight="150" maxWidth="10000" prefHeight="150.0" prefWidth="10000.0" styleClass="searchResults" />
+                       <HBox fx:id="results" style="-fx-background-color: #2f3136;" maxHeight="150" fillHeight="false" maxWidth="10000" prefHeight="150.0" prefWidth="10000.0" styleClass="searchResults" />
                    </ScrollPane>
                </children>
             </VBox>

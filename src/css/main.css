@@ -1,4 +1,5 @@
 
+
 .tab-pane .tab-header-area .tab-header-background {
     -fx-background-color: #202225;
     -fx-effect: null;
@@ -115,6 +116,37 @@
 
 #clearCanvasButton {
     -fx-background-image: url("../assets/icons/baseline_cancel_white_36dp.png");
+}
+
+#loadFromDbButton {
+    -fx-background-image: url("../assets/icons/baseline_save_alt_white_36dp.png");
+}
+
+#dbStatusIcon {
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 16px 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url("../assets/icons/baseline_storage_white_36dp.png");
+}
+
+#positiveConnectionIcon {
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 16px 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url("../assets/icons/baseline_radio_button_checked_white_36dp.png");
+}
+
+#negativeConnectionIcon {
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 16px 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url("../assets/icons/baseline_radio_button_unchecked_white_36dp.png");
 }
 
 .searchResults {

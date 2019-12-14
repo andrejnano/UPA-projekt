@@ -1,29 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="controllers.MainController">
-    <tabs>
-        <Tab text="Settings" fx:id="settingsTab">
-            <content>
-                <fx:include source="loginView.fxml" />
-            </content>
-        </Tab>
-        <Tab text="Manage map" fx:id="manageMapTab">
-            <content>
-                <fx:include source="canvasView.fxml" />
-            </content>
-        </Tab>
-        <Tab text="Search for offers" fx:id="searchTab">
-            <content>
-                <fx:include source="searchView.fxml" />
-            </content>
-        </Tab>
-        <Tab text="Create offer" fx:id="createTab">
-            <content>
-                <fx:include source="offersView.fxml" />
-            </content>
-        </Tab>
-    </tabs>
-</TabPane>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+   <children>
+       <VBox>
+          <children>
+              <TabPane tabClosingPolicy="UNAVAILABLE">
+                <Tab text="Settings" fx:id="settingsTab">
+                    <fx:include source="loginView.fxml"/>
+                </Tab>
+                <Tab text="Manage map" fx:id="manageMapTab">
+                    <fx:include source="canvasView.fxml"/>
+                </Tab>
+                <Tab text="Search for offers" fx:id="searchTab">
+                    <fx:include source="searchView.fxml"/>
+                </Tab>
+                <Tab text="Create offer" fx:id="createTab">
+                    <fx:include source="offersView.fxml"/>
+                </Tab>
+            </TabPane>
+              <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40" prefWidth="1060" style="-fx-background-color: #202225;">
+                 <children>
+                  <Region fx:id="dbStatusIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin></Region>
+                     <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="110.0" text="Connection status:" textFill="WHITE">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+                     <Region fx:id="positiveConnectionIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0"/>
+                     <Region fx:id="negativeConnectionIcon" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0"/>
+                     <Label fx:id="databaseConnectionStatus" minWidth="-Infinity" prefWidth="800.0" text="current status" textFill="WHITE" underline="true">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                 </children>
+              </HBox>
+          </children>
+       </VBox>
+   </children>
+</AnchorPane>

@@ -150,6 +150,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
             handleZoom(zoomEvent);
             zoomEvent.consume();
         });
+
     }
 
     public static CanvasController getInstance() { return instance; }
@@ -248,8 +249,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         if (appState.getCanvasShapeState().contains("POLYLINE")) {
             idShapeEditController.shape = new PolyLine(pane, appState, shapes, idShapeEditController);
         }
-
-        fillCanvas();
     }
 
     private void clearUnfinished() {
@@ -364,22 +363,26 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     public void drawGridOnCanvas() {
         List<Line> horizontalLines = new ArrayList<>();
         List<Line> verticalLines = new ArrayList<>();
+
         for(int i=0; i < gridRows; i++) {
             horizontalLines.add(new Line(0, i*gridCellSize ,pane.getPrefWidth(), i*gridCellSize));
             horizontalLines.get(i).setStroke(Color.LIGHTGRAY);
             horizontalLines.get(i).setStrokeWidth(1.0);
         }
+
         for(int i=0; i < gridCols; i++) {
             verticalLines.add(new Line(i*gridCellSize, 0 ,i*gridCellSize, pane.getPrefHeight()));
             verticalLines.get(i).setStroke(Color.LIGHTGRAY);
             verticalLines.get(i).setStrokeWidth(1.0);
         }
+
         pane.getChildren().addAll(horizontalLines);
         pane.getChildren().addAll(verticalLines);
     }
 
     // fills canvas with all objects
-    public void fillCanvas() {
+    @FXML
+    public void loadShapesFromDb() {
         if (!DatabaseManager.getInstance().isConnected())
             return;
         SpatialHandler sh = SpatialHandler.getInstance();
@@ -390,7 +393,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         for(int objectId: objectIds) {
             SpatialDBO object = sh.loadObject(objectId);
             if (object.getShape() != null) {
-                Shape canvasShape = object.setGeometry();
+                Shape canvasShape = object.setGeometry(pane);
                 canvasShape.name.set(object.getName());
                 canvasShape.description.set(object.getDescription());
                 canvasShape.entityType.set(object.getType());

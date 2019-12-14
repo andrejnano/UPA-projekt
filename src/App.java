@@ -1,6 +1,8 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import model.DatabaseManager;
@@ -22,11 +24,14 @@ public class App extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        TabPane root =  FXMLLoader.load(getClass().getResource("views/mainView.fxml"));
+
         new DatabaseManager();
 
+        AnchorPane root =  FXMLLoader.load(getClass().getResource("views/mainView.fxml"));
+
+
         // assign it to the scene
-        Scene scene = new Scene(root, 1060, 735);
+        Scene scene = new Scene(root, 1060, 775);
         scene.getStylesheets().add("css/main.css");
         primaryStage.setTitle("UPA 2019 - Estate manager");
         primaryStage.setScene(scene);

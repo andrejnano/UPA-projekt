@@ -1,5 +1,8 @@
 package model;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.pool.OracleDataSource;
 
@@ -15,18 +18,24 @@ import java.io.IOException;
 public class DatabaseManager {
 
     private static DatabaseManager instance = null;
+    public SimpleBooleanProperty isConnectedStatus;
     private OracleDataSource ods;
     private Connection connection;
     private boolean connected = false;
+    public SimpleStringProperty connectionStatusString;
 
     public DatabaseManager() {
         instance = this;
+        connectionStatusString = new SimpleStringProperty("Not connected");
+        isConnectedStatus = new SimpleBooleanProperty(false);
     }
 
     public static DatabaseManager getInstance() { return instance; }
 
     public Connection getConnection() { return connection; }
     public boolean isConnected() { return connected; }
+
+
 
     // Configure OracleDataSource to a Database Server¶
     public void setup(String host, String port, String serviceName, String user, String password) throws SQLException {
@@ -56,8 +65,12 @@ public class DatabaseManager {
             new MultimediaHandler();
             new OffersHandler();
             new SpatialHandler();
+            updateStatusBar("Connected");
+            isConnectedStatus.set(true);
         } catch (SQLException sqlException) {
             System.err.println("SQLException: " + sqlException.getMessage());
+            updateStatusBar("SQLException: " + sqlException.getMessage());
+            isConnectedStatus.set(false);
         }
     }
 
@@ -65,15 +78,20 @@ public class DatabaseManager {
     public void disconnect() {
         try {
             connection.close();
+            updateStatusBar("Not connected");
+            isConnectedStatus.set(false);
         } catch (SQLException sqlException) {
             System.err.println("SQLException: " + sqlException.getMessage());
+            updateStatusBar("SQLException: " + sqlException.getMessage());
         }
+        isConnectedStatus.set(false);
         this.connected = false;
     }
 
     // input: file in sql, stores file into sql db
     public void loadDbFromFile(String filename) {
         List<String> toQuery = new ArrayList<String>();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             StringBuilder fileData = new StringBuilder();
             String lineData = "";
@@ -85,6 +103,7 @@ public class DatabaseManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         try (Statement stmt = connection.createStatement()) {
             for (String query : toQuery) {
                 try {
@@ -115,8 +134,8 @@ public class DatabaseManager {
         return maxId+1;
     }
 
-    // CanvasShape
-    // AppShape
-    // JGeometry
+    public void updateStatusBar(String statusString) {
+        connectionStatusString.setValue(statusString);
+    }
 
 }
