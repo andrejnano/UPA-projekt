@@ -16,9 +16,9 @@ public enum PointType {
 
     private String label;
     private Color color;
-    private int width;
+    private double width;
 
-    PointType(String label, Color color, int width) {
+    PointType(String label, Color color, double width) {
         this.label = label;
         this.color = color;
         this.width = width;
@@ -36,7 +36,7 @@ public enum PointType {
     }
 
     public void toColor (VisualObject visualObj) {
-        visualObj.shape.setStroke(color);
-        visualObj.shape.setStrokeWidth(width);
+        visualObj.strokeProperty().setValue(color);
+        visualObj.widthProperty().setValue(width);
     }
 }

@@ -24,7 +24,9 @@ public class MultiPoint extends Shape {
         visualObject.anchors = FXCollections.observableArrayList();
         circles = new ArrayList<Circle>();
         visualObject.stroke = Color.BLUE;
+        visualObject.width = 0.0;
         visualObject.strokeProperty = new SimpleObjectProperty(visualObject.stroke);
+        visualObject.widthProperty = new SimpleDoubleProperty(visualObject.width);
     }
 
 
@@ -49,6 +51,10 @@ public class MultiPoint extends Shape {
         visualObject.strokeProperty.addListener((observable, oldPaint, paint) -> {
             centre.setFill(paint);
             visualObject.stroke = paint;
+        });
+
+        visualObject.widthProperty.addListener((observable, oldWidth, newWidth) -> {
+            centre.setRadius(newWidth.intValue());
         });
 
         centre.setOnMouseClicked(e -> {

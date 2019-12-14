@@ -38,8 +38,8 @@ public enum AreaType {
         return null;
     }
 
-    public void toColor (VisualObject visualObject) {
-        visualObject.shape.setStroke(color);
-        visualObject.shape.setFill(color.deriveColor(1, 1, 1, 0.4));
+    public void toColor (VisualObject visualObj) {
+        visualObj.strokeProperty().setValue(color);
+        visualObj.shape.setFill(color.deriveColor(1, 1, 1, 0.4));
     }
 }

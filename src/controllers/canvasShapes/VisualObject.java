@@ -1,6 +1,7 @@
 package controllers.canvasShapes;
 
 import controllers.AppState;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -11,6 +12,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import controllers.CanvasController;
+
+import javax.swing.*;
+
 /*
 |--------------------------------------------------------------------------
 | Visual Object
@@ -20,7 +24,9 @@ public class VisualObject {
     public ObservableList<Anchor> anchors;
     public Shape shape;
     protected Paint stroke;
+    protected Double width;
     protected ObjectProperty<Paint> strokeProperty;
+    protected DoubleProperty widthProperty;
     public AppState appState;
 
     public VisualObject(Shape s, AppState appState) {
@@ -138,10 +144,18 @@ public class VisualObject {
     }
 
     public ObjectProperty<Paint> strokeProperty() {
-        if (shape == null) {
+        if (strokeProperty != null) {
             return strokeProperty;
         } else {
             return shape.strokeProperty();
+        }
+    }
+
+    public DoubleProperty widthProperty() {
+        if (widthProperty != null) {
+            return widthProperty;
+        } else {
+            return shape.strokeWidthProperty();
         }
     }
 }

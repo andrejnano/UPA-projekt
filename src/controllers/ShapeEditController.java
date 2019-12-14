@@ -1,8 +1,11 @@
 package controllers;
 
 import controllers.canvasShapes.Shape;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -15,6 +18,8 @@ import model.SpatialHandler;
 import model.spatialObjType.AreaType;
 import model.spatialObjType.PointType;
 import model.spatialObjType.PolylineType;
+
+import java.util.function.Function;
 
 // some common data of all shapes / geometry objects
 // this is the 'app representation' of a JGeometry object
@@ -50,9 +55,10 @@ public class ShapeEditController {
     private ObjectProperty<Paint> fill;
     private ObjectProperty<Paint> stroke;
 
+    private ChangeListener<Object> curListener;
+    private ComboBox curComboBox;
     private ScrollPane scrollPane;
     private Pane sideBar;
-
     public AppState appState;
 
     String DbType = "None";
@@ -67,6 +73,7 @@ public class ShapeEditController {
         this.appState = appState;
         this.sideBar = sideBar;
         this.canvasController = canvasController;
+        curComboBox = null;
     }
 
     public void setDbType(String value) { this.DbType = value; }
@@ -76,65 +83,50 @@ public class ShapeEditController {
         // assign new shape to the current ShapeEditorController
         this.shape = shape;
 
-        // TODO: remove colorPicker
-        // TODO: on Ok set object color in canvas
         shapeTypeLabel.setText(shape.type);
         // View < - > ViewModel bidirectional binding of Shape name and description
         Bindings.bindBidirectional(nameField.textProperty(), shape.name);
         Bindings.bindBidirectional(descriptionField.textProperty(), shape.description);
 
-        // Color and stroke binding between VisualObject and ShapeEditorController form controls
-        Color originalColor = (Color)shape.visualObject.getStroke();
-//        colorPicker.setValue(originalColor);
-//        if (this.DbType.equals("None")) {
-//            colorPicker.setValue(originalColor);
-//        } else {
-//            colorPicker.setValue(getTypeColor(this.DbType));
-//            this.DbType = "None";
-//        }
-//        fxCollections
-//        spatialObjectType.setItems();
         shapeTypeHide();
         stroke = shape.visualObject.strokeProperty();
         int width = 5;
         switch (shape.type) {
             case "POINT" :
             case "MULTIPOINT" :
-                pointType.setVisible(true);
-                pointType.valueProperty().addListener((observable, oldVal, newVal) -> {
-                    ((PointType)newVal).toColor(shape.visualObject);
-                });
+                curComboBox = pointType;
+                curListener = new ChangeListener<Object>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Object> observable, Object oldVal, Object newVal) {
+                        ((PointType)newVal).toColor(shape.visualObject);
+                    }
+                };
                 break;
             case "POLYLINE" :
-                polylineType.setVisible(true);
-                polylineType.valueProperty().addListener((observable, oldVal, newVal) -> {
-                    ((PolylineType)newVal).toColor(shape.visualObject);
-                });
+                curComboBox = polylineType;
+                curListener = new ChangeListener<Object>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Object> observable, Object oldVal, Object newVal) {
+                        ((PolylineType)newVal).toColor(shape.visualObject);
+                    }
+                };
                 break;
             case "POLYGON" :
-                areaType.setVisible(true);
-                areaType.valueProperty().addListener((observable, oldVal, newVal) -> {
-                    ((AreaType)newVal).toColor(shape.visualObject);
-                });
+                curComboBox = areaType;
+                curListener = new ChangeListener<Object>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Object> observable, Object oldVal, Object newVal) {
+                        ((AreaType)newVal).toColor(shape.visualObject);
+                    }
+                };
+        }
+        if (curComboBox != null) {
+            curComboBox.setVisible(true);
+            curComboBox.valueProperty().addListener(curListener);
         }
         // Bind color picker < - >
-//        stroke.bind(Bindings.createObjectBinding(() -> { return (Color)colorPicker.getValue(); }, colorPicker.valueProperty()));
-
         if (shape.visualObject.shape != null)
             shape.visualObject.shape.setStrokeWidth(width);
-//
-//        stroke.bind(Bindings.createObjectBinding(() -> {
-//            Color c = colorPicker.getValue();
-//            return c;
-//        }, colorPicker.valueProperty()));
-//
-//        if (shape.type.contains("POLYGON")) {
-//            fill = shape.visualObject.shape.fillProperty();
-//            fill.bind(Bindings.createObjectBinding(() -> {
-//                Color c = colorPicker.getValue();
-//                return c.deriveColor(1, 1, 1, 0.4);
-//            }, colorPicker.valueProperty()));
-//        }
         bound = true;
     }
 
@@ -152,11 +144,9 @@ public class ShapeEditController {
             Bindings.unbindBidirectional(nameField.textProperty(), shape.name);
             Bindings.unbindBidirectional(descriptionField.textProperty(), shape.description);
 
-            try {
-                if (shape.type.contains("POLYGON"))
-                    fill.unbind();
-                stroke.unbind();
-            } catch (Exception e) {}
+            if (curComboBox != null) {
+                curComboBox.valueProperty().removeListener(curListener);
+            }
         }
         bound = false;
     }

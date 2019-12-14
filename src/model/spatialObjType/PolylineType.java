@@ -36,7 +36,7 @@ public enum PolylineType {
     }
 
     public void toColor (VisualObject visualObj) {
-        visualObj.shape.setStroke(color);
-        visualObj.shape.setStrokeWidth(width);
+        visualObj.strokeProperty().setValue(color);
+        visualObj.widthProperty().setValue(width);
     }
 }
