@@ -3,6 +3,7 @@ package controllers;
 import controllers.canvasShapes.Shape;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
@@ -142,6 +143,12 @@ public class ShapeEditController {
         object.setShape(shape, shape.type);
         object.setSpatialType(shape.type);
         int id = SpatialHandler.getInstance().insertObject(object);
+    }
+
+    @FXML
+    private void deleteButtonClicked(ActionEvent actionEvent) {
+        ((Pane) scrollPane.getContent()).getChildren().remove(shape.visualObject.shape);
+        canvasController.viewMode();
     }
 }
 

@@ -29,6 +29,9 @@ public class PictureEditController {
         window.setOnCloseRequest(event -> window.hide());
         this.pictureFile = pictureFile;
         picture.setImage(pictureFile.image.getImage());
+        if (pictureFile.path != null)
+            pictureFile.id = multiHandler.storeImage(offerId, pictureFile.path);
+        pictureFile.path = null;
     }
 
     @FXML
@@ -38,11 +41,7 @@ public class PictureEditController {
             URL url = new File(path).toURI().toURL();
             picture.setImage(new Image(url.toString()));
             pictureFile.image = picture;
-            if (pictureFile.path != null) {
-                multiHandler.storeImage(offerId, path);
-            } else if (pictureFile.id != -1) {
-                multiHandler.updateImage(pictureFile.id, path);
-            }
+            multiHandler.updateImage(pictureFile.id, path);
             pictureFile.path = null;
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,6 +50,14 @@ public class PictureEditController {
 
     @FXML
     private void rotateLeft(ActionEvent actionEvent) {
+        try{
+            Image img = multiHandler.getProcessedPhotoFromDatabase(pictureFile.id, "rotate 90");
+            if (img != null) {
+                pictureFile.image.setImage(img);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

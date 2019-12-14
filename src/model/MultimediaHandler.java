@@ -42,6 +42,19 @@ public class MultimediaHandler {
         updateStillImage(id);
     }
 
+    public Image getProcessedPhotoFromDatabase(int id, String process) throws SQLException, IOException
+    {
+        OrdImage imgProxy = this.getProxy(id);
+        if(imgProxy == null)
+        {
+            return null;
+        }
+        imgProxy.process(process);
+        BufferedImage bufferedImg = ImageIO.read(new ByteArrayInputStream(imgProxy.getDataInByteArray()));
+        Image image = SwingFXUtils.toFXImage(bufferedImg, null);
+        return image;
+    }
+
     // returns ids of similar pictures
     // sorted from most similar to image specified by id
     public List<Integer> getSimilarities(int id) {

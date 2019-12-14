@@ -251,7 +251,6 @@ public class OffersController implements Initializable{
         if (titlePictureFile.path != null)
             multiHandler.storeImage(curOffer.id, titlePictureFile.path);
         for (PictureFile pf : otherPictureFiles) {
-            // TODO update
             if (pf.path != null) {
                 multiHandler.storeImage(curOffer.id, pf.path);
             }
