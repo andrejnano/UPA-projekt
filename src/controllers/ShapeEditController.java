@@ -67,6 +67,8 @@ public class ShapeEditController {
         // assign new shape to the current ShapeEditorController
         this.shape = shape;
 
+        // TODO: remove colorPicker
+        // TODO: on Ok set object color in canvas
         shapeTypeLabel.setText(shape.type);
         // View < - > ViewModel bidirectional binding of Shape name and description
         Bindings.bindBidirectional(nameField.textProperty(), shape.name);
