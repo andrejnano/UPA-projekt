@@ -94,7 +94,9 @@ public class OffersController implements Initializable{
         areaField.textProperty().bindBidirectional(offer.area);
         descriptionArea.textProperty().bindBidirectional(offer.description);
         priceField.textProperty().bindBidirectional(offer.price);
-
+        bound = true;
+        if (curOffer.id == -1)
+            return;
 
         multiHandler = MultimediaHandler.getInstance();
         List<Integer> ids =  multiHandler.getImageId(curOffer.id);
@@ -115,7 +117,6 @@ public class OffersController implements Initializable{
                 otherPictures.getChildren().add(view);
             }
         }
-        bound = true;
     }
 
     public void unBind() {

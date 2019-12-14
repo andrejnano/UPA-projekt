@@ -5,6 +5,7 @@ import controllers.ShapeEditController;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeType;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class Area extends Shape {
         super(p, appState, controller);
         visualObject = new VisualObject(new Polygon(), appState);
         visualObject.shape.setStroke(Color.BLUE);
+        visualObject.shape.setStrokeType(StrokeType.INSIDE);
     }
 
     public void clear() {

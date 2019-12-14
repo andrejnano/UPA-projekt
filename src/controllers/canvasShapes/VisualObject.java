@@ -4,6 +4,7 @@ import controllers.AppState;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -36,6 +37,7 @@ public class VisualObject {
         }
 
         final Coordinate dragDelta = new Coordinate();
+        final Coordinate oldMousePosition = new Coordinate();
 
         shape.setOnMousePressed(new EventHandler<MouseEvent>() {
 
@@ -46,8 +48,11 @@ public class VisualObject {
                     shape.toFront();
 
                     // record a delta distance for the drag and drop operation.
-                    dragDelta.setX(VisualObject.this.getCenterX() - mouseEvent.getX());
-                    dragDelta.setY(VisualObject.this.getCenterY() - mouseEvent.getY());
+                    dragDelta.setX(0);
+                    dragDelta.setY(0);
+                    oldMousePosition.setX(mouseEvent.getX());
+                    oldMousePosition.setY(mouseEvent.getY());
+
 
                     shape.getScene().setCursor(Cursor.MOVE);
                 }
@@ -71,14 +76,17 @@ public class VisualObject {
 
         shape.setOnMouseDragged(mouseEvent -> {
             if (appState.getCanvasState().contains("EDIT")) {
-//                Bounds bounds = shape.getParent().localToScene(shape.getParent().getBoundsInLocal());
-                double newX = mouseEvent.getX() + dragDelta.getX();
-                if (newX > 0 && newX < ((Pane) shape.getParent()).getMaxWidth()) {
-                    setCenterX(newX);
+                dragDelta.setX(mouseEvent.getX() - oldMousePosition.getX());
+                dragDelta.setY(mouseEvent.getY() - oldMousePosition.getY());
+                Bounds bounds = shape.getBoundsInLocal();
+
+                oldMousePosition.setX(mouseEvent.getX());
+                oldMousePosition.setY(mouseEvent.getY());
+                if (inBounds(bounds.getMinX(), bounds.getMaxX(), dragDelta.getX(), ((Pane) shape.getParent()).getWidth())) {
+                    moveX(dragDelta.getX());
                 }
-                double newY = mouseEvent.getY() + dragDelta.getY();
-                if (newY > 0 && newY < ((Pane) shape.getParent()).getMaxHeight()) {
-                    setCenterY(newY);
+                if (inBounds(bounds.getMinY(), bounds.getMaxY(), dragDelta.getY(), ((Pane) shape.getParent()).getHeight())) {
+                    moveY(dragDelta.getY());
                 }
             }
         });
@@ -102,36 +110,19 @@ public class VisualObject {
         });
     }
 
-    private double getCenterX () {
-        double sum = 0;
-        int n = 0;
-        for (Anchor a : anchors) {
-            sum += a.getCenterX();
-            n++;
-        }
-        return sum / n;
+    private boolean inBounds(double min, double max, double delta, double size) {
+        return ((min + delta) > 0 && (max + delta) < size);
     }
 
-    private double getCenterY () {
-        double sum = 0;
-        int n = 0;
-        for (Anchor a : anchors) {
-            sum += a.getCenterY();
-            n++;
-        }
-        return sum / n;
-    }
 
-    private void setCenterX(double x) {
-        double deltaX = x - getCenterX();
+    private void moveX(double deltaX) {
         for (Anchor a : anchors) {
             double curX = a.getCenterX();
             a.setCenterX(curX + deltaX);
         }
     }
 
-    private void setCenterY(double y) {
-        double deltaY = y - getCenterY();
+    private void moveY(double deltaY) {
         for (Anchor a : anchors) {
             double curY = a.getCenterY();
             a.setCenterY(curY + deltaY);
