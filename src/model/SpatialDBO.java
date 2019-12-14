@@ -18,27 +18,32 @@ public class SpatialDBO {
     private static final int defaultId = 0;
 
     private int id;
-    private String name, description, type;
-    private JGeometry shape;
+    private String name, description, type, spatialType;
+    private JGeometry shape, reverseShape;
 
     public SpatialDBO() {
         this.id = defaultId;
         this.name = "";
         this.description = "";
         this.type = "";
+        this.spatialType = "";
         this.shape = null;
+        this.reverseShape = null;
     }
 
     public int getId() { return this.id; }
     public String getName() { return this.name; }
     public String getDescription() { return this.description; }
     public String getType() { return this.type; }
+    public String getSpatialType() { return this.spatialType; }
     public JGeometry getShape() { return this.shape; }
+    public JGeometry getReverseShape() { return this.reverseShape; }
 
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
     public void setType(String type) { this.type = type; }
+    public void setSpatialType(String spatialType) { this.spatialType = spatialType; }
 
     // prints to canvas
     public Shape setGeometry(Pane canvasPane) {
@@ -69,6 +74,9 @@ public class SpatialDBO {
                 break;
             case JGeometry.GTYPE_POLYGON:
                 double[] polygonOrds = shape.getOrdinatesArray();
+                if (this.shape.isRectangle()) {
+                    polygonOrds = computeRectangle(polygonOrds);
+                }
                 Area polygon = new Area(canvasPane, appState, idShapeEditController);
 
                 for (int i = 0; i < polygonOrds.length; i += 2) {
@@ -93,6 +101,38 @@ public class SpatialDBO {
         return canvasShape;
     }
 
+    // checks if drawn object is rectangle or polygon
+    public boolean isRectangle(double[] polygonOrds) {
+        if (polygonOrds.length == 8) {
+            for(int i = 0; i < polygonOrds.length; i+=2) {
+                if (((polygonOrds[i] == polygonOrds[(i+2)%8]) || (polygonOrds[i] == polygonOrds[(i+6)%8]))) {
+                    if ((polygonOrds[i+1] == polygonOrds[(i+3)%8]) || (polygonOrds[i+1] == polygonOrds[(i+7)%8])) {
+                        continue;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    // creates new double array of polygon corners from rectangle ordinates
+    double[] computeRectangle(double[] polygonOrds) {
+        if (polygonOrds.length == 4) {
+            double[] rectangleCorners = {
+                    polygonOrds[0], polygonOrds[1],
+                    polygonOrds[2], polygonOrds[1],
+                    polygonOrds[2], polygonOrds[3],
+                    polygonOrds[0], polygonOrds[3],
+                    polygonOrds[0], polygonOrds[1]
+            };
+            return rectangleCorners;
+        }
+        return polygonOrds;
+    }
+
     // store existing jgeometry object
     public void setShape(JGeometry shape) {
         this.shape = shape;
@@ -105,29 +145,22 @@ public class SpatialDBO {
         switch (type) {
             case "POLYGON":
                 double[] ordArray1 = canvasShape.getOrds();
-                // checks polygon type - clockwise/counterclockwise
-                double sum = 0;
-                for (int i = 0; i < ordArray1.length-2; i += 2) {
-                    double value = (ordArray1[i] - ordArray1[i+2]) *
-                            (ordArray1[i+1] - ordArray1[i+3]);
-                    sum += value;
+                if (isRectangle(ordArray1)) {
+                    this.shape = new JGeometry(ordArray1[0], ordArray1[1], ordArray1[4], ordArray1[5], 0);
+                    break;
                 }
-                // reverses ordArray for counterclockwise polygons
-                if (sum < 0) {
-                    for(int i = 0; i < ordArray1.length/2; i+=2) {
-                        double temp1 = ordArray1[i];
-                        double temp2 = ordArray1[i+1];
-                        ordArray1[i] = ordArray1[ordArray1.length-i-2];
-                        ordArray1[i+1] = ordArray1[ordArray1.length-i-1];
-                        ordArray1[ordArray1.length-i-2] = temp1;
-                        ordArray1[ordArray1.length-i-1] = temp2;
-                    }
+
+                double[] reverse = canvasShape.getOrds();
+                for(int i = 0; i < reverse.length/2; i+=2) {
+                    double temp1 = reverse[i];
+                    double temp2 = reverse[i+1];
+                    reverse[i] = reverse[reverse.length-i-2];
+                    reverse[i+1] = reverse[reverse.length-i-1];
+                    reverse[reverse.length-i-2] = temp1;
+                    reverse[reverse.length-i-1] = temp2;
                 }
-                /*for (int i = 0; i < ordArrayPolygon.length; i++) {
-                    System.out.println(ordArrayPolygon[i] + " ");
-                }
-                System.out.println();*/
-                // TODO: check if inserted shape is valid
+
+                this.reverseShape = JGeometry.createLinearPolygon(reverse, 2, 0);
                 this.shape = JGeometry.createLinearPolygon(ordArray1, 2, 0);
                 break;
             case "POINT":

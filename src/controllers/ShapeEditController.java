@@ -140,7 +140,8 @@ public class ShapeEditController {
         object.setType(shape.entityType.get());
         object.setId(shape.id);
         object.setShape(shape, shape.type);
-        SpatialHandler.getInstance().insertObject(object);
+        object.setSpatialType(shape.type);
+        int id = SpatialHandler.getInstance().insertObject(object);
     }
 }
 

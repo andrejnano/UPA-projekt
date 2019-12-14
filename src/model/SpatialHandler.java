@@ -43,7 +43,7 @@ public class SpatialHandler {
     }
 
     // updates geometry in db, internal method
-    private void setGeometry(int id, JGeometry jgeom) {
+    public void setGeometry(int id, JGeometry jgeom) {
         try (PreparedStatement pstmt = connection.prepareStatement(
                 "update map_entities set shape = ? where id = " + id)) {
             Struct obj = JGeometry.storeJS(connection, jgeom);
@@ -64,16 +64,35 @@ public class SpatialHandler {
         }
     }
 
+    // deletes object specified by entity id from database
+    public void deleteObject(int id) {
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "delete from map_entities where id = " + id;
+            stmt.executeUpdate(sqlString);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // updates object based on informations in SpatialDBO object
     public void updateObject(SpatialDBO object) {
+        JGeometry temp = getGeometry(object.getId());
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "update map_entities " +
                     "set name = '" + object.getName() + "', description = '" + object.getDescription() + "', type = '" + object.getType() + "' " +
                     "where id = " + object.getId();
             stmt.executeUpdate(sqlString);
-            setGeometry(object.getId(), object.getShape());
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        setGeometry(object.getId(), object.getShape());
+        if (!checkShapeState(object.getId())) {
+            if (object.getSpatialType().equals("POLYGON")) {
+                setGeometry(object.getId(), object.getReverseShape());
+            }
+            if (!checkShapeState(object.getId())) {
+                setGeometry(object.getId(), temp);
+            }
         }
     }
 
@@ -84,12 +103,40 @@ public class SpatialHandler {
             String sqlString = "insert into map_entities (id, name, description, type) values(" +
                     "" + id + ", '" + object.getName() + "', '" + object.getDescription() + "', '" + object.getType() + "')";
             stmt.executeUpdate(sqlString);
-            setGeometry(id, object.getShape());
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        setGeometry(id, object.getShape());
+        if (!checkShapeState(id)) {
+            if (object.getSpatialType().equals("POLYGON")) {
+                setGeometry(id, object.getReverseShape());
+            }
+            if (!checkShapeState(id)) {
+                deleteObject(id);
+                return -1;
+            }
+        }
         return id;
     }
+
+    public boolean checkShapeState(int id) {
+        String success = "";
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rset = stmt.executeQuery(
+                    "select SDO_GEOM.VALIDATE_GEOMETRY_WITH_CONTEXT(shape, 5) valid " +
+                            "from map_entities where id = " + id);
+            if (rset.next()) {
+                success = rset.getString(1);
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (success.equals("TRUE"))
+            return true;
+        return false;
+    }
+
 
     // loads object from database into SpatialDBO object
     public SpatialDBO loadObject(int id) {
