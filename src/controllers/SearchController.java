@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 import model.*;
+import oracle.sql.INTERVALDS;
 
 import javax.swing.text.DefaultEditorKit;
 import java.net.URL;
@@ -48,9 +49,9 @@ public class SearchController implements Initializable {
     @FXML
     ComboBox transactionType;
     @FXML
-    CheckBox closeToCenter;
+    ChoiceBox centerDistance;
     @FXML
-    CheckBox closeToLake;
+    ChoiceBox lakeDistance;
     @FXML
     HBox results;
 
@@ -77,8 +78,11 @@ public class SearchController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        // select the default property, by selecting the first one
         propertyType.getSelectionModel().selectFirst();
         transactionType.getSelectionModel().selectFirst();
+        centerDistance.getSelectionModel().selectFirst();
+        lakeDistance.getSelectionModel().selectFirst();
 
         results.setPadding(new Insets(5, 5, 5,5));
         results.setSpacing(10.0);
@@ -114,35 +118,98 @@ public class SearchController implements Initializable {
         });
     }
 
+    // Return list of OffersDBOs that match 'propertyType' & 'nameString'
+    public List<OffersDBO> searchByPropertyTypeAndName(String propertyTypeString, String nameString) {
+        List<Integer> offersIds = OffersHandler.getInstance().getOffers(propertyTypeString, nameString);
+        System.out.println("Got these offers ids: " + offersIds.toString());
+        return OffersHandler.getInstance().loadOffers(offersIds);
+    }
+
+    // search for all offers that are close to given type within a given distance
+    public List<OffersDBO> searchCloseTo(String type) {
+        List<Integer> offersIds;
+
+        if (type == "center") {
+            // check if relevant distance is selected, otherwise dont fetch offers
+            if (!centerDistance.getSelectionModel().getSelectedItem().toString().contains("any")) {
+                // get the distance
+                int distanceToCenter = Integer.parseInt(centerDistance.getSelectionModel().getSelectedItem().toString());
+                // get all offers that are close to center within a given distance
+                offersIds = SpatialHandler.getInstance().selectWithinDistance(type, distanceToCenter);
+            } else {
+                offersIds = SpatialHandler.getInstance().selectAllObjects();
+            }
+
+            System.out.println("Got these offers close to " + type + ": " + offersIds.toString());
+            return OffersHandler.getInstance().loadOffers(offersIds);
+        }
+
+        if (type == "lake") {
+            // check if relevant distance is selected, otherwise dont fetch offers
+            if (!lakeDistance.getSelectionModel().getSelectedItem().toString().contains("any")) {
+                // get the distance
+                int distanceToLake = Integer.parseInt(lakeDistance.getSelectionModel().getSelectedItem().toString());
+                // get all offers that are close to center within a given distance
+                offersIds = SpatialHandler.getInstance().selectWithinDistance(type, distanceToLake);
+            } else {
+                offersIds = SpatialHandler.getInstance().selectAllObjects();
+            }
+
+            System.out.println("Got these offers close to " + type + ": " + offersIds.toString());
+            return OffersHandler.getInstance().loadOffers(offersIds);
+        }
+
+        return new ArrayList<OffersDBO>();
+    }
+
+
+
     @FXML
     public void searchSubmit() {
         results.getChildren().removeAll();
-        System.out.println("Search called");
+
         // 1. collect data from form
         String nameString = nameField.getText();
         String propertyTypeString = propertyType.getSelectionModel().getSelectedItem().toString();
         String transactionTypeString = transactionType.getSelectionModel().getSelectedItem().toString();
         String streetString = streetField.getText();
-        Boolean isCloseToCenter = closeToCenter.isSelected();
-        Boolean isCloseToLake = closeToLake.isSelected();
 
         System.out.println("name: " + nameString);
         System.out.println("property type: " + propertyTypeString);
         System.out.println("transaction type: " + transactionTypeString);
         System.out.println("street: " + streetString);
-        System.out.println("close to center: " + isCloseToCenter.toString());
-        System.out.println("close to lake: " + isCloseToLake.toString());
 
-        // 2. dispatch query
-        List<Integer> offersIds = OffersHandler.getInstance().getOffers(propertyTypeString, nameString);
-        System.out.println("Got these offers ids: " + offersIds.toString());
-        List<OffersDBO> offersDBOs = OffersHandler.getInstance().loadOffers(offersIds);
+        // get all offers that match property type and string
+        List<OffersDBO> offersDBOsMatchingTypeAndName = new ArrayList<OffersDBO>();
+        List<OffersDBO> offersDBOsCloseToLake = new ArrayList<OffersDBO>();
+        List<OffersDBO> offersDBOsCloseToCenter = new ArrayList<OffersDBO>();
+
+        /* First, search only by offer type and name */
+        offersDBOsMatchingTypeAndName = searchByPropertyTypeAndName(propertyTypeString, nameString);
+
+        /* Second, search by distance to given type within given distance (both for lake and center) */
+        offersDBOsCloseToLake = searchCloseTo("lake");
+        offersDBOsCloseToCenter = searchCloseTo("center");
 
         // -- create spatial object ids list, ids of objects that will be painted to canvas
         List<Integer> spatialIds = new ArrayList<Integer>();
 
         // 3. display results
-        for (OffersDBO offer: offersDBOs) {
+        for (OffersDBO offer: offersDBOsMatchingTypeAndName) {
+
+            // check if this offer is in also in the array of offers close to center
+            for (OffersDBO offerCloseToCenter: offersDBOsCloseToCenter) {
+                if (offer.getId() != offerCloseToCenter.getId()) {
+                    continue;
+                }
+            }
+
+            // check if this offer is in also in the array of offers close to lake
+            for (OffersDBO offerCloseToLake: offersDBOsCloseToLake) {
+                if (offer.getId() != offerCloseToLake.getId()) {
+                    continue;
+                }
+            }
 
             // configure a single result
             VBox singleResult = new VBox();
