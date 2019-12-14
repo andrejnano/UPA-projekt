@@ -28,28 +28,84 @@ public class MultimediaHandler {
 
     // resizes current image
     // specified by id, takes new dimensions
-    public void resizeImage(int id, int x, int y)  throws SQLException {
-        OrdImage imgProxy = getProxy(id);
-        try (OraclePreparedStatement pstmt = (OraclePreparedStatement) connection.prepareStatement(
-                "update pictures set picture = ? where id = " + id)) {
-            imgProxy.process("maxscale=" + x + " " + y + " fileformat=png");
-            pstmt.setORAData(1, imgProxy);
-            pstmt.executeUpdate();
+    public void resizeImage(int id, int x, int y) {
+        try {
+            final boolean previousAutoCommit = connection.getAutoCommit();
+            connection.setAutoCommit(false);
+            try {
+                OrdImage imgProxy = getProxy(id);
+                try (OraclePreparedStatement pstmt = (OraclePreparedStatement) connection.prepareStatement(
+                        "update pictures set picture = ? where id = " + id)) {
+                    imgProxy.process("maxscale=" + x + " " + y + " fileformat=png");
+                    pstmt.setORAData(1, imgProxy);
+                    pstmt.executeUpdate();
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                updateStillImage(id);
+            } finally {
+                connection.setAutoCommit(previousAutoCommit);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
         }
-        catch (SQLException e) {
+    }
+
+    public int editImage(int id, String operation) {
+        int newId = prepareNewImage(getEstateId(id));
+        try {
+            final boolean previousAutoCommit = connection.getAutoCommit();
+            connection.setAutoCommit(false);
+            try {
+                OrdImage newProxy = getProxy(newId);
+                OrdImage oldProxy = getProxy(id);
+                oldProxy.processCopy(operation, newProxy);
+                OraclePreparedStatement pstmt = (OraclePreparedStatement) connection.prepareStatement(
+                        "update pictures set picture = ? where id = " + newId);
+                pstmt.setORAData(1, newProxy);
+                pstmt.executeUpdate();
+                pstmt.close();
+                updateStillImage(newId);
+                connection.commit();
+            } finally {
+                connection.setAutoCommit(previousAutoCommit);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return newId;
+    }
+
+    // returns list of picture ids corresponding with specified offer id
+    public int getEstateId(int id) {
+        int estateId = 0;
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select estateId from pictures where id = " + id;
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            if (rset.next()) {
+                estateId = rset.getInt("estateId");
+            }
+            rset.close();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        updateStillImage(id);
+        return estateId;
     }
 
     public Image getProcessedPhotoFromDatabase(int id, String process) throws SQLException, IOException
     {
-        OrdImage imgProxy = this.getProxy(id);
-        OrdImage dstImgProxy = this.getProxy(id);
-        imgProxy.processCopy(process, dstImgProxy);
+        int newId = editImage(id, process);
+        return getPicture(newId);
+        /*OrdImage imgProxy = this.getProxy(id);
+        if(imgProxy == null)
+        {
+            return null;
+        }
+        imgProxy.process(process);
         BufferedImage bufferedImg = ImageIO.read(new ByteArrayInputStream(imgProxy.getDataInByteArray()));
         Image image = SwingFXUtils.toFXImage(bufferedImg, null);
-        return image;
+        return image;*/
     }
 
     // returns ids of similar pictures
@@ -97,7 +153,7 @@ public class MultimediaHandler {
 
     // returns picture in Image format
     // https://docs.oracle.com/cd/B12037_01/appdev.101/b10829/mm_imgref001.htm
-    public Image getPicture(int id) throws SQLException {
+    public Image getPicture(int id) {
         OrdImage imgProxy = getProxy(id);
         BufferedImage buffer = null;
         try {
@@ -156,6 +212,20 @@ public class MultimediaHandler {
         }
     }
 
+    // creates new image entry with init ordiamge
+    public int prepareNewImage(int estateId)
+    {
+        int id = 0;
+        id = dbManager.getNextId("pictures");
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "insert into pictures (id, estateId, picture) values(" + id + ", " + estateId + ", ordsys.ordimage.init())";
+            stmt.executeUpdate(sqlString);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
     // creates new record for image and stores image from file
     // returns id of stored image
     // adds all necessary informations for image
@@ -166,13 +236,7 @@ public class MultimediaHandler {
             final boolean previousAutoCommit = connection.getAutoCommit();
             connection.setAutoCommit(false);
             try {
-                id = dbManager.getNextId("pictures");
-                try (Statement stmt = connection.createStatement()) {
-                    String sqlString = "insert into pictures (id, estateId, picture) values(" + id + ", " + estateId + ", ordsys.ordimage.init())";
-                    stmt.executeUpdate(sqlString);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                id = prepareNewImage(estateId);
                 updateImage(id, filename);
                 connection.commit();
             } finally {
@@ -183,55 +247,21 @@ public class MultimediaHandler {
         }
         return id;
     }
-//
-//    // internal function, loads picture from db into ordImage obejct
-//    // "for update" locks image until commit/rollback is issued
-//    private OrdImage getProxy(int id)
-//    {
-//        OrdImage imgProxy = null;
-//        try (Statement stmt = connection.createStatement()) {
-//            String sqlString = "select picture from pictures where id = " + id + " for update";
-//            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
-//            if (rset.next()) {
-//                imgProxy = (OrdImage) rset.getORAData("picture", OrdImage.getORADataFactory());
-//            }
-//            rset.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return imgProxy;
-//    }
 
-    /**
-     * Get proxy for future manipulation
-     * @param id
-     * @return image proxy
-     * @throws SQLException
-     */
-    public OrdImage getProxy(int id) throws SQLException
+    // internal function, loads picture from db into ordImage obejct
+    // "for update" locks image until commit/rollback is issued
+    private OrdImage getProxy(int id)
     {
         OrdImage imgProxy = null;
-        OraclePreparedStatement pstmtSelect = (OraclePreparedStatement) this.connection.prepareStatement(
-                "select picture from pictures where id=" + id + " for update"
-        );
-        try
-        {
-            OracleResultSet rset = (OracleResultSet) pstmtSelect.executeQuery();
-            try
-            {
-                if (rset.next())
-                {
-                    imgProxy = (OrdImage) rset.getORAData("picture", OrdImage.getORADataFactory());
-                }
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select picture from pictures where id = " + id + " for update";
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            if (rset.next()) {
+                imgProxy = (OrdImage) rset.getORAData("picture", OrdImage.getORADataFactory());
             }
-            finally
-            {
-                rset.close();
-            }
-        }
-        finally
-        {
-            pstmtSelect.close();
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return imgProxy;
     }

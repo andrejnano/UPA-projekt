@@ -137,7 +137,6 @@ public class SpatialHandler {
         return false;
     }
 
-
     // loads object from database into SpatialDBO object
     public SpatialDBO loadObject(int id) {
         System.out.println("at least got here...");
