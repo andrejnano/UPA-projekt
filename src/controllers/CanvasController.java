@@ -249,6 +249,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         if (appState.getCanvasShapeState().contains("POLYLINE")) {
             idShapeEditController.shape = new PolyLine(pane, appState, shapes, idShapeEditController);
         }
+        loadShapesFromDb();
     }
 
     private void clearUnfinished() {
@@ -387,9 +388,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
             return;
         SpatialHandler sh = SpatialHandler.getInstance();
         // temporary, load whole canvas
-        //int[] borders = {0, 1000, 0, 1000};
-        //List<Integer> objectIds = sh.selectWithinCanvas(borders);
-        List<Integer> objectIds = sh.selectAllObjects();
+        int[] borders = {0, 0, 1000, 1000};
+        List<Integer> objectIds = sh.selectWithinCanvas(borders);
         for(int objectId: objectIds) {
             SpatialDBO object = sh.loadObject(objectId);
             if (object.getShape() != null) {
