@@ -4,6 +4,7 @@ import controllers.canvasShapes.Coordinate;
 import controllers.canvasShapes.PolyLine;
 import controllers.canvasShapes.Shape;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -12,9 +13,11 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -205,61 +208,91 @@ public class SearchController implements Initializable {
 
         // 3. display results
         for (OffersDBO offer: getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject)) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
+                AnchorPane offerListItem = loader.load();
+                OfferListItemCtrl itemController =  loader.getController();
 
-            // configure a single result
-            VBox singleResult = new VBox();
-            singleResult.setPadding(new Insets(5, 10, 5, 10));
-            singleResult.getStyleClass().add("resultBox");
-            singleResult.setPrefHeight(130);
-            singleResult.setAlignment(Pos.CENTER_LEFT);
+                MultimediaHandler multiHandler = MultimediaHandler.getInstance();
+                int imageId = multiHandler.getFirstImageId(offer.getId());
+                Image image = (imageId == -1) ? null : multiHandler.getPicture(imageId);
+                itemController.init(offer, image);
 
-            // name
-            Label name = new Label("Name: " + offer.getName());
-            singleResult.getChildren().add(name);
+                // Add selection click  handler
+                offerListItem.setOnMousePressed(mouseEvent -> {
 
-            // id
-            Label id = new Label("ID: " + Integer.toString(offer.getId()));
-            singleResult.getChildren().add(new Label("ID: " + Integer.toString(offer.getId())));
+                    // select this object in the canvas
+                    selectObjectById(offer.getSpatialId());
 
-            // spatial Id, not displayed, just stored
-            searchResultsSpatialIds.add(offer.getSpatialId());
+                    // remove "selectedResult" style from all results
+                    for (Node result: results.getChildren()
+                    ) {
+                        result.getStyleClass().remove("selectedResult");
+                    }
+                    // add "selectedResult" for this one
+                    offerListItem.getStyleClass().add("selectedResult");
+                });
 
-            // price
-            Label price = new Label("Price: " + Integer.toString(offer.getPrice()));
-            singleResult.getChildren().add(price);
+                // add the whole result to HBOX of results
+                results.getChildren().add(offerListItem);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            // description
-            Label description = new Label("Description: " + offer.getDescription());
-            description.setWrapText(true);
-            description.setPrefWidth(300);
-            description.setMinWidth(300);
-            singleResult.getChildren().add(description);
+//            // configure a single result
+//            VBox singleResult = new VBox();
+//            singleResult.setPadding(new Insets(5, 10, 5, 10));
+//            singleResult.getStyleClass().add("resultBox");
+//            singleResult.setPrefHeight(130);
+//            singleResult.setAlignment(Pos.CENTER_LEFT);
+//
+//            // name
+//            Label name = new Label("Name: " + offer.getName());
+//            singleResult.getChildren().add(name);
+//
+//            // id
+//            Label id = new Label("ID: " + Integer.toString(offer.getId()));
+//            singleResult.getChildren().add(new Label("ID: " + Integer.toString(offer.getId())));
+//
+//            // spatial Id, not displayed, just stored
+//            searchResultsSpatialIds.add(offer.getSpatialId());
+//
+//            // price
+//            Label price = new Label("Price: " + Integer.toString(offer.getPrice()));
+//            singleResult.getChildren().add(price);
+//
+//            // description
+//            Label description = new Label("Description: " + offer.getDescription());
+//            description.setWrapText(true);
+//            description.setPrefWidth(300);
+//            description.setMinWidth(300);
+//            singleResult.getChildren().add(description);
+//
+//            // type
+//            Label type = new Label("Type: " + offer.getType());
+//            singleResult.getChildren().add(type);
+//
+//            // transaction
+//            Label transaction = new Label("Transaction: " + offer.getTransaction());
+//            singleResult.getChildren().add(transaction);
 
-            // type
-            Label type = new Label("Type: " + offer.getType());
-            singleResult.getChildren().add(type);
-
-            // transaction
-            Label transaction = new Label("Transaction: " + offer.getTransaction());
-            singleResult.getChildren().add(transaction);
-
-            // Add selection click  handler
-            singleResult.setOnMousePressed(mouseEvent -> {
-
-                // select this object in the canvas
-                selectObjectById(offer.getSpatialId());
-
-                // remove "selectedResult" style from all results
-                for (Node result: results.getChildren()
-                     ) {
-                    result.getStyleClass().remove("selectedResult");
-                }
-                // add "selectedResult" for this one
-                singleResult.getStyleClass().add("selectedResult");
-            });
-
-            // add the whole result to HBOX of results
-            results.getChildren().add(singleResult);
+//            // Add selection click  handler
+//            singleResult.setOnMousePressed(mouseEvent -> {
+//
+//                // select this object in the canvas
+//                selectObjectById(offer.getSpatialId());
+//
+//                // remove "selectedResult" style from all results
+//                for (Node result: results.getChildren()
+//                     ) {
+//                    result.getStyleClass().remove("selectedResult");
+//                }
+//                // add "selectedResult" for this one
+//                singleResult.getStyleClass().add("selectedResult");
+//            });
+//
+//            // add the whole result to HBOX of results
+//            results.getChildren().add(singleResult);
 
             // highlight specific object with spatialId in the canvasShapes array < - > canvas
             for (Shape shape: canvasShapes) {
@@ -292,7 +325,7 @@ public class SearchController implements Initializable {
                         for (Node result: results.getChildren()) { result.getStyleClass().remove("selectedResult"); }
 
                         // add "selectedResult" class for this specific one
-                        singleResult.getStyleClass().add("selectedResult");
+//                        singleResult.getStyleClass().add("selectedResult");
 
                         mouseEvent.consume();
                     });
