@@ -176,7 +176,7 @@ public class SearchController implements Initializable {
     public void searchSubmit() {
         // remove all previously loaded results in the HBOX of results
         results.getChildren().clear();
-        // remove all previously loaded results from the canvas
+        // remove all previously loaded results from canvas
         clearCanvas();
         // load all objects from DB, display as background
         loadShapesFromDb();
@@ -195,10 +195,11 @@ public class SearchController implements Initializable {
         List<OffersDBO> offersDBOsMatchingTypeAndName = new ArrayList<OffersDBO>();
         List<OffersDBO> offersDBOsCloseToObject = new ArrayList<OffersDBO>();
 
+        // 2. Search
         /* First, search only by offer type and name */
         offersDBOsMatchingTypeAndName = searchByPropertyTypeAndName(propertyTypeString, nameString);
 
-        /* Second, search by distance to given type within given distance (both for lake and center) */
+        /* Second, search by distance to given type within given distance */
         offersDBOsCloseToObject = searchCloseTo(distanceToObjectType.getSelectionModel().getSelectedItem().toString());
 
         System.out.println("Got this intersection: " + getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject).toString());
@@ -206,7 +207,7 @@ public class SearchController implements Initializable {
         // -- create spatial object ids list, ids of objects that will be painted to canvas
         searchResultsSpatialIds = new ArrayList<Integer>();
 
-        // 3. display results
+        // 3. Display results
         for (OffersDBO offer: getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject)) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
@@ -217,6 +218,8 @@ public class SearchController implements Initializable {
                 int imageId = multiHandler.getFirstImageId(offer.getId());
                 Image image = (imageId == -1) ? null : multiHandler.getPicture(imageId);
                 itemController.init(offer, image);
+                // spatial Id, not displayed, just stored
+                searchResultsSpatialIds.add(offer.getSpatialId());
 
                 // Add selection click  handler
                 offerListItem.setOnMousePressed(mouseEvent -> {
@@ -225,6 +228,8 @@ public class SearchController implements Initializable {
                     selectObjectById(offer.getSpatialId());
 
                     // remove "selectedResult" style from all results
+                    // todo: update this to previous list of results
+                    // enable adding/removing styles "selectedResult"
                     for (Node result: results.getChildren()
                     ) {
                         result.getStyleClass().remove("selectedResult");
