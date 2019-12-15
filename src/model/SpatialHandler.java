@@ -264,15 +264,16 @@ public class SpatialHandler {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return area;
+        // convert to one block in canvas equals 1m2
+        return area/200;
     }
 
     // returns distance between two spatial objects specified by id
-    public int selectObjectDistance(int firstObjId, int secondObjId) {
+    public int selectObjectDistance(int spatialId, String type) {
         int distance = 0;
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select SDO_GEOM.SDO_DISTANCE(first.shape, second.shape, 1) from map_entities first, map_entities second " +
-                    "where (first.id = " + firstObjId + " and second.id = " + secondObjId + " )";
+                    "where (first.id = " + spatialId + " and second.type = '" + type +"' )";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             if (rset.next()) {
                 distance = rset.getInt(1);
@@ -281,7 +282,8 @@ public class SpatialHandler {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return distance;
+        // convert to one block in canvas = 1m
+        return distance/20;
     }
 
     // returns diameter/length of object specified by id

@@ -29,7 +29,7 @@ public class OfferListItemCtrl {
         this.offerDBO = offer;
         transactionType.setText(offer.getTransaction());
         propertyType.setText(" " + offer.getType().toLowerCase());
-        area.setText(Integer.toString((SpatialHandler.getInstance().selectObjectArea(offer.getSpatialId())/100)));
+        area.setText(Integer.toString((SpatialHandler.getInstance().selectObjectArea(offer.getSpatialId()))));
         price.setText(((Integer)offer.getPrice()).toString());
         description.setText(offer.getDescription());
         if (image != null)
