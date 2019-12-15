@@ -52,8 +52,8 @@ public class PointInsertor extends Manipulator {
     protected void addLine(Coordinate oldC, Coordinate c) {
         if (c == null || oldC == null)
             return;
-        System.out.println(c.getX());
-        System.out.println(oldC.getX());
+        //System.out.println(c.getX());
+        //System.out.println(oldC.getX());
         Line l = new Line(oldC.getX(), oldC.getY(), c.getX(), c.getY());
 
         lines.add(l);

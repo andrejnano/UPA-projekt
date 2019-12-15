@@ -163,8 +163,13 @@ public class MultimediaHandler {
         catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-        assert buffer != null;
-        return SwingFXUtils.toFXImage(buffer, null);
+        Image image = null;
+        try {
+            image = SwingFXUtils.toFXImage(buffer, null);
+        } catch (NullPointerException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return image;
     }
 
     // sets new estateId for picture specified by id

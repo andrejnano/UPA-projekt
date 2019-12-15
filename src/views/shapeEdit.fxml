@@ -103,6 +103,7 @@
                                <PointType fx:value="SHOP" />
                                <PointType fx:value="WIFI" />
                                <PointType fx:value="CHURCH" />
+                               <PointType fx:value="TREE" />
                            </FXCollections>
                        </items>
                        <padding>

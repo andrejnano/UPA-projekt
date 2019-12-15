@@ -122,9 +122,9 @@ public class OffersHandler {
         int id = 0;
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select offers.id from offers " +
-            "where offers.spatialId = '" + spatialId + "' ";
+            "where offers.spatialId = " + spatialId;
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
-            while (rset.next()) {
+            if (rset.next()) {
                 id = rset.getInt(1);
             }
             rset.close();

@@ -36,7 +36,7 @@ public abstract class Shape extends PointInsertor {
         this.appState = appState;
         this.shapeEditController = controller;
         this.type = appState.getCanvasShapeState();
-        System.out.println(appState.getCanvasShapeState());
+        //System.out.println(appState.getCanvasShapeState());
         this.name = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
         this.entityType = new SimpleStringProperty();
