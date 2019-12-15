@@ -5,6 +5,7 @@ import controllers.canvasUtils.ConvertSpatialObjects;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
@@ -380,8 +381,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
             return;
         SpatialHandler sh = SpatialHandler.getInstance();
         // temporary, load whole canvas
-        int[] borders = {0, 0, 1000, 1000};
-        List<Integer> objectIds = sh.selectWithinCanvas(borders);
+        //int[] borders = {0, 0, 1000, 1000};
+        List<Integer> objectIds = sh.selectWithinCanvas(getVisibleNodes());
         for(int objectId: objectIds) {
             SpatialDBO object = sh.loadObject(objectId);
             if (object.getShape() != null) {
@@ -392,5 +393,61 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
                 canvasShape.id = object.getId();
             }
         }
+    }
+
+    // computes required zoom for canvas view function getVisibleNodes()
+    private double getZoom() {
+        switch (currentZoomLevel) {
+            case 5:  return 1.666667;
+            case 6:  return 1.428571;
+            case 7:  return 1.329577;
+            case 8:  return 1.208451;
+            case 9:  return 1.097183;
+            case 10: return 1.000000;
+            case 11: return 0.907042;
+            case 12: return 0.825352;
+            case 13: return 0.749296;
+            case 14: return 0.680282;
+            case 15: return 0.619718;
+            case 16: return 0.563380;
+            case 17: return 0.512676;
+            case 18: return 0.477465;
+            case 19: return 0.423944;
+            case 20: return 0.385915;
+            default: return currentZoomLevel/10.0;
+        }
+    }
+
+    // returns array of canvas view boundaries
+    private int[] getVisibleNodes() {
+        // boundaries of scrollPane and pane inside
+        Bounds bounds = scrollPane.getViewportBounds();
+        Bounds boundsPane = pane.getBoundsInParent();
+        // default size of canvas view, required only in this scope
+        int defaultPaneX = 710;
+        int defaultPaneY = 630;
+        // add 10 points around shown canvas in case of rounding errors
+        int roundingDeviation = 10;
+
+        // get top left coordinates of canvas view
+        // because of canvas error, requires boundsPane to be added to compute when changing zoom
+        double minX = (Math.abs(bounds.getMinX()+boundsPane.getMinX()+4))*getZoom();
+        double minY = (Math.abs(bounds.getMinY()+boundsPane.getMinY()+4))*getZoom();
+        int[] rectangleEdges = {
+                (int)minX-roundingDeviation,
+                (int)minY-roundingDeviation,
+                (int)(minX+defaultPaneX*getZoom()+roundingDeviation),
+                (int)(minY+defaultPaneY*getZoom()+roundingDeviation)
+        };
+
+
+        // for debugging
+        for (int i = 0; i < rectangleEdges.length; i++) {
+            System.out.print(rectangleEdges[i] +" ");
+        }
+        System.out.println();
+
+
+        return rectangleEdges;
     }
 }
