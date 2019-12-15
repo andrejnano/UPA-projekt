@@ -73,6 +73,7 @@
                    <ComboBox fx:id="areaType" maxWidth="-Infinity" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.valignment="CENTER" visible="false" prefWidth="223.0" >
                        <items>
                            <FXCollections fx:factory="observableArrayList">
+                               <AreaType fx:value="LAND" />
                                <AreaType fx:value="LAKE" />
                                <AreaType fx:value="FOREST" />
                                <AreaType fx:value="FIELD" />
@@ -81,7 +82,7 @@
                                <AreaType fx:value="SQUARE" />
                                <AreaType fx:value="CENTRE" />
                                <AreaType fx:value="SHOPPING" />
-                               <AreaType fx:value="Playground" />
+                               <AreaType fx:value="PLAYGROUND" />
                            </FXCollections>
                        </items>
                        <padding>

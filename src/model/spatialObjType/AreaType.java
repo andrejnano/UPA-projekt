@@ -11,11 +11,12 @@ public enum AreaType {
     FOREST("Forest", Color.DARKGREEN),
     FIELD("Field", Color.LIGHTYELLOW),
     PARK("Park", Color.LIGHTGREEN),
-    PARKING("Parking", Color.GRAY),
-    SQUARE("Square", Color.LIGHTGRAY),
+    PARKING("Parking", Color.LIGHTBLUE),
+    SQUARE("Square", Color.PURPLE),
     CENTRE("City centre", Color.SANDYBROWN),
     SHOPPING("Shopping area", Color.LIGHTBLUE),
-    Playground("Playground", Color.ORANGE);
+    PLAYGROUND("Playground", Color.ORANGE),
+    LAND("Land", Color.DARKSLATEGRAY);
 
     private String label;
     private Color color;

@@ -12,6 +12,9 @@
 
 <?import model.offerType.OfferPropertyType?>
 <?import model.offerType.OfferTransactionType?>
+<?import model.spatialObjType.AreaType?>
+<?import model.spatialObjType.PointType?>
+<?import model.spatialObjType.PolylineType?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SearchController">
     <children>
@@ -144,19 +147,13 @@
                                      </GridPane.margin>
                                  </TextField>
 
-                                  <Label alignment="CENTER_RIGHT" layoutX="25.0" layoutY="94.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="Distance to center" textAlignment="RIGHT" textFill="#f5f5f5" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                                  <Label alignment="CENTER_RIGHT" layoutX="25.0" layoutY="166.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="Distance within: " textAlignment="RIGHT" textFill="#f5f5f5" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                                      <font>
                                         <Font name="System Bold" size="14.0" />
                                      </font>
                                   </Label>
 
-                                  <Label alignment="CENTER_RIGHT" layoutX="25.0" layoutY="166.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="Distance to lake" textAlignment="RIGHT" textFill="#f5f5f5" GridPane.rowIndex="5" GridPane.valignment="CENTER">
-                                     <font>
-                                        <Font name="System Bold" size="14.0" />
-                                     </font>
-                                  </Label>
-
-                                 <Button fx:id="searchButton" alignment="CENTER" mnemonicParsing="false" onAction="#searchSubmit" prefHeight="28.0" prefWidth="300.0" style="-fx-background-color: #43b480; -fx-cursor: hand;" text="SEARCH" textFill="WHITE" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="11">
+                                 <Button fx:id="searchButton" alignment="CENTER" mnemonicParsing="false" onAction="#searchSubmit" prefHeight="28.0" prefWidth="300.0" style="-fx-background-color: #43b480; -fx-cursor: hand;" text="SEARCH" textFill="WHITE" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -164,36 +161,57 @@
                                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                  </GridPane.margin>
                                  </Button>
-                              <ChoiceBox  fx:id="centerDistance" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                  <items>
-                                      <FXCollections fx:factory="observableArrayList">
-                                          <String fx:value="any" />
-                                          <String fx:value="50" />
-                                          <String fx:value="100" />
-                                          <String fx:value="150" />
-                                          <String fx:value="200" />
-                                          <String fx:value="250" />
-                                      </FXCollections>
-                                  </items>
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="15.0" top="5.0" />
-                                 </GridPane.margin>
-                              </ChoiceBox>
-                              <ChoiceBox fx:id="lakeDistance"  prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                  <items>
-                                      <FXCollections fx:factory="observableArrayList">
-                                          <String fx:value="any" />
-                                          <String fx:value="50" />
-                                          <String fx:value="100" />
-                                          <String fx:value="150" />
-                                          <String fx:value="200" />
-                                          <String fx:value="250" />
-                                      </FXCollections>
-                                  </items>
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="15.0" top="5.0" />
-                                 </GridPane.margin>
-                              </ChoiceBox>
+                                  <ChoiceBox fx:id="distance"  prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                      <items>
+                                          <FXCollections fx:factory="observableArrayList">
+                                              <String fx:value="any" />
+                                              <String fx:value="50" />
+                                              <String fx:value="100" />
+                                              <String fx:value="150" />
+                                              <String fx:value="200" />
+                                              <String fx:value="250" />
+                                          </FXCollections>
+                                      </items>
+                                     <GridPane.margin>
+                                        <Insets bottom="5.0" left="15.0" top="5.0" />
+                                     </GridPane.margin>
+                                  </ChoiceBox>
+                                 <Label alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="to: " textAlignment="RIGHT" textFill="#f5f5f5" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                                     <font>
+                                         <Font name="System Bold" size="14.0" />
+                                     </font>
+                                 </Label>
+                                 <ComboBox fx:id="distanceToObjectType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                     <items>
+                                         <FXCollections fx:factory="observableArrayList">
+                                             <AreaType fx:value="LAKE"/>
+                                             <AreaType fx:value="FOREST"/>
+                                             <AreaType fx:value="FIELD"/>
+                                             <AreaType fx:value="PARK"/>
+                                             <AreaType fx:value="PARKING"/>
+                                             <AreaType fx:value="SQUARE"/>
+                                             <AreaType fx:value="CENTRE"/>
+                                             <AreaType fx:value="SHOPPING"/>
+                                             <AreaType fx:value="PLAYGROUND"/>
+                                             <PointType fx:value="BUS"/>
+                                             <PointType fx:value="TRAM"/>
+                                             <PointType fx:value="COFFEE"/>
+                                             <PointType fx:value="CINEMA"/>
+                                             <PointType fx:value="SHOP"/>
+                                             <PointType fx:value="WIFI"/>
+                                             <PointType fx:value="CHURCH"/>
+                                             <PolylineType fx:value="ROAD"/>
+                                             <PolylineType fx:value="HIGHWAY"/>
+                                             <PolylineType fx:value="PATH"/>
+                                             <PolylineType fx:value="TRAM"/>
+                                             <PolylineType fx:value="POWERLINE"/>
+                                             <PolylineType fx:value="RIVER"/>
+                                         </FXCollections>
+                                     </items>
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="15.0" top="5.0" />
+                                     </GridPane.margin>
+                                 </ComboBox>
 
                              </children>
                              <columnConstraints>
