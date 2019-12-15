@@ -17,7 +17,6 @@
                 <Button mnemonicParsing="false" onAction="#flip" text="Flip" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             </GridPane>
             <ImageView fitHeight="400" preserveRatio="true" fx:id="picture"/>
-            <Button mnemonicParsing="false" text="Save" onAction="#save"/>
        </VBox>
    </content>
 </DialogPane>

@@ -27,6 +27,7 @@ public class MultiPoint extends Shape {
         visualObject.width = 0.0;
         visualObject.strokeProperty = new SimpleObjectProperty(visualObject.stroke);
         visualObject.widthProperty = new SimpleDoubleProperty(visualObject.width);
+        visualObject.multipoints = new ArrayList<>();
     }
 
 
@@ -35,6 +36,7 @@ public class MultiPoint extends Shape {
         Circle centre = new Circle(c.getX(), c.getY(), 3);
         centre.setFill(visualObject.stroke);
 
+        visualObject.multipoints.add(centre);
         DoubleProperty xProperty = new SimpleDoubleProperty(c.getX());
         DoubleProperty yProperty = new SimpleDoubleProperty(c.getY());
 

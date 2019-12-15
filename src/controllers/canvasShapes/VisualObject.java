@@ -14,6 +14,7 @@ import javafx.scene.shape.Shape;
 import controllers.CanvasController;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,7 @@ import javax.swing.*;
 public class VisualObject {
     public ObservableList<Anchor> anchors;
     public Shape shape;
+    public ArrayList<Object> multipoints;
     protected Paint stroke;
     protected Double width;
     protected ObjectProperty<Paint> strokeProperty;

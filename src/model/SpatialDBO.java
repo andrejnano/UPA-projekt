@@ -5,6 +5,9 @@ import controllers.CanvasController;
 import controllers.ShapeEditController;
 import controllers.canvasShapes.*;
 import javafx.scene.layout.Pane;
+import model.spatialObjType.AreaType;
+import model.spatialObjType.PointType;
+import model.spatialObjType.PolylineType;
 import oracle.spatial.geometry.JGeometry;
 import java.util.ArrayList;
 import java.lang.reflect.Array;
@@ -61,6 +64,8 @@ public class SpatialDBO {
                 point.add(c0, shapes);
                 canvasShape = point.getShape();
                 canvasShape.type = "POINT";
+                PointType pointType = PointType.getByLabel(type);
+                pointType.toColor(canvasShape.visualObject);
                 break;
             case JGeometry.GTYPE_CURVE:
                 double[] lineOrds = shape.getOrdinatesArray();
@@ -71,6 +76,8 @@ public class SpatialDBO {
                 }
                 canvasShape = line.getShape();
                 canvasShape.type = "POLYLINE";
+                PolylineType polylineType = PolylineType.getByLabel(type);
+                polylineType.toColor(canvasShape.visualObject);
                 break;
             case JGeometry.GTYPE_POLYGON:
                 double[] polygonOrds = shape.getOrdinatesArray();
@@ -85,6 +92,8 @@ public class SpatialDBO {
                 }
                 canvasShape = polygon.getShape();
                 canvasShape.type = "POLYGON";
+                AreaType polygonType = AreaType.getByLabel(type);
+                polygonType.toColor(canvasShape.visualObject);
                 break;
             case JGeometry.GTYPE_MULTIPOINT:
                 double[] multiOrds = shape.getOrdinatesArray();
@@ -96,14 +105,14 @@ public class SpatialDBO {
                 }
                 canvasShape = multiPoint.getShape();
                 canvasShape.type = "MULTIPOINT";
+                PointType mPointType = PointType.getByLabel(type);
+                mPointType.toColor(canvasShape.visualObject);
                 break;
         }
+        canvasShape.spatialObjType = type;
+        canvasShape.finish();
+        idShapeEditController.finishedEditingShape = true;
 
-        if (canvasShape != null) {
-            idShapeEditController.setDbType(this.type);
-            idShapeEditController.unBind();
-            idShapeEditController.bind(canvasShape);
-        }
         return canvasShape;
     }
 

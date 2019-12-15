@@ -13,7 +13,7 @@ public enum AreaType {
     PARK("Park", Color.LIGHTGREEN),
     PARKING("Parking", Color.GRAY),
     SQUARE("Square", Color.LIGHTGRAY),
-    CENTRE("City centre", Color.LIGHTYELLOW),
+    CENTRE("City centre", Color.SANDYBROWN),
     SHOPPING("Shopping area", Color.LIGHTBLUE),
     Playground("Playground", Color.ORANGE);
 

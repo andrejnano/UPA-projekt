@@ -4,6 +4,8 @@ import controllers.AppState;
 import controllers.ShapeEditController;
 import javafx.scene.layout.Pane;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +24,13 @@ public abstract class Shape extends PointInsertor {
     public SimpleStringProperty entityType;
     public VisualObject visualObject;
     public String type;
+    public String spatialObjType;
     protected ShapeEditController shapeEditController;
     public AppState appState;
 
     public Shape(Pane p, AppState appState, ShapeEditController controller) {
         super(p);
+        id = -1;
         this.appState = appState;
         this.shapeEditController = controller;
         this.type = appState.getCanvasShapeState();
@@ -59,6 +63,18 @@ public abstract class Shape extends PointInsertor {
             return;
         for (Anchor a : visualObject.anchors) {
             a.setVisible(visibility);
+        }
+    }
+
+    public void delete() {
+        if (visualObject.anchors == null)
+            return;
+        for (Anchor a : visualObject.anchors) {
+            pane.getChildren().remove(a);
+        }
+        pane.getChildren().removeAll(visualObject.shape);
+        if (visualObject.multipoints != null) {
+            pane.getChildren().removeAll(visualObject.multipoints);
         }
     }
 

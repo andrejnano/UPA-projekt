@@ -1,7 +1,6 @@
 package controllers;
 
 import controllers.canvasShapes.Shape;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -10,9 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import model.CanvasEntityType;
 import model.SpatialDBO;
 import model.SpatialHandler;
 import model.spatialObjType.AreaType;
@@ -40,9 +37,6 @@ public class ShapeEditController {
     @FXML
     Label shapeTypeLabel;
     @FXML
-    ComboBox entityType;
-
-    @FXML
     ComboBox polylineType;
     @FXML
     ComboBox areaType;
@@ -61,11 +55,8 @@ public class ShapeEditController {
     private Pane sideBar;
     public AppState appState;
 
-    String DbType = "None";
-
     Shape shape;
     private boolean bound;
-
     public boolean finishedEditingShape;
 
     public void init(CanvasController canvasController, AppState appState, ScrollPane scrollPane, Pane sideBar) {
@@ -73,15 +64,15 @@ public class ShapeEditController {
         this.appState = appState;
         this.sideBar = sideBar;
         this.canvasController = canvasController;
+        id = -1;
         curComboBox = null;
     }
-
-    public void setDbType(String value) { this.DbType = value; }
 
     public void bind(Shape shape) {
 //        finishedEditingShape = false;
         // assign new shape to the current ShapeEditorController
         this.shape = shape;
+        id = shape.id;
 
         shapeTypeLabel.setText(shape.type);
         // View < - > ViewModel bidirectional binding of Shape name and description
@@ -91,32 +82,42 @@ public class ShapeEditController {
         shapeTypeHide();
         stroke = shape.visualObject.strokeProperty();
         int width = 5;
+
         switch (shape.type) {
             case "POINT" :
             case "MULTIPOINT" :
                 curComboBox = pointType;
+                if (shape.spatialObjType != null)
+                    curComboBox.setValue(PointType.getByLabel(shape.spatialObjType));
                 curListener = new ChangeListener<Object>() {
                     @Override
                     public void changed(ObservableValue<? extends Object> observable, Object oldVal, Object newVal) {
                         ((PointType)newVal).toColor(shape.visualObject);
+                        shape.spatialObjType = ((PointType)newVal).toString();
                     }
                 };
                 break;
             case "POLYLINE" :
                 curComboBox = polylineType;
+                if (shape.spatialObjType != null)
+                    curComboBox.setValue(PolylineType.getByLabel(shape.spatialObjType));
                 curListener = new ChangeListener<Object>() {
                     @Override
                     public void changed(ObservableValue<? extends Object> observable, Object oldVal, Object newVal) {
                         ((PolylineType)newVal).toColor(shape.visualObject);
+                        shape.spatialObjType = ((PolylineType)newVal).toString();
                     }
                 };
                 break;
             case "POLYGON" :
                 curComboBox = areaType;
+                if (shape.spatialObjType != null)
+                    curComboBox.setValue(AreaType.getByLabel(shape.spatialObjType));
                 curListener = new ChangeListener<Object>() {
                     @Override
                     public void changed(ObservableValue<? extends Object> observable, Object oldVal, Object newVal) {
                         ((AreaType)newVal).toColor(shape.visualObject);
+                        shape.spatialObjType = ((AreaType)newVal).toString();
                     }
                 };
         }
@@ -124,9 +125,6 @@ public class ShapeEditController {
             curComboBox.setVisible(true);
             curComboBox.valueProperty().addListener(curListener);
         }
-        // Bind color picker < - >
-        if (shape.visualObject.shape != null)
-            shape.visualObject.shape.setStrokeWidth(width);
         bound = true;
     }
 
@@ -148,6 +146,7 @@ public class ShapeEditController {
                 curComboBox.valueProperty().removeListener(curListener);
             }
         }
+        id = -1;
         bound = false;
     }
 
@@ -181,23 +180,6 @@ public class ShapeEditController {
         }
     }
 
-    public Color getTypeColor(String entityType) {
-        switch (entityType) {
-            case "Street":
-                return Color.BLACK;
-            case "Lake":
-                return Color.BLUE;
-            case "Tree":
-                return Color.GREEN;
-            case "Bus":
-                return Color.RED;
-            case "Building":
-                return Color.GRAY;
-            default:
-                return Color.LIGHTGRAY;
-        }
-    }
-
     private void setSpatial() {
         SpatialDBO object = new SpatialDBO();
         object.setName(shape.name.get());
@@ -205,14 +187,26 @@ public class ShapeEditController {
         object.setId(shape.id);
         object.setShape(shape, shape.type);
         object.setSpatialType(shape.type);
-        object.setType(entityType.getSelectionModel().getSelectedItem().toString());
-        int id = SpatialHandler.getInstance().insertObject(object);
+        object.setType(curComboBox.getValue().toString());
+        SpatialHandler spatialHandler = SpatialHandler.getInstance();
+        if (id != -1) {
+            object.setId(id);
+            spatialHandler.updateObject(object);
+        } else {
+            id = spatialHandler.insertObject(object);
+        }
     }
 
     @FXML
     private void deleteButtonClicked(ActionEvent actionEvent) {
-        ((Pane) scrollPane.getContent()).getChildren().remove(shape.visualObject.shape);
+        shape.delete();
         canvasController.viewMode();
+        if (id != -1) {
+            System.out.println("id "+id);
+            SpatialHandler.getInstance().deleteObject(id);
+        }
+        id = -1;
+        bound = false;
     }
 }
 

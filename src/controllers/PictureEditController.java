@@ -51,9 +51,10 @@ public class PictureEditController {
     @FXML
     private void rotateLeft(ActionEvent actionEvent) {
         try{
-            Image img = multiHandler.getProcessedPhotoFromDatabase(pictureFile.id, "rotate 90");
+            Image img = multiHandler.getProcessedPhotoFromDatabase(pictureFile.id, "rotate -90");
             if (img != null) {
                 pictureFile.image.setImage(img);
+                picture.setImage(img);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,6 +63,15 @@ public class PictureEditController {
 
     @FXML
     private void rotateRight(ActionEvent actionEvent) {
+        try{
+            Image img = multiHandler.getProcessedPhotoFromDatabase(pictureFile.id, "rotate 90");
+            if (img != null) {
+                pictureFile.image.setImage(img);
+                picture.setImage(img);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -75,13 +85,27 @@ public class PictureEditController {
 
     @FXML
     private void mirror(ActionEvent actionEvent) {
+        try{
+            Image img = multiHandler.getProcessedPhotoFromDatabase(pictureFile.id, "mirror");
+            if (img != null) {
+                pictureFile.image.setImage(img);
+                picture.setImage(img);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void flip(ActionEvent actionEvent) {
-    }
-
-    @FXML
-    private void save(ActionEvent actionEvent) {
+        try{
+            Image img = multiHandler.getProcessedPhotoFromDatabase(pictureFile.id, "flip");
+            if (img != null) {
+                pictureFile.image.setImage(img);
+                picture.setImage(img);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
