@@ -8,10 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
@@ -147,7 +144,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
             handleZoom(zoomEvent);
             zoomEvent.consume();
         });
-
     }
 
     public static CanvasController getInstance() { return instance; }
@@ -379,7 +375,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     }
 
     // fills canvas with all objects
-    @FXML
     public void loadShapesFromDb() {
         if (!DatabaseManager.getInstance().isConnected())
             return;

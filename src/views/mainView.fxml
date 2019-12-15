@@ -11,7 +11,7 @@
        <VBox>
           <children>
               <TabPane tabClosingPolicy="UNAVAILABLE">
-                <Tab text="Settings" fx:id="settingsTab">
+                <Tab text="Settings" fx:id="settingsTab" onSelectionChanged="#dbUpdate">
                     <fx:include source="loginView.fxml"/>
                 </Tab>
                 <Tab text="Manage map" fx:id="manageMapTab">

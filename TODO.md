@@ -2,7 +2,7 @@
 
 - [ ] zarovnavanie bodov pri posunuti do mriezky (anchors)
 - [ ] zarovnavanie bodov pri posunuti do mriezky (cely shape)
-- [ ] nacitanie celeho obsahu mapy pri otvoreni tabu/po prihlaseni
+- [X] nacitanie celeho obsahu mapy pri otvoreni tabu/po prihlaseni
 - [ ] interval "price" pri vyhladavani
 - [ ] vypocitanie obsahu plochy a zobrazenie pri vyhladani
 - [ ] vytvorenie zakladnych objektov v init.sql
