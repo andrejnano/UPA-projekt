@@ -10,3 +10,4 @@
 - [ ] zobrazit obrazky pri vysledkoch vyhladavania
 - [ ] pripravit projekt na odovzdanie (Maven/libraries/jar)
 - [ ] pripravit lokalnu DB v docker contianer
+- [ ] zjednotit tooltip name + shape object type do jedneho tooltipu
