@@ -1,2 +1,7 @@
 /out/
 /.idea/
+out/
+out/*
+/out/*
+/out/**
+/UPA-projekt.iml
