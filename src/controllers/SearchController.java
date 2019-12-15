@@ -301,7 +301,6 @@ public class SearchController implements Initializable {
         }
     }
 
-
     // removes all shapes from canvas
     @FXML
     private void clearCanvas() {
@@ -465,9 +464,5 @@ public class SearchController implements Initializable {
         }
         pane.getChildren().addAll(horizontalLines);
         pane.getChildren().addAll(verticalLines);
-    }
-
-    public static boolean contains(final int[] arr, final int key) {
-        return Arrays.stream(arr).anyMatch(i -> i == key);
     }
 }
