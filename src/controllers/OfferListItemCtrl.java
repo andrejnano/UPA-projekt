@@ -22,12 +22,10 @@ public class OfferListItemCtrl {
     @FXML
     ImageView picture;
 
-    private OffersController offersController;
     OffersDBO offerDBO;
 
-    public void init(OffersDBO offer, Image image, OffersController offersController) {
+    public void init(OffersDBO offer, Image image) {
         this.offerDBO = offer;
-        this.offersController = offersController;
         transactionType.setText(offer.getTransaction());
         propertyType.setText(" " + offer.getType().toLowerCase());
         area.setText(offer.getName());
@@ -35,14 +33,5 @@ public class OfferListItemCtrl {
         description.setText(offer.getDescription());
         if (image != null)
             picture.setImage(image);
-    }
-
-    @FXML
-    private void offerSelected(MouseEvent mouseEvent) {
-        offersController.unBind();
-        offersController.clear();
-        offersController.myOffersSidebar.setVisible(false);
-        offersController.editOfferSidebar.setVisible(true);
-        offersController.bind(new Offer(offerDBO));
     }
 }

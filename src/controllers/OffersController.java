@@ -285,7 +285,14 @@ public class OffersController implements Initializable{
                 multiHandler = MultimediaHandler.getInstance();
                 int imageId = multiHandler.getFirstImageId(o.getId());
                 Image image = (imageId == -1) ? null : multiHandler.getPicture(imageId);
-                itemController.init(o, image, this);
+                itemController.init(o, image);
+                offerListItem.setOnMouseClicked(e -> {
+                    unBind();
+                    clear();
+                    myOffersSidebar.setVisible(false);
+                    editOfferSidebar.setVisible(true);
+                    bind(new Offer(o));
+                });
                 myOffersBox.getChildren().add(offerListItem);
                 listItems.add(offerListItem);
             } catch (Exception e) {
