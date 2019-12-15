@@ -5,8 +5,8 @@
 - [X] nacitanie celeho obsahu mapy pri otvoreni tabu/po prihlaseni
 - [ ] refresh/update tlacitko do search/create/manage views na ziskanie aktualnych dat z db
 - [ ] interval "price" pri vyhladavani
-- [ ] vypocitanie obsahu plochy a zobrazenie pri vyhladani
-- [ ] vytvorenie zakladnych objektov v init.sql
+- [X] vypocitanie obsahu plochy a zobrazenie pri vyhladani
+- [X] vytvorenie zakladnych objektov v init.sql, ale obrazky ešte nefungujú
 - [ ] zobrazit obrazky pri vysledkoch vyhladavania
 - [ ] pripravit projekt na odovzdanie (Maven/libraries/jar)
 - [ ] pripravit lokalnu DB v docker contianer

@@ -251,11 +251,11 @@ public class SpatialHandler {
 
     // returns area of object polygon
     // requires type
-    public int selectObjectArea(String type, int id) {
+    public int selectObjectArea(int id) {
         int area = 0;
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select SUM(SDO_GEOM.SDO_AREA(shape, 1)) from map_entities object " +
-                    "where object.type = '" + type + "' and object.id = " + id + " ";
+            String sqlString = "select SUM(SDO_GEOM.SDO_AREA(shape, 1)) from map_entities " +
+                    "where id = " + id + " ";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             if (rset.next()) {
                 area = rset.getInt(1);
