@@ -41,6 +41,6 @@ public enum AreaType {
 
     public void toColor (VisualObject visualObj) {
         visualObj.strokeProperty().setValue(color);
-        visualObj.shape.setFill(color.deriveColor(1, 1, 1, 0.4));
+        visualObj.shape.setFill(color.deriveColor(1, 1, 1, 0.2));
     }
 }

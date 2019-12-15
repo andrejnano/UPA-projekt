@@ -231,7 +231,7 @@ public class SpatialHandler {
         // gets spatialIds
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select land_entity.id from map_entities land_entity, map_entities object " +
-                    "where land_entity.type = 'land' and object.type = '" + type + "' AND " +
+                    "where land_entity.type = 'Land' and object.type = '" + type + "' AND " +
                     "(SDO_WITHIN_DISTANCE(land_entity.shape, object.shape, 'distance=" + distance + "') = 'TRUE')";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             while (rset.next()) {

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
@@ -49,9 +50,7 @@ public class SpatialDBO {
     public void setSpatialType(String spatialType) { this.spatialType = spatialType; }
 
     // prints to canvas
-    public Shape setGeometry(Pane canvasPane) {
-        ArrayList<Shape> shapes = CanvasController.getInstance().getShapes();
-//        Pane p = CanvasController.getInstance().getPane();
+    public Shape drawShapeToCanvas(Pane canvasPane, ArrayList<Shape> canvasShapes) {
         AppState appState = CanvasController.getInstance().appState;
         ShapeEditController idShapeEditController = CanvasController.getInstance().getShapeEditController();
         Shape canvasShape = null;
@@ -61,7 +60,7 @@ public class SpatialDBO {
                 double[] pointOrds = shape.getPoint();
                 Point point = new Point(canvasPane, appState, idShapeEditController);
                 Coordinate c0 = new Coordinate(pointOrds[0], pointOrds[1]);
-                point.add(c0, shapes);
+                point.add(c0, canvasShapes);
                 canvasShape = point.getShape();
                 canvasShape.type = "POINT";
                 PointType pointType = PointType.getByLabel(type);
@@ -69,10 +68,10 @@ public class SpatialDBO {
                 break;
             case JGeometry.GTYPE_CURVE:
                 double[] lineOrds = shape.getOrdinatesArray();
-                PolyLine line = new PolyLine(canvasPane, appState, shapes, idShapeEditController);
+                PolyLine line = new PolyLine(canvasPane, appState, canvasShapes, idShapeEditController);
                 for (int i = 0; i < lineOrds.length; i += 2) {
                     Coordinate c1 = new Coordinate(lineOrds[i], lineOrds[i+1]);
-                    line.add(c1, shapes);
+                    line.add(c1, canvasShapes);
                 }
                 canvasShape = line.getShape();
                 canvasShape.type = "POLYLINE";
@@ -88,7 +87,7 @@ public class SpatialDBO {
 
                 for (int i = 0; i < polygonOrds.length; i += 2) {
                     Coordinate c2 = new Coordinate(polygonOrds[i], polygonOrds[i+1]);
-                    polygon.add(c2, shapes);
+                    polygon.add(c2, canvasShapes);
                 }
                 canvasShape = polygon.getShape();
                 canvasShape.type = "POLYGON";
@@ -101,7 +100,7 @@ public class SpatialDBO {
 
                 for (int i = 0; i < multiOrds.length; i += 2) {
                     Coordinate c3 = new Coordinate(multiOrds[i], multiOrds[i+1]);
-                    multiPoint.add(c3, shapes);
+                    multiPoint.add(c3, canvasShapes);
                 }
                 canvasShape = multiPoint.getShape();
                 canvasShape.type = "MULTIPOINT";

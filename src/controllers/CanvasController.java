@@ -8,16 +8,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -84,7 +81,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     private Coordinate dragDelta;
 
     // 2D Points that should be rendered to canvas
-    private ArrayList<Shape> shapes;
+    private ArrayList<Shape> canvasShapes;
 
     // ??
     private Pane sidePane;
@@ -119,7 +116,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         this.viewMode();
 
         // Collection of shapes in the canvas
-        shapes = new ArrayList<>();
+        canvasShapes = new ArrayList<>();
 
         // cursor position tooltip box with coordinate [x,y], displayed on MOUSE PRESSED
         cursorLocationToolTip = new Tooltip();
@@ -154,7 +151,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     }
 
     public static CanvasController getInstance() { return instance; }
-    public ArrayList<Shape> getShapes() { return this.shapes; }
+    public ArrayList<Shape> getShapes() { return this.canvasShapes; }
     public Pane getPane() { return this.pane; }
     public ShapeEditController getShapeEditController() { return this.idShapeEditController; }
 
@@ -191,7 +188,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         appState.setCanvasShapeState("POLYLINE");
         canvasStateLabel.setText(appState.getCanvasState() + " " + appState.getCanvasShapeState());
         createPolyLineButton.getStyleClass().add("active");
-        idShapeEditController.bind(new PolyLine(pane, appState, shapes, idShapeEditController));
+        idShapeEditController.bind(new PolyLine(pane, appState, canvasShapes, idShapeEditController));
     }
 
     @FXML
@@ -240,14 +237,14 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         sideBar.setVisible(false);
         clearUnfinished();
 
-        for (Shape s : shapes) {
-            s.clear();
+        for (Shape shape : canvasShapes) {
+            shape.clear();
         }
 
-        shapes.clear();
+        canvasShapes.clear();
 
         if (appState.getCanvasShapeState().contains("POLYLINE")) {
-            idShapeEditController.shape = new PolyLine(pane, appState, shapes, idShapeEditController);
+            idShapeEditController.shape = new PolyLine(pane, appState, canvasShapes, idShapeEditController);
         }
         loadShapesFromDb();
     }
@@ -280,7 +277,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
                 Coordinate c = new Coordinate(mouseEvent.getX(), mouseEvent.getY(), gridCellSize);
 
-                if (idShapeEditController.shape.add(c, shapes) && !idShapeEditController.finishedEditingShape) {
+                if (idShapeEditController.shape.add(c, canvasShapes) && !idShapeEditController.finishedEditingShape) {
                     idShapeEditController.finishedEditingShape = true;
                 }
             }
@@ -393,7 +390,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         for(int objectId: objectIds) {
             SpatialDBO object = sh.loadObject(objectId);
             if (object.getShape() != null) {
-                Shape canvasShape = object.setGeometry(pane);
+                Shape canvasShape = object.drawShapeToCanvas(pane, canvasShapes);
                 canvasShape.name.set(object.getName());
                 canvasShape.description.set(object.getDescription());
                 canvasShape.entityType.set(object.getType());

@@ -1,6 +1,7 @@
 package controllers;
 
 import controllers.canvasShapes.Coordinate;
+import controllers.canvasShapes.PolyLine;
 import controllers.canvasShapes.Shape;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
@@ -10,12 +11,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -23,13 +22,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 import model.*;
-import oracle.sql.INTERVALDS;
 
-import javax.swing.text.DefaultEditorKit;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.IntFunction;
 
 public class SearchController implements Initializable {
     @FXML
@@ -57,6 +56,9 @@ public class SearchController implements Initializable {
 
     Offer queryOffer;
 
+    ArrayList<Shape> canvasShapes;
+    List<Integer> searchResultsSpatialIds;
+
     // Mouse cursor position
     private Coordinate mouseCoordinate;
 
@@ -77,6 +79,9 @@ public class SearchController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Collection of shapes in the canvas
+        canvasShapes = new ArrayList<>();
 
         // select the default property, by selecting the first one
         propertyType.getSelectionModel().selectFirst();
@@ -127,25 +132,24 @@ public class SearchController implements Initializable {
 
     // search for all offers that are close to given type within a given distance
     public List<OffersDBO> searchCloseTo(String type) {
-        List<Integer> offersIds = new ArrayList<Integer>();
         List<OffersDBO> offersDBOs = new ArrayList<OffersDBO>();
 
         // check if relevant distance is selected, otherwise dont fetch offers
         if (!distance.getSelectionModel().getSelectedItem().toString().contains("any")) {
             // get the distance
             int distanceValue = Integer.parseInt(distance.getSelectionModel().getSelectedItem().toString());
+            System.out.println("Selected distance to " + type + " of value: " + distanceValue);
+
             // get all offers that are close to center within a given distance
-            offersIds = SpatialHandler.getInstance().selectWithinDistance(type, distanceValue);
+            List<Integer> offersIds = SpatialHandler.getInstance().selectWithinDistance(type, distanceValue);
+            System.out.println("Got these offers close to " + type + ": " + offersIds.toString());
+            offersDBOs = OffersHandler.getInstance().loadOffers(offersIds);
         } else {
-            offersIds = SpatialHandler.getInstance().selectAllObjects();
+            System.out.println("'any' was selected, getting all offers");
+            offersDBOs = OffersHandler.getInstance().getAllOffers();
         }
-
-        offersDBOs = OffersHandler.getInstance().loadOffers(offersIds);
-
-        System.out.println("Got these offers close to " + type + ": " + offersIds.toString());
         return offersDBOs;
     }
-
 
 
     // get common offer objects in two lists, used to merge search results from different queries
@@ -164,18 +168,21 @@ public class SearchController implements Initializable {
     }
 
 
-
-
+    /* Execute search query */
     @FXML
     public void searchSubmit() {
-        results.getChildren().removeAll();
+        // remove all previously loaded results in the HBOX of results
+        results.getChildren().clear();
+        // remove all previously loaded results from the canvas
+        clearCanvas();
+        // load all objects from DB, display as background
+        loadShapesFromDb();
 
         // 1. collect data from form
         String nameString = nameField.getText();
         String propertyTypeString = propertyType.getSelectionModel().getSelectedItem().toString();
         String transactionTypeString = transactionType.getSelectionModel().getSelectedItem().toString();
         String streetString = streetField.getText();
-
         System.out.println("name: " + nameString);
         System.out.println("property type: " + propertyTypeString);
         System.out.println("transaction type: " + transactionTypeString);
@@ -194,7 +201,7 @@ public class SearchController implements Initializable {
         System.out.println("Got this intersection: " + getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject).toString());
 
         // -- create spatial object ids list, ids of objects that will be painted to canvas
-        List<Integer> spatialIds = new ArrayList<Integer>();
+        searchResultsSpatialIds = new ArrayList<Integer>();
 
         // 3. display results
         for (OffersDBO offer: getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject)) {
@@ -215,7 +222,7 @@ public class SearchController implements Initializable {
             singleResult.getChildren().add(new Label("ID: " + Integer.toString(offer.getId())));
 
             // spatial Id, not displayed, just stored
-            spatialIds.add(offer.getSpatialId());
+            searchResultsSpatialIds.add(offer.getSpatialId());
 
             // price
             Label price = new Label("Price: " + Integer.toString(offer.getPrice()));
@@ -238,7 +245,10 @@ public class SearchController implements Initializable {
 
             // Add selection click  handler
             singleResult.setOnMousePressed(mouseEvent -> {
-                System.out.println("mouse clicked on result " + id);
+
+                // select this object in the canvas
+                selectObjectById(offer.getSpatialId());
+
                 // remove "selectedResult" style from all results
                 for (Node result: results.getChildren()
                      ) {
@@ -250,13 +260,48 @@ public class SearchController implements Initializable {
 
             // add the whole result to HBOX of results
             results.getChildren().add(singleResult);
+
+            // highlight specific object with spatialId in the canvasShapes array < - > canvas
+            for (Shape shape: canvasShapes) {
+                if (shape.id == offer.getSpatialId()) {
+                    shape.visualObject.strokeProperty().setValue(Color.YELLOWGREEN);
+                    shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.4));
+                }
+            }
+        }
+    }
+
+
+    public void updateCanvas(List<Offer> offers) {
+
+        // for each offer...
+//        pane.getChildren().add();
+    }
+
+    @FXML
+    private void clearCanvas() {
+
+        for (Shape shape : canvasShapes) {
+            shape.clear();
         }
 
-        // draw
-        for(int spatialId: spatialIds) {
-            SpatialDBO object = SpatialHandler.getInstance().loadObject(spatialId);
+        canvasShapes.clear();
+        loadShapesFromDb();
+    }
+
+    // fills canvas with all objects
+    @FXML
+    public void loadShapesFromDb() {
+        if (!DatabaseManager.getInstance().isConnected())
+            return;
+        SpatialHandler sh = SpatialHandler.getInstance();
+        // temporary, load whole canvas
+        int[] borders = {0, 0, 1000, 1000};
+        List<Integer> objectIds = sh.selectWithinCanvas(borders);
+        for(int objectId: objectIds) {
+            SpatialDBO object = sh.loadObject(objectId);
             if (object.getShape() != null) {
-                Shape canvasShape = object.setGeometry(pane);
+                Shape canvasShape = object.drawShapeToCanvas(pane, canvasShapes);
                 canvasShape.name.set(object.getName());
                 canvasShape.description.set(object.getDescription());
                 canvasShape.entityType.set(object.getType());
@@ -265,10 +310,35 @@ public class SearchController implements Initializable {
         }
     }
 
-    public void updateCanvas(List<Offer> offers) {
+    // select specific shape object on canvas by ID, highlight with bright yellow color
+    public void selectObjectById(int id) {
+        for (Shape shape: canvasShapes) {
 
-        // for each offer...
-//        pane.getChildren().add();
+            // update colors only for Land type objects, ignore others
+            if (shape.entityType.toString().contains("Land")) {
+
+                // reset all Land objects, even those that are not in search results
+                shape.visualObject.shape.setStrokeWidth(1);
+                shape.visualObject.strokeProperty().setValue(Color.DARKSLATEGRAY);
+                shape.visualObject.shape.setFill(Color.DARKSLATEGRAY.deriveColor(1, 1, 1, 0.2));
+
+                // repaint search results
+                for (int searchResultSpatialId: searchResultsSpatialIds) {
+                    if (shape.id == searchResultSpatialId) {
+                        shape.visualObject.shape.setStrokeWidth(1);
+                        shape.visualObject.strokeProperty().setValue(Color.YELLOW);
+                        shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.2));
+                    }
+                }
+
+                // finally, primarily select the one which was selected by clicking
+                if (shape.id == id) {
+                    shape.visualObject.shape.setStrokeWidth(3);
+                    shape.visualObject.shape.setStroke(Color.RED);
+                    shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.5));
+                }
+            }
+        }
     }
 
 
@@ -377,5 +447,9 @@ public class SearchController implements Initializable {
         }
         pane.getChildren().addAll(horizontalLines);
         pane.getChildren().addAll(verticalLines);
+    }
+
+    public static boolean contains(final int[] arr, final int key) {
+        return Arrays.stream(arr).anyMatch(i -> i == key);
     }
 }
