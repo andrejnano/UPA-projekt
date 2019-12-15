@@ -398,8 +398,6 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     // computes required zoom for canvas view function getVisibleNodes()
     private double getZoom() {
         switch (currentZoomLevel) {
-            case 5:  return 1.666667;
-            case 6:  return 1.428571;
             case 7:  return 1.329577;
             case 8:  return 1.208451;
             case 9:  return 1.097183;
@@ -420,34 +418,32 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
 
     // returns array of canvas view boundaries
     private int[] getVisibleNodes() {
-        // boundaries of scrollPane and pane inside
-        Bounds bounds = scrollPane.getViewportBounds();
-        Bounds boundsPane = pane.getBoundsInParent();
-        // default size of canvas view, required only in this scope
-        int defaultPaneX = 710;
-        int defaultPaneY = 630;
-        // add 10 points around shown canvas in case of rounding errors
-        int roundingDeviation = 10;
-
-        // get top left coordinates of canvas view
-        // because of canvas error, requires boundsPane to be added to compute when changing zoom
-        double minX = (Math.abs(bounds.getMinX()+boundsPane.getMinX()+4))*getZoom();
-        double minY = (Math.abs(bounds.getMinY()+boundsPane.getMinY()+4))*getZoom();
-        int[] rectangleEdges = {
-                (int)minX-roundingDeviation,
-                (int)minY-roundingDeviation,
-                (int)(minX+defaultPaneX*getZoom()+roundingDeviation),
-                (int)(minY+defaultPaneY*getZoom()+roundingDeviation)
-        };
-
-
-        // for debugging
-        for (int i = 0; i < rectangleEdges.length; i++) {
-            System.out.print(rectangleEdges[i] +" ");
+        if (currentZoomLevel > 6) {
+            // for zoom over 60% load only object below canvas view
+            // boundaries of scrollPane and pane inside
+            Bounds bounds = scrollPane.getViewportBounds();
+            Bounds boundsPane = pane.getBoundsInParent();
+            // default size of canvas view, required only in this scope
+            int defaultPaneX = 710;
+            int defaultPaneY = 630;
+            // add 10 points around shown canvas in case of rounding errors
+            int roundingDeviation = 10;
+            // get top left coordinates of canvas view
+            // because of canvas error, requires boundsPane to be added to compute when changing zoom
+            double minX = (Math.abs(bounds.getMinX() + boundsPane.getMinX() + 4)) * getZoom();
+            double minY = (Math.abs(bounds.getMinY() + boundsPane.getMinY() + 4)) * getZoom();
+            int[] rectangleEdges = {
+                    (int) minX - roundingDeviation,
+                    (int) minY - roundingDeviation,
+                    (int) (minX + defaultPaneX * getZoom() + roundingDeviation),
+                    (int) (minY + defaultPaneY * getZoom() + roundingDeviation)
+            };
+            return rectangleEdges;
+        } else {
+            // for smaller zooms load whole canvas
+            int[] paneEdges = {0,0,1000,1000};
+            return paneEdges;
         }
-        System.out.println();
 
-
-        return rectangleEdges;
     }
 }
