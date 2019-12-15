@@ -18,13 +18,14 @@ public class OffersDBO {
     }
 
     // quick init
-    public void init(int id, String name, String description, int price, String type, String transaction) {
+    public void init(int id, String name, String description, int price, String type, String transaction, int spatialId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.type = type;
         this.transaction = transaction;
+        this.spatialId = spatialId;
     }
 
     public void setId(int id) { this.id = id; }

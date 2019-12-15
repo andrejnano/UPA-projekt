@@ -25,12 +25,14 @@ public abstract class Shape extends PointInsertor {
     public VisualObject visualObject;
     public String type;
     public String spatialObjType;
+    public Boolean isContainedInOffer;
     protected ShapeEditController shapeEditController;
     public AppState appState;
 
     public Shape(Pane p, AppState appState, ShapeEditController controller) {
         super(p);
         id = -1;
+        this.isContainedInOffer = false;
         this.appState = appState;
         this.shapeEditController = controller;
         this.type = appState.getCanvasShapeState();

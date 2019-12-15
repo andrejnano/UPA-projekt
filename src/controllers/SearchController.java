@@ -264,27 +264,33 @@ public class SearchController implements Initializable {
             // highlight specific object with spatialId in the canvasShapes array < - > canvas
             for (Shape shape: canvasShapes) {
                 if (shape.id == offer.getSpatialId()) {
-                    shape.visualObject.strokeProperty().setValue(Color.YELLOWGREEN);
-                    shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.4));
+                    shape.visualObject.strokeProperty().setValue(Color.YELLOW);
+                    shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.3));
+
+                    shape.visualObject.shape.setOnMousePressed(mouseEvent -> {
+                        // select this object in the canvas
+                        selectObjectById(offer.getSpatialId());
+
+                        // remove "selectedResult" style from all results
+                        for (Node result: results.getChildren()
+                        ) {
+                            result.getStyleClass().remove("selectedResult");
+                        }
+                        // add "selectedResult" for this one
+                        singleResult.getStyleClass().add("selectedResult");
+                    });
                 }
             }
         }
     }
 
 
-    public void updateCanvas(List<Offer> offers) {
-
-        // for each offer...
-//        pane.getChildren().add();
-    }
-
+    // removes all shapes from canvas
     @FXML
     private void clearCanvas() {
-
         for (Shape shape : canvasShapes) {
             shape.clear();
         }
-
         canvasShapes.clear();
         loadShapesFromDb();
     }
@@ -318,16 +324,16 @@ public class SearchController implements Initializable {
             if (shape.entityType.toString().contains("Land")) {
 
                 // reset all Land objects, even those that are not in search results
-                shape.visualObject.shape.setStrokeWidth(1);
+                shape.visualObject.shape.setStrokeWidth(2);
                 shape.visualObject.strokeProperty().setValue(Color.DARKSLATEGRAY);
                 shape.visualObject.shape.setFill(Color.DARKSLATEGRAY.deriveColor(1, 1, 1, 0.2));
 
                 // repaint search results
                 for (int searchResultSpatialId: searchResultsSpatialIds) {
                     if (shape.id == searchResultSpatialId) {
-                        shape.visualObject.shape.setStrokeWidth(1);
+                        shape.visualObject.shape.setStrokeWidth(2);
                         shape.visualObject.strokeProperty().setValue(Color.YELLOW);
-                        shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.2));
+                        shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.3));
                     }
                 }
 

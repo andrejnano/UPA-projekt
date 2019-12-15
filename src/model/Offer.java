@@ -1,6 +1,7 @@
 package model;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import model.offerType.OfferPropertyType;
@@ -9,9 +10,10 @@ import model.offerType.OfferTransactionType;
 public class Offer {
     public ObjectProperty<OfferPropertyType> propertyType;
     public ObjectProperty<OfferTransactionType> transactionType;
-    public SimpleStringProperty area;
+    public SimpleStringProperty name;
     public SimpleStringProperty description;
     public SimpleStringProperty price;
+    public SimpleIntegerProperty spatialId;
     public int id;
 
     public Offer() {
@@ -25,24 +27,26 @@ public class Offer {
         OfferPropertyType ot = OfferPropertyType.getByLabel(dbo.getType());
         propertyType.setValue(ot);
         transactionType.setValue(OfferTransactionType.getByLabel(dbo.getTransaction()));
-        area.setValue(dbo.getName());
+        name.setValue(dbo.getName());
         description.setValue(dbo.getDescription());
         price.setValue(((Integer) dbo.getPrice()).toString());
+        spatialId.set(dbo.getSpatialId());
     }
 
     private void init() {
         id = -1;
         propertyType = new SimpleObjectProperty<>();
         transactionType = new SimpleObjectProperty<>();
-        area = new SimpleStringProperty();
+        name = new SimpleStringProperty();
         description = new SimpleStringProperty();
         price = new SimpleStringProperty();
+        spatialId = new SimpleIntegerProperty();
     }
 
     public boolean isValid() {
         if (propertyType.getValue() != null &&
                 transactionType.getValue() != null &&
-                !area.getValue().isEmpty() &&
+                !name.getValue().isEmpty() &&
                 !description.getValue().isEmpty() &&
                 !price.getValue().isEmpty()) {
             return true;
@@ -52,11 +56,12 @@ public class Offer {
 
     public OffersDBO toDBO() {
         OffersDBO dbo = new OffersDBO();
-        dbo.init(-1, area.getValue(),
+        dbo.init(-1, name.getValue(),
                 description.getValue(),
                 Integer.parseInt(price.getValue()),
                 propertyType.getValue().toString(),
-                transactionType.getValue().toString());
+                transactionType.getValue().toString(),
+                spatialId.intValue());
         return dbo;
     }
 }

@@ -1,6 +1,8 @@
 package controllers;
 
 import controllers.canvasShapes.Coordinate;
+import controllers.canvasShapes.Shape;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,7 +52,7 @@ public class OffersController implements Initializable{
     @FXML
     Label mouseCoordinateLabel;
     @FXML
-    TextField areaField;
+    TextField nameField;
     @FXML
     TextArea descriptionArea;
     @FXML
@@ -68,6 +70,9 @@ public class OffersController implements Initializable{
     @FXML
     HBox otherPictures;
 
+    // currently selected shape object on canvas
+    SimpleIntegerProperty selectedSpatialId;
+
     Offer curOffer;
     ArrayList<Pane> listItems;
     PictureFile titlePictureFile;
@@ -75,6 +80,8 @@ public class OffersController implements Initializable{
     MultimediaHandler multiHandler;
     boolean bound;
     boolean updateOffer;
+
+    ArrayList<Shape> canvasShapes;
 
     // Mouse cursor position
     private Coordinate mouseCoordinate;
@@ -96,6 +103,10 @@ public class OffersController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Collection of shapes in the canvas
+        canvasShapes = new ArrayList<>();
+        selectedSpatialId = new SimpleIntegerProperty(0);
+
         curOffer = null;
         listItems = new ArrayList<Pane>();
         otherPictureFiles= new ArrayList<>();
@@ -156,9 +167,11 @@ public class OffersController implements Initializable{
 
         this.propertyType.valueProperty().bindBidirectional(offer.propertyType);
         this.transactionType.valueProperty().bindBidirectional(offer.transactionType);
-        areaField.textProperty().bindBidirectional(offer.area);
+        nameField.textProperty().bindBidirectional(offer.name);
         descriptionArea.textProperty().bindBidirectional(offer.description);
         priceField.textProperty().bindBidirectional(offer.price);
+        selectedSpatialId.bindBidirectional(offer.spatialId);
+
         bound = true;
         if (curOffer.id == -1)
             return;
@@ -192,7 +205,7 @@ public class OffersController implements Initializable{
         if (bound) {
             this.propertyType.valueProperty().bindBidirectional(curOffer.propertyType);
             this.transactionType.valueProperty().bindBidirectional(curOffer.transactionType);
-            areaField.textProperty().bindBidirectional(curOffer.area);
+            nameField.textProperty().bindBidirectional(curOffer.name);
             descriptionArea.textProperty().bindBidirectional(curOffer.description);
             priceField.textProperty().bindBidirectional(curOffer.price);
         }
@@ -200,12 +213,31 @@ public class OffersController implements Initializable{
     }
 
     @FXML
-    private void setLocation() {
-
-    }
-
-    @FXML
     private void createOffer() {
+        // remove all previously loaded results from the canvas
+        clearCanvas();
+
+        // load all objects from DB, display as background
+        loadShapesFromDb();
+
+        // enable selection for "Land" type objects only
+        for (Shape shape: canvasShapes) {
+            if (shape.entityType.toString().contains("Land")) {
+                // check if any offer has this Land, if it does, paint it red and dont select
+                if (!isAvailable(shape.id)) {
+                    shape.visualObject.shape.setStrokeWidth(2);
+                    shape.visualObject.strokeProperty().setValue(Color.RED);
+                    shape.visualObject.shape.setFill(Color.RED.deriveColor(1, 1, 1, 0.3));
+                } else {
+                    shape.visualObject.shape.setOnMousePressed(mouseEvent -> {
+                        System.out.println("Clicked on shape " + shape.id);
+                        selectObjectById(shape.id);
+                    });
+                }
+            }
+        }
+
+        // setup sidepanel form
         errorLabel.setText("");
         myOffersSidebar.setVisible(false);
         editOfferSidebar.setVisible(true);
@@ -215,14 +247,13 @@ public class OffersController implements Initializable{
         clear();
         curOffer = new Offer();
         bind(curOffer);
-        intFieldRegex(areaField);
         intFieldRegex(priceField);
     }
 
     public void clear() {
         propertyType.getSelectionModel().clearSelection();
         transactionType.getSelectionModel().clearSelection();
-        areaField.clear();
+        nameField.clear();
         descriptionArea.clear();
         priceField.clear();
         titlePicture.setImage(null);
@@ -371,6 +402,75 @@ public class OffersController implements Initializable{
         }
     }
 
+
+    // removes all shapes from canvas
+    @FXML
+    private void clearCanvas() {
+        for (Shape shape : canvasShapes) {
+            shape.clear();
+        }
+        canvasShapes.clear();
+        loadShapesFromDb();
+    }
+
+    // fills canvas with all objects
+    @FXML
+    public void loadShapesFromDb() {
+        if (!DatabaseManager.getInstance().isConnected())
+            return;
+        SpatialHandler sh = SpatialHandler.getInstance();
+        // temporary, load whole canvas
+        int[] borders = {0, 0, 1000, 1000};
+        List<Integer> objectIds = sh.selectWithinCanvas(borders);
+        for(int objectId: objectIds) {
+            SpatialDBO object = sh.loadObject(objectId);
+            if (object.getShape() != null) {
+                Shape canvasShape = object.drawShapeToCanvas(pane, canvasShapes);
+                canvasShape.name.set(object.getName());
+                canvasShape.description.set(object.getDescription());
+                canvasShape.entityType.set(object.getType());
+                canvasShape.id = object.getId();
+            }
+        }
+    }
+
+    // checks if the given spatial ID is available for use or already included in some offer
+    private boolean isAvailable(int spatialId) {
+        return OffersHandler.getInstance().getOfferByObject(spatialId) == 0;
+    }
+
+    // select specific shape object on canvas by ID, highlight with bright yellow color
+    public void selectObjectById(int id) {
+        for (Shape shape: canvasShapes) {
+
+            // select only for Land type objects, ignore others
+            if (shape.entityType.toString().contains("Land")) {
+
+                // check if any offer has this Land, if it does, paint it red and dont select
+                if (!isAvailable(shape.id)) {
+                    shape.visualObject.shape.setStrokeWidth(2);
+                    shape.visualObject.strokeProperty().setValue(Color.RED);
+                    shape.visualObject.shape.setFill(Color.RED.deriveColor(1, 1, 1, 0.3));
+                    continue;
+                }
+
+                // reset all Land objects, even those that are not in search results
+                shape.visualObject.shape.setStrokeWidth(2);
+                shape.visualObject.strokeProperty().setValue(Color.DARKSLATEGRAY);
+                shape.visualObject.shape.setFill(Color.DARKSLATEGRAY.deriveColor(1, 1, 1, 0.2));
+
+                // finally, primarily select the one which was selected by clicking
+                if (shape.id == id) {
+                    shape.visualObject.shape.setStrokeWidth(3);
+                    shape.visualObject.shape.setStroke(Color.YELLOW);
+                    shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.5));
+                    // store the selected shape's ID as SimpleIntegerProperty
+                    // this is later bound to the new Offer DBO's spatialId property, which can be stored in DB on save()
+                    selectedSpatialId.set(shape.id);
+                }
+            }
+        }
+    }
 
 
     // pane or "canvas" mouse event handler

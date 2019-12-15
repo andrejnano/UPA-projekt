@@ -123,27 +123,12 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
                               </ComboBox>
-         
-                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Location" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Name" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="3">
                                  <padding>
                                     <Insets bottom="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </Label>
-                              <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#setLocation" prefWidth="100.0" text="Select on map" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                                 <GridPane.margin>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </GridPane.margin>
-                              </Button>
-         
-                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Area (m²)" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="3">
-                                 <padding>
-                                    <Insets bottom="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </Label>
-                              <TextField fx:id="areaField" maxWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <TextField fx:id="nameField" maxWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
