@@ -12,7 +12,8 @@ public enum PointType {
     CINEMA("Cinema", Color.GOLD, 6),
     SHOP("Small shop", Color.GREEN, 6),
     WIFI("Wi-fi AP", Color.LIGHTBLUE, 6),
-    CHURCH("Church", Color.LIGHTGREEN, 8);
+    CHURCH("Church", Color.LIGHTGREEN, 8),
+    TREE("Tree", Color.DARKGREEN, 4);
 
     private String label;
     private Color color;

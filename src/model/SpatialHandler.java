@@ -139,7 +139,7 @@ public class SpatialHandler {
 
     // loads object from database into SpatialDBO object
     public SpatialDBO loadObject(int id) {
-        System.out.println("at least got here...");
+        //System.out.println("at least got here...");
         SpatialDBO object = new SpatialDBO();
         try (Statement stmt = connection.createStatement()) {
             ResultSet rset = stmt.executeQuery(
@@ -166,7 +166,7 @@ public class SpatialHandler {
         // gets spatialIds
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "select land_entity.id from map_entities land_entity, map_entities object " +
-                    "where (land_entity.type = 'land' and object.type = '" + type + "' AND " +
+                    "where (land_entity.type = 'Land' and object.type = '" + type + "' AND " +
                     "(SDO_RELATE(land_entity.shape, object.shape, 'mask=ANYINTERACT')) = 'TRUE')";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             while (rset.next()) {
