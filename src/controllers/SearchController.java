@@ -23,6 +23,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 import model.*;
 
+import javax.tools.Tool;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,8 +75,7 @@ public class SearchController implements Initializable {
     public static double gridCellSize;
     Canvas gridCanvas;
 
-    // mouse coordinates tooltip next to cursor
-    Tooltip cursorLocationToolTip;
+    Tooltip offerNameTooltip;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -96,8 +96,8 @@ public class SearchController implements Initializable {
         gridCellSize = pane.getPrefHeight() / gridRows;
         drawGridOnCanvas();
 
-        // cursor position tooltip box with coordinate [x,y], displayed on MOUSE PRESSED
-        cursorLocationToolTip = new Tooltip();
+        // tooltip that will be displayed next to offers in canvas giving further info
+        offerNameTooltip = new Tooltip();
 
         // mouse cursor coordinate model [x,y]
         mouseCoordinate = new Coordinate();
@@ -264,20 +264,37 @@ public class SearchController implements Initializable {
             // highlight specific object with spatialId in the canvasShapes array < - > canvas
             for (Shape shape: canvasShapes) {
                 if (shape.id == offer.getSpatialId()) {
+
+                    // highlight with yellow color, so it's diffrent from the rest of "Land" objects
                     shape.visualObject.strokeProperty().setValue(Color.YELLOW);
                     shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.3));
 
-                    shape.visualObject.shape.setOnMousePressed(mouseEvent -> {
+                    // apply mouse event handlers to display proper cursors
+                    shape.visualObject.shape.setOnMouseEntered(mouseEvent -> { scrollPane.setCursor(Cursor.HAND); });
+                    shape.visualObject.shape.setOnMouseExited(mouseEvent -> { scrollPane.setCursor(Cursor.OPEN_HAND); });
+
+                    // handle clicking on the shape by selecting, repainting and showing tooltip
+                    shape.visualObject.shape.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
                         // select this object in the canvas
                         selectObjectById(offer.getSpatialId());
 
-                        // remove "selectedResult" style from all results
-                        for (Node result: results.getChildren()
-                        ) {
-                            result.getStyleClass().remove("selectedResult");
-                        }
-                        // add "selectedResult" for this one
+                        // hide the previous tooltip
+                        offerNameTooltip.hide();
+
+                        // update tooltip with new offer name
+                        offerNameTooltip.setText(offer.getName());
+
+                        // todo: this should be placed in the location of the offer spatial object in canvas, not mouseEvent [x,y]
+                        offerNameTooltip.show((Node) mouseEvent.getSource(), mouseEvent.getScreenX() + 20, mouseEvent.getScreenY());
+//                        Tooltip.install(shape.visualObject.shape, offerNameTooltip);
+
+                        // remove "selectedResult" class from all results in HBOX of results
+                        for (Node result: results.getChildren()) { result.getStyleClass().remove("selectedResult"); }
+
+                        // add "selectedResult" class for this specific one
                         singleResult.getStyleClass().add("selectedResult");
+
+                        mouseEvent.consume();
                     });
                 }
             }
@@ -355,17 +372,12 @@ public class SearchController implements Initializable {
 
             // Handle mouse-click event on pane
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_PRESSED) {
-
+                offerNameTooltip.hide();
                 scrollPane.setCursor(Cursor.CLOSED_HAND);
-                // display tooltip next to cursor
-                cursorLocationToolTip.setText("[x: "+Math.round(mouseEvent.getX())+", y: "+Math.round(mouseEvent.getY())+"]");
-                Node node = (Node) mouseEvent.getSource();
-                cursorLocationToolTip.show(node, mouseEvent.getScreenX() + 10, mouseEvent.getScreenY() + 20);
                 return;
             }
 
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_RELEASED) {
-                cursorLocationToolTip.hide();
                 scrollPane.setCursor(Cursor.OPEN_HAND);
             }
 
