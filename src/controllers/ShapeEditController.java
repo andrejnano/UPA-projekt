@@ -92,7 +92,7 @@ public class ShapeEditController {
                 curListener = new ChangeListener<Object>() {
                     @Override
                     public void changed(ObservableValue<? extends Object> observable, Object oldVal, Object newVal) {
-                        ((PointType)newVal).toColor(shape.visualObject);
+                        ((PointType)newVal).toColor(shape.visualObject, nameField.getText());
                         shape.spatialObjType = ((PointType)newVal).toString();
                     }
                 };
@@ -104,7 +104,7 @@ public class ShapeEditController {
                 curListener = new ChangeListener<Object>() {
                     @Override
                     public void changed(ObservableValue<? extends Object> observable, Object oldVal, Object newVal) {
-                        ((PolylineType)newVal).toColor(shape.visualObject);
+                        ((PolylineType)newVal).toColor(shape.visualObject, nameField.getText());
                         shape.spatialObjType = ((PolylineType)newVal).toString();
                     }
                 };
@@ -116,7 +116,7 @@ public class ShapeEditController {
                 curListener = new ChangeListener<Object>() {
                     @Override
                     public void changed(ObservableValue<? extends Object> observable, Object oldVal, Object newVal) {
-                        ((AreaType)newVal).toColor(shape.visualObject);
+                        ((AreaType)newVal).toColor(shape.visualObject, nameField.getText());
                         shape.spatialObjType = ((AreaType)newVal).toString();
                     }
                 };

@@ -39,8 +39,9 @@ public enum AreaType {
         return null;
     }
 
-    public void toColor (VisualObject visualObj) {
+    public void toColor (VisualObject visualObj, String name) {
         visualObj.strokeProperty().setValue(color);
         visualObj.shape.setFill(color.deriveColor(1, 1, 1, 0.2));
+        visualObj.textProperty.setValue(label+": "+name);
     }
 }

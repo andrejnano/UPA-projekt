@@ -35,8 +35,9 @@ public enum PolylineType {
         return label;
     }
 
-    public void toColor (VisualObject visualObj) {
+    public void toColor (VisualObject visualObj, String name) {
         visualObj.strokeProperty().setValue(color);
         visualObj.widthProperty().setValue(width);
+        visualObj.textProperty.setValue(label+": "+name);
     }
 }

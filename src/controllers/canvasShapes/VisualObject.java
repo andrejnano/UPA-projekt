@@ -3,13 +3,16 @@ package controllers.canvasShapes;
 import controllers.AppState;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import controllers.CanvasController;
 
@@ -24,17 +27,31 @@ import java.util.ArrayList;
 public class VisualObject {
     public ObservableList<Anchor> anchors;
     public Shape shape;
-    public ArrayList<Object> multipoints;
+    public ArrayList<Circle> multipoints;
     protected Paint stroke;
     protected Double width;
     protected ObjectProperty<Paint> strokeProperty;
     protected DoubleProperty widthProperty;
     public AppState appState;
+    public SimpleStringProperty textProperty;
+    private Tooltip tooltip;
 
     public VisualObject(Shape s, AppState appState) {
         shape = s;
         this.appState = appState;
         enableDrag();
+        textProperty = new SimpleStringProperty();
+        tooltip = new Tooltip();
+        textProperty.addListener(e -> {
+        tooltip.setText(((SimpleStringProperty) e).getValue().toString());
+        if (multipoints != null) {
+            for (Circle c : multipoints) {
+                Tooltip.install(c, tooltip);
+            }
+        } else {
+                Tooltip.install(shape, tooltip);
+            }
+        });
     }
 
     // make a node movable by dragging it around with the mouse.

@@ -64,7 +64,7 @@ public class SpatialDBO {
                 canvasShape = point.getShape();
                 canvasShape.type = "POINT";
                 PointType pointType = PointType.getByLabel(type);
-                pointType.toColor(canvasShape.visualObject);
+                pointType.toColor(canvasShape.visualObject, name);
                 break;
             case JGeometry.GTYPE_CURVE:
                 double[] lineOrds = shape.getOrdinatesArray();
@@ -76,7 +76,7 @@ public class SpatialDBO {
                 canvasShape = line.getShape();
                 canvasShape.type = "POLYLINE";
                 PolylineType polylineType = PolylineType.getByLabel(type);
-                polylineType.toColor(canvasShape.visualObject);
+                polylineType.toColor(canvasShape.visualObject, name);
                 break;
             case JGeometry.GTYPE_POLYGON:
                 double[] polygonOrds = shape.getOrdinatesArray();
@@ -92,7 +92,7 @@ public class SpatialDBO {
                 canvasShape = polygon.getShape();
                 canvasShape.type = "POLYGON";
                 AreaType polygonType = AreaType.getByLabel(type);
-                polygonType.toColor(canvasShape.visualObject);
+                polygonType.toColor(canvasShape.visualObject, name);
                 break;
             case JGeometry.GTYPE_MULTIPOINT:
                 double[] multiOrds = shape.getOrdinatesArray();
@@ -105,7 +105,7 @@ public class SpatialDBO {
                 canvasShape = multiPoint.getShape();
                 canvasShape.type = "MULTIPOINT";
                 PointType mPointType = PointType.getByLabel(type);
-                mPointType.toColor(canvasShape.visualObject);
+                mPointType.toColor(canvasShape.visualObject, name);
                 break;
         }
         canvasShape.spatialObjType = type;
