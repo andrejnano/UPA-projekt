@@ -281,7 +281,7 @@ public class OffersController implements Initializable{
 
         for (OffersDBO o: offers) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("../views/offerListItem.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("views/offerListItem.fxml"));
                 AnchorPane offerListItem = loader.load();
                 offerListItem.setPadding(new Insets(5, 10, 5, 10));
                 offerListItem.getStyleClass().add("resultBox");
@@ -403,7 +403,7 @@ public class OffersController implements Initializable{
     private void pictureEdit(PictureFile pictureFile) {
         try {
             Dialog dialog = new Dialog();
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("../views/pictureEditView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("views/pictureEditView.fxml"));
             DialogPane dialogPane = loader.load();
             PictureEditController pictureController =  loader.getController();
 
