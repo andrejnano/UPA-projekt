@@ -1,11 +1,11 @@
-package model.spatialObjType;
+package main.java.model.spatialObjType;
 
 
-import controllers.canvasShapes.VisualObject;
+import main.java.controllers.canvasShapes.VisualObject;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import model.SpatialHandler;
+import main.java.model.SpatialHandler;
 
 public enum PolylineType {
     ROAD("Road", Color.BLACK, 4),

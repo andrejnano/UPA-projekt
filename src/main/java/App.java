@@ -1,3 +1,5 @@
+package main.java;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
@@ -5,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
-import model.DatabaseManager;
+import main.java.model.DatabaseManager;
 
 // This is the initial starting point for the whole application
 public class App extends Application {

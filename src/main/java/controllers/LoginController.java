@@ -1,4 +1,4 @@
-package controllers;
+package main.java.controllers;
 
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.DatabaseManager;
+import main.java.model.DatabaseManager;
 
 import java.io.File;
 import java.sql.SQLException;

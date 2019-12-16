@@ -1,6 +1,6 @@
-package controllers.canvasUtils;
+package main.java.controllers.canvasUtils;
 
-import controllers.canvasShapes.*;
+import main.java.controllers.canvasShapes.*;
 import javafx.scene.Node;
 import oracle.spatial.geometry.JGeometry;
 

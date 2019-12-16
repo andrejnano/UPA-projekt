@@ -1,6 +1,6 @@
-package controllers.canvasShapes;
+package main.java.controllers.canvasShapes;
 
-import controllers.AppState;
+import main.java.controllers.AppState;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,7 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
-import controllers.CanvasController;
+import main.java.controllers.CanvasController;
 
 import javax.swing.*;
 import java.util.ArrayList;

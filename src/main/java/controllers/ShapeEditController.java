@@ -1,6 +1,6 @@
-package controllers;
+package main.java.controllers;
 
-import controllers.canvasShapes.Shape;
+import main.java.controllers.canvasShapes.Shape;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -10,11 +10,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
-import model.SpatialDBO;
-import model.SpatialHandler;
-import model.spatialObjType.AreaType;
-import model.spatialObjType.PointType;
-import model.spatialObjType.PolylineType;
+import main.java.model.SpatialDBO;
+import main.java.model.SpatialHandler;
+import main.java.model.spatialObjType.AreaType;
+import main.java.model.spatialObjType.PointType;
+import main.java.model.spatialObjType.PolylineType;
 
 import java.util.function.Function;
 

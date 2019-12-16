@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;

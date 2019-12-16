@@ -1,7 +1,7 @@
-package controllers;
+package main.java.controllers;
 
-import controllers.canvasShapes.Coordinate;
-import controllers.canvasShapes.Shape;
+import main.java.controllers.canvasShapes.Coordinate;
+import main.java.controllers.canvasShapes.Shape;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -26,7 +26,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.*;
+import main.java.model.*;
 
 import java.io.File;
 import java.net.URL;

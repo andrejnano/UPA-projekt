@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;

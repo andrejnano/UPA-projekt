@@ -1,7 +1,7 @@
 package main.java.controllers.canvasShapes;
 
-import controllers.AppState;
-import controllers.CanvasController;
+import main.java.controllers.AppState;
+import main.java.controllers.CanvasController;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;

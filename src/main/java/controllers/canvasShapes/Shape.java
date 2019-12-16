@@ -1,7 +1,7 @@
-package controllers.canvasShapes;
+package main.java.controllers.canvasShapes;
 
-import controllers.AppState;
-import controllers.ShapeEditController;
+import main.java.controllers.AppState;
+import main.java.controllers.ShapeEditController;
 import javafx.scene.layout.Pane;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;

@@ -1,8 +1,8 @@
-package controllers.canvasShapes;
+package main.java.controllers.canvasShapes;
 
-import controllers.AppState;
-import controllers.CanvasController;
-import controllers.ShapeEditController;
+import main.java.controllers.AppState;
+import main.java.controllers.CanvasController;
+import main.java.controllers.ShapeEditController;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;

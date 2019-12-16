@@ -11,13 +11,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.collections.FXCollections?>
 
-<?import model.offerType.OfferPropertyType?>
-<?import model.offerType.OfferTransactionType?>
-<?import model.spatialObjType.AreaType?>
-<?import model.spatialObjType.PointType?>
-<?import model.spatialObjType.PolylineType?>
+<?import main.java.model.offerType.OfferPropertyType?>
+<?import main.java.model.offerType.OfferTransactionType?>
+<?import main.java.model.spatialObjType.AreaType?>
+<?import main.java.model.spatialObjType.PointType?>
+<?import main.java.model.spatialObjType.PolylineType?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SearchController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.SearchController">
     <children>
         <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1060.0" style="-fx-background-color: #2f3136;">
             <top>

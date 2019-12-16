@@ -1,8 +1,8 @@
-package controllers;
+package main.java.controllers;
 
-import controllers.canvasShapes.Coordinate;
-import controllers.canvasShapes.PolyLine;
-import controllers.canvasShapes.Shape;
+import main.java.controllers.canvasShapes.Coordinate;
+import main.java.controllers.canvasShapes.PolyLine;
+import main.java.controllers.canvasShapes.Shape;
 import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
-import model.*;
+import main.java.model.*;
 
 import javax.tools.Tool;
 import java.net.URL;

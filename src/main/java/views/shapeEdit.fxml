@@ -6,12 +6,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.collections.FXCollections?>
-<?import model.CanvasEntityType?>
+<?import main.java.model.CanvasEntityType?>
 
-<?import model.spatialObjType.AreaType?>
-<?import model.spatialObjType.PolylineType?>
-<?import model.spatialObjType.PointType?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="300.0" AnchorPane.topAnchor="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ShapeEditController">
+<?import main.java.model.spatialObjType.AreaType?>
+<?import main.java.model.spatialObjType.PolylineType?>
+<?import main.java.model.spatialObjType.PointType?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="300.0" AnchorPane.topAnchor="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.ShapeEditController">
    <children>
        <VBox>
            <Label alignment="CENTER" fx:id="shapeTypeLabel" text="shape type" prefWidth="300" prefHeight="18.0" textFill="#e1e1e1" textAlignment="CENTER">

@@ -1,7 +1,7 @@
-package controllers;
+package main.java.controllers;
 
-import controllers.canvasShapes.*;
-import controllers.canvasUtils.ConvertSpatialObjects;
+import main.java.controllers.canvasShapes.*;
+import main.java.controllers.canvasUtils.ConvertSpatialObjects;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -22,9 +22,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Scale;
-import model.DatabaseManager;
-import model.SpatialDBO;
-import model.SpatialHandler;
+import main.java.model.DatabaseManager;
+import main.java.model.SpatialDBO;
+import main.java.model.SpatialHandler;
 
 /*
 |--------------------------------------------------------------------------

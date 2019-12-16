@@ -12,7 +12,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Tooltip?>
 <AnchorPane prefHeight="140.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.OfferListItemCtrl">
+            fx:controller="main.java.controllers.OfferListItemCtrl">
    <HBox alignment="TOP_LEFT" style="-fx-cursor: hand;">
       <padding>
          <Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>

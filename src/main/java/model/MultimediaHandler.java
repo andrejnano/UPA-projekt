@@ -1,4 +1,4 @@
-package model;
+package main.java.model;
 
 import javafx.embed.swing.SwingFXUtils;
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
-package model.offerType;
+package main.java.model.offerType;
 
 public enum OfferTransactionType {
     RENT("Rent"),

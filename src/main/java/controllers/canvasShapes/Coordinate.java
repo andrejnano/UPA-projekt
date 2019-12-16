@@ -1,4 +1,4 @@
-package controllers.canvasShapes;
+package main.java.controllers.canvasShapes;
 
 /*
 |--------------------------------------------------------------------------

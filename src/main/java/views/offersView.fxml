@@ -7,8 +7,8 @@
 <?import java.lang.*?>
 <?import javafx.collections.FXCollections?>
 
-<!--<?import model.offerType.OfferPropertyType?>-->
-<!--<?import model.offerType.OfferTransactionType?>-->
+<?import main.java.model.offerType.OfferPropertyType?>
+<?import main.java.model.offerType.OfferTransactionType?>
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.effect.DropShadow?>
@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="750.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OffersController">
+<AnchorPane prefHeight="750.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controllers.OffersController">
    <children>
       <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1060.0" style="-fx-background-color: #2f3136;">
          <top>
@@ -94,15 +94,15 @@
                               </Label>
                               <ComboBox fx:id="propertyType" maxWidth="-Infinity" prefHeight="37.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
                                  <items>
-<!--                                 <FXCollections fx:factory="observableArrayList">-->
-<!--                                    <OfferPropertyType fx:value="FLAT"/>-->
-<!--                                    <OfferPropertyType fx:value="LAND"/>-->
-<!--                                    <OfferPropertyType fx:value="DETACHED"/>-->
-<!--                                    <OfferPropertyType fx:value="TOWNHOUSE"/>-->
-<!--                                    <OfferPropertyType fx:value="BUNGALOW"/>-->
-<!--                                    <OfferPropertyType fx:value="COTTAGE"/>-->
-<!--                                    <OfferPropertyType fx:value="OTHER"/>-->
-<!--                                 </FXCollections>-->
+                                 <FXCollections fx:factory="observableArrayList">
+                                    <OfferPropertyType fx:value="FLAT"/>
+                                    <OfferPropertyType fx:value="LAND"/>
+                                    <OfferPropertyType fx:value="DETACHED"/>
+                                    <OfferPropertyType fx:value="TOWNHOUSE"/>
+                                    <OfferPropertyType fx:value="BUNGALOW"/>
+                                    <OfferPropertyType fx:value="COTTAGE"/>
+                                    <OfferPropertyType fx:value="OTHER"/>
+                                 </FXCollections>
                               </items>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -119,11 +119,11 @@
                               </Label>
                               <ComboBox fx:id="transactionType" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <items>
-<!--                                 <FXCollections fx:factory="observableArrayList">-->
-<!--                                    <OfferTransactionType fx:value="RENT"/>-->
-<!--                                    <OfferTransactionType fx:value="SELL"/>-->
-<!--                                    <OfferTransactionType fx:value="SHARE"/>-->
-<!--                                 </FXCollections>-->
+                                 <FXCollections fx:factory="observableArrayList">
+                                    <OfferTransactionType fx:value="RENT"/>
+                                    <OfferTransactionType fx:value="SELL"/>
+                                    <OfferTransactionType fx:value="SHARE"/>
+                                 </FXCollections>
                               </items>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

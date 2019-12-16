@@ -1,12 +1,12 @@
-package controllers;
+package main.java.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.Window;
-import model.MultimediaHandler;
-import model.PictureFile;
+import main.java.model.MultimediaHandler;
+import main.java.model.PictureFile;
 import javafx.scene.image.ImageView;
 import java.io.File;
 import java.net.URL;

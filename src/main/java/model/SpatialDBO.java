@@ -1,13 +1,13 @@
-package model;
+package main.java.model;
 
-import controllers.AppState;
-import controllers.CanvasController;
-import controllers.ShapeEditController;
-import controllers.canvasShapes.*;
+import main.java.controllers.AppState;
+import main.java.controllers.CanvasController;
+import main.java.controllers.ShapeEditController;
+import main.java.controllers.canvasShapes.*;
 import javafx.scene.layout.Pane;
-import model.spatialObjType.AreaType;
-import model.spatialObjType.PointType;
-import model.spatialObjType.PolylineType;
+import main.java.model.spatialObjType.AreaType;
+import main.java.model.spatialObjType.PointType;
+import main.java.model.spatialObjType.PolylineType;
 import oracle.spatial.geometry.JGeometry;
 import java.util.ArrayList;
 import java.lang.reflect.Array;

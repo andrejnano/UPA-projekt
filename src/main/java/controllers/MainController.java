@@ -1,4 +1,4 @@
-package controllers;
+package main.java.controllers;
 
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
@@ -16,7 +16,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
-import model.DatabaseManager;
+import main.java.model.DatabaseManager;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
