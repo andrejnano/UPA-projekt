@@ -287,7 +287,7 @@ public class OffersController implements Initializable{
                 multiHandler = MultimediaHandler.getInstance();
                 int imageId = multiHandler.getFirstImageId(o.getId());
                 Image image = (imageId == -1) ? null : multiHandler.getPicture(imageId);
-                itemController.init(o, image);
+                itemController.init(o, image, false);
                 offerListItem.setOnMouseClicked(e -> {
                     unBind();
                     clear();

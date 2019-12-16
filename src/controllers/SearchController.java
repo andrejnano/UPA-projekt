@@ -230,11 +230,15 @@ public class SearchController implements Initializable {
         return OffersHandler.getInstance().loadOffers(offerIds);
     }
 
+    public void clearResults() {
+        // remove all previously loaded results in the HBOX of results
+        results.getChildren().clear();
+    }
+
     /* Execute search query */
     @FXML
     public void searchSubmit() {
-        // remove all previously loaded results in the HBOX of results
-        results.getChildren().clear();
+        clearResults();
         // remove all previously loaded results from canvas
         clearCanvas();
         // load all objects from DB, display as background
@@ -303,7 +307,10 @@ public class SearchController implements Initializable {
 
         // -- create spatial object ids list, ids of objects that will be painted to canvas
         searchResultsSpatialIds = new ArrayList<Integer>();
+        showResults(offers);
+    }
 
+    public void showResults(List<OffersDBO> offers) {
         // 3. Display results
         for (OffersDBO offer: offers) {
             AnchorPane offerListItem = null;
@@ -313,12 +320,13 @@ public class SearchController implements Initializable {
                 offerListItem.setPadding(new Insets(5, 10, 5, 10));
                 offerListItem.getStyleClass().add("resultBox");
                 offerListItem.setPrefHeight(130);
-                OfferListItemCtrl itemController =  loader.getController();
+                OfferListItemCtrl itemController = loader.getController();
+                itemController.setSearchController(this);
 
                 MultimediaHandler multiHandler = MultimediaHandler.getInstance();
                 int imageId = multiHandler.getFirstImageId(offer.getId());
                 Image image = (imageId == -1) ? null : multiHandler.getPicture(imageId);
-                itemController.init(offer, image);
+                itemController.init(offer, image, true);
 
                 // spatial Id, not displayed, just stored
                 searchResultsSpatialIds.add(offer.getSpatialId());
@@ -334,7 +342,7 @@ public class SearchController implements Initializable {
                     // remove "selectedResult" style from all results
                     // todo: update this to previous list of results
                     // enable adding/removing styles "selectedResult"
-                    for (Node result: results.getChildren()
+                    for (Node result : results.getChildren()
                     ) {
                         result.getStyleClass().remove("selectedResult");
                     }
@@ -350,7 +358,7 @@ public class SearchController implements Initializable {
 
 
             // highlight specific object with spatialId in the canvasShapes array < - > canvas
-            for (Shape shape: canvasShapes) {
+            for (Shape shape : canvasShapes) {
                 if (shape.id == offer.getSpatialId()) {
 
                     // highlight with yellow color, so it's diffrent from the rest of "Land" objects
@@ -358,8 +366,12 @@ public class SearchController implements Initializable {
                     shape.visualObject.shape.setFill(Color.YELLOW.deriveColor(1, 1, 1, 0.3));
 
                     // apply mouse event handlers to display proper cursors
-                    shape.visualObject.shape.setOnMouseEntered(mouseEvent -> { scrollPane.setCursor(Cursor.HAND); });
-                    shape.visualObject.shape.setOnMouseExited(mouseEvent -> { scrollPane.setCursor(Cursor.OPEN_HAND); });
+                    shape.visualObject.shape.setOnMouseEntered(mouseEvent -> {
+                        scrollPane.setCursor(Cursor.HAND);
+                    });
+                    shape.visualObject.shape.setOnMouseExited(mouseEvent -> {
+                        scrollPane.setCursor(Cursor.OPEN_HAND);
+                    });
 
                     // handle clicking on the shape by selecting, repainting and showing tooltip
                     AnchorPane finalOfferListItem1 = offerListItem;
@@ -378,7 +390,9 @@ public class SearchController implements Initializable {
 //                        Tooltip.install(shape.visualObject.shape, offerNameTooltip);
 
                         // remove "selectedResult" class from all results in HBOX of results
-                        for (Node result: results.getChildren()) { result.getStyleClass().remove("selectedResult"); }
+                        for (Node result : results.getChildren()) {
+                            result.getStyleClass().remove("selectedResult");
+                        }
 
                         // add "selectedResult" class for this specific one
                         finalOfferListItem1.getStyleClass().add("selectedResult");
