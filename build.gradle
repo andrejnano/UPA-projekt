@@ -1,0 +1,88 @@
+plugins {
+    // Apply the java plugin to add support for Java
+    id 'java'
+    // Apply the application plugin to add support for building an application
+    id 'application'
+    // Apply the Maven publish plugin to publish resulting artefacts into a Maven repository
+    id 'maven-publish'
+
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+group = "UPA-Project"
+version = "1.0"
+
+// Define the main class for the application
+mainClassName = "App"
+
+run {
+    doFirst {
+        jvmArgs = [
+                '--module-path', classpath.asPath,
+                '--add-modules', 'javafx.controls',
+                '--add-modules', 'javafx.fxml',
+                '--add-modules', 'javafx.graphics',
+                '--add-modules', 'javafx.swing',
+                '--add-modules', 'javafx.base'
+        ]
+    }
+    systemProperties System.getProperties();
+}
+
+javafx {
+    version = "13"
+    modules = [ 'javafx.controls', 'javafx.graphics', 'javafx.swing', 'javafx.base', 'javafx.fxml' ]
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = 'build-repository'
+            url = "file://${buildDir}/mvn-repo"
+        }
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/java"]
+            includes = ["**/*.fxml", "**/*.css", "**/*.png"]
+        }
+    }
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-fxml
+    compile group: 'org.openjfx', name: 'javafx-fxml', version: '13.0.1'
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-graphics
+    compile group: 'org.openjfx', name: 'javafx-graphics', version: '13.0.1'
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-base
+    compile group: 'org.openjfx', name: 'javafx-base', version: '13.0.1'
+
+    //compile group: 'org.openjfx', name: 'javafx', version: '13', ext: 'pom'
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-controls
+    compile group: 'org.openjfx', name: 'javafx-controls', version: '13.0.1'
+    // https://mvnrepository.com/artifact/org.openjfx/javafx-swing
+    compile group: 'org.openjfx', name: 'javafx-swing', version: '13.0.1'
+
+    // Oracle JDBC for Java 8
+    compile group: 'com.oracle.weblogic', name: 'ojdbc8', version:'18.3.0.0.0'
+    // Oracle Multimedia Database
+    compile group: 'oracle.ord.im', name: 'ordim', version:'12.2.0.1.0'
+    // Oracle SDO Locator Objects
+    compile group: 'oracle.sdo.locator', name: 'sdoapi', version:'12.2.0.1.0'
+}
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use jcenter for resolving dependencies
+    jcenter()
+    // Maven repository for the Database Systems courses
+    maven { url "https://rychly-edu.gitlab.io/dbs/mvn-repo" }
+}
