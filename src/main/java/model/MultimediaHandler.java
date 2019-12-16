@@ -108,23 +108,25 @@ public class MultimediaHandler {
         return image;*/
     }
 
+
     // returns ids of similar pictures
     // sorted from most similar to image specified by id
     public List<Integer> getSimilarities(int id) {
-        List<Integer> similarIDs = new ArrayList<Integer>();
+        int estateId = getEstateId(id);
+        List<Integer> similarEstateIDs = new ArrayList<Integer>();
         try (Statement stmt = connection.createStatement()) {
-            String sqlString = "select src." + id + " as source, dst.id as destination, si_scorebyftrlist(new si_featurelist(" +
+            String sqlString = "SELECT dst.estateId, si_scorebyftrlist(new si_featurelist(" +
                     "src.picture_ac, 0.3, src.picture_ch, 0.3, src.picture_pc, 0.1, src.picture_tx, 0.3), " +
-                    "dst.picture_si) as similarity from pictures src, pictures dst where src.id <> dst.id and src.id = " + id + " order by similarity asc";
+                    "dst.picture_si) as similarity FROM pictures src, pictures dst WHERE src.estateId <> dst.estateId and src.estateId = " + estateId + " ORDER BY similarity ASC";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             while (rset.next()) {
-                similarIDs.add(rset.getInt("id"));
+                similarEstateIDs.add(rset.getInt(1));
             }
             rset.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return similarIDs;
+        return similarEstateIDs;
     }
 
     // returns list of picture ids corresponding with specified offer id
