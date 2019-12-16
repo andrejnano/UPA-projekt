@@ -161,9 +161,10 @@ public class ShapeEditController {
     @FXML
     private void okButtonClicked() {
         setDefaults();
-        unBind();
-        bind(shape);
+        //unBind();
+        //bind(shape);
         setSpatial();
+        canvasController.refreshCanvas();
         canvasController.viewMode();
     }
 

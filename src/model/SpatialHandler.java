@@ -265,7 +265,7 @@ public class SpatialHandler {
             e.printStackTrace();
         }
         // convert to one block in canvas equals 1m2
-        return area/200;
+        return area/20;
     }
 
     // returns distance between two spatial objects specified by id
@@ -283,7 +283,7 @@ public class SpatialHandler {
             e.printStackTrace();
         }
         // convert to one block in canvas = 1m
-        return distance/20;
+        return (int)(distance/2.5);
     }
 
     // returns diameter/length of object specified by id
@@ -301,7 +301,7 @@ public class SpatialHandler {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return length;
+        return (int)(length/2.5);
     }
 
 }

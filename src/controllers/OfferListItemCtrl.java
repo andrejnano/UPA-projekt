@@ -21,6 +21,10 @@ public class OfferListItemCtrl {
     @FXML
     Label description;
     @FXML
+    Label centreDistance;
+    @FXML
+    Label shopDistance;
+    @FXML
     ImageView picture;
 
     OffersDBO offerDBO;
@@ -29,8 +33,10 @@ public class OfferListItemCtrl {
         this.offerDBO = offer;
         transactionType.setText(offer.getTransaction());
         propertyType.setText(" " + offer.getType().toLowerCase());
-        area.setText(Integer.toString((SpatialHandler.getInstance().selectObjectArea(offer.getSpatialId()))));
+        area.setText(Integer.toString(SpatialHandler.getInstance().selectObjectArea(offer.getSpatialId())));
         price.setText(((Integer)offer.getPrice()).toString());
+        centreDistance.setText(Integer.toString(SpatialHandler.getInstance().selectObjectDistance(offer.getSpatialId(), "City centre")));
+        shopDistance.setText(Integer.toString(SpatialHandler.getInstance().selectObjectDistance(offer.getSpatialId(), "Shopping area")));
         description.setText(offer.getDescription());
         if (image != null)
             picture.setImage(image);

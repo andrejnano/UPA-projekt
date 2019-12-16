@@ -21,10 +21,23 @@
                <Label fx:id="area"/>
                <Label text=" m&#x00B2;, price: "/>
                <Label fx:id="price"/>
-               <Label text=" CZK"/>
+               <Label text=" CZK "/>
             </HBox>
-            <Label text="Description: "/>
-            <Label fx:id="description"/>
+            <HBox>
+               <Label text="City centre distance: "/>
+               <Label fx:id="centreDistance"/>
+               <Label text=" "/>
+            </HBox>
+            <HBox>
+               <Label text="Shop distance: "/>
+               <Label fx:id="shopDistance"/>
+               <Label text=" "/>
+            </HBox>
+            <HBox>
+               <Label text="Description: "/>
+               <Label fx:id="description"/>
+               <Label text=" "/>
+            </HBox>
          </VBox>
       </HBox>
    </children>

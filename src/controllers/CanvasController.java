@@ -248,7 +248,7 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     }
 
     @FXML
-    private void refreshCanvas() {
+    public void refreshCanvas() {
         clearCanvas();
         loadShapesFromDb();
     }

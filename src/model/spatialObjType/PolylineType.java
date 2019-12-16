@@ -5,6 +5,7 @@ import controllers.canvasShapes.VisualObject;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import model.SpatialHandler;
 
 public enum PolylineType {
     ROAD("Road", Color.BLACK, 4),
@@ -35,9 +36,17 @@ public enum PolylineType {
         return label;
     }
 
+    // on mouse hover shows name of line and its length calculated in spatial DB
+    public void toColor (VisualObject visualObj, String name, int id) {
+        visualObj.strokeProperty().setValue(color);
+        visualObj.widthProperty().setValue(width);
+        visualObj.textProperty.setValue(label+": " + name + "\nLength: " + SpatialHandler.getInstance().selectObjectLength(id));
+    }
+
+    // objects not loaded from db show only its name
     public void toColor (VisualObject visualObj, String name) {
         visualObj.strokeProperty().setValue(color);
         visualObj.widthProperty().setValue(width);
-        visualObj.textProperty.setValue(label+": "+name);
+        visualObj.textProperty.setValue(label+": " + name);
     }
 }
