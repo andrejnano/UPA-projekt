@@ -29,7 +29,7 @@ public class App extends Application {
 
         new DatabaseManager();
 
-        AnchorPane root =  FXMLLoader.load(getClass().getResource("views/mainView.fxml"));
+        AnchorPane root =  FXMLLoader.load(getClass().getClassLoader().getResource("views/mainView.fxml"));
 
         // assign it to the scene
         Scene scene = new Scene(root, 1060, 825);

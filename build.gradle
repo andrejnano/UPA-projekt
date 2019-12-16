@@ -13,7 +13,7 @@ group = "UPA-Project"
 version = "1.0"
 
 // Define the main class for the application
-mainClassName = "App"
+mainClassName = "main.java.App"
 
 run {
     doFirst {
