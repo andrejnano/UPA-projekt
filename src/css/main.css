@@ -181,16 +181,30 @@
 .resultBox {
     -fx-background-color: #6F7480;
     -fx-border-color: #DEE8FF;
-    -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-border-radius: 3px;
-    -fx-opacity: 0.5;
+    -fx-opacity: 0.75;
 }
 
 .resultBox:hover {
     -fx-cursor: hand;
+    -fx-opacity: 0.8;
 }
 
 .resultBox.selectedResult {
     -fx-opacity: 1;
-    -fx-border-color: #ccc;
+    -fx-border-color: lime;
+}
+
+.searchResultNameLabel {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.searchResultTransactionTypeLabel {
+
+}
+
+.searchResultPropertyTypeLabel {
+
 }

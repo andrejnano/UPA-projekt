@@ -42,6 +42,7 @@ public class VisualObject {
         enableDrag();
         textProperty = new SimpleStringProperty();
         tooltip = new Tooltip();
+        tooltip.setStyle("-fx-border-radius: 0;");
         textProperty.addListener(e -> {
         tooltip.setText(((SimpleStringProperty) e).getValue().toString());
         if (multipoints != null) {

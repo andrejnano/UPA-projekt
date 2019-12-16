@@ -44,7 +44,7 @@ public enum AreaType {
     public void toColor (VisualObject visualObj, String name, int id) {
         visualObj.strokeProperty().setValue(color);
         visualObj.shape.setFill(color.deriveColor(1, 1, 1, 0.2));
-        visualObj.textProperty.setValue(label+": " + name + "\nTotal area: " + SpatialHandler.getInstance().selectObjectArea(id));
+        visualObj.textProperty.setValue(label+": " + name + "\nTotal area: " + SpatialHandler.getInstance().selectObjectArea(id) + "m²");
     }
 
     // objects not loaded from db show only its name

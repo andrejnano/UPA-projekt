@@ -31,7 +31,7 @@ public class App extends Application {
 
 
         // assign it to the scene
-        Scene scene = new Scene(root, 1060, 775);
+        Scene scene = new Scene(root, 1060, 825);
         scene.getStylesheets().add("css/main.css");
         primaryStage.setTitle("UPA 2019 - Estate manager");
         primaryStage.setScene(scene);

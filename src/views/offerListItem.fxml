@@ -6,39 +6,63 @@
 
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
-<AnchorPane prefHeight="100.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.OfferListItemCtrl">
-   <children>
-      <HBox styleClass="resultBox">
-         <Separator/>
-         <ImageView fx:id="picture" id="titlePic" fitHeight="100" preserveRatio="true" />
-         <VBox prefHeight="100.0">
-            <HBox>
-               <Label fx:id="transactionType"/>
-               <Label fx:id="propertyType"/>
-            </HBox>
-            <HBox>
-               <Label text="Area: "/>
-               <Label fx:id="area"/>
-               <Label text=" m&#x00B2;, price: "/>
-               <Label fx:id="price"/>
-               <Label text=" CZK "/>
-            </HBox>
-            <HBox>
-               <Label text="City centre distance: "/>
-               <Label fx:id="centreDistance"/>
-               <Label text=" "/>
-            </HBox>
-            <HBox>
-               <Label text="Shop distance: "/>
-               <Label fx:id="shopDistance"/>
-               <Label text=" "/>
-            </HBox>
-            <HBox>
-               <Label text="Description: "/>
-               <Label fx:id="description"/>
-               <Label text=" "/>
-            </HBox>
-         </VBox>
-      </HBox>
-   </children>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="140.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.OfferListItemCtrl">
+   <HBox alignment="CENTER_LEFT">
+      <padding>
+         <Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+      </padding>
+      <ImageView fx:id="picture" id="titlePic" fitHeight="120" preserveRatio="true"/>
+      <VBox prefHeight="120.0">
+         <padding>
+            <Insets top="4.0" bottom="4.0" left="4.0" right="4.0"/>
+         </padding>
+         <Label fx:id="name" styleClass="searchResultNameLabel"/>
+         <HBox>
+            <Label fx:id="transactionType" styleClass="searchResultTransactionTypeLabel">
+               <font>
+                  <Font name="System Bold" size="12.0"/>
+               </font>
+            </Label>
+            <Label text="/"/>
+            <Label fx:id="propertyType" styleClass="searchResultPropertyTypeLabel">
+               <font>
+                  <Font name="System Bold" size="12.0"/>
+               </font>
+            </Label>
+         </HBox>
+         <HBox>
+            <Label text="Area: "/>
+            <Label fx:id="area">
+               <font>
+                  <Font name="System Bold" size="12.0"/>
+               </font>
+            </Label>
+            <Label text=" m&#x00B2;, price: "/>
+            <Label fx:id="price">
+               <font>
+                  <Font name="System Bold" size="12.0"/>
+               </font>
+            </Label>
+            <Label text=" CZK"/>
+         </HBox>
+         <HBox>
+            <Label text="City centre distance: "/>
+            <Label fx:id="centreDistance"/>
+            <Label text="m"/>
+         </HBox>
+         <HBox>
+            <Label text="Shop distance: "/>
+            <Label fx:id="shopDistance"/>
+            <Label text="m"/>
+         </HBox>
+         <HBox>
+            <Label text="Description: "/>
+            <Label fx:id="description"/>
+         </HBox>
+      </VBox>
+   </HBox>
 </AnchorPane>

@@ -47,8 +47,6 @@ public class SearchController implements Initializable {
     @FXML
     Label scaleAmountLabel;
     @FXML
-    Label mouseCoordinateLabel;
-    @FXML
     ComboBox propertyType;
     @FXML
     ComboBox transactionType;
@@ -104,10 +102,7 @@ public class SearchController implements Initializable {
         distanceToObjectType.getSelectionModel().selectFirst();
 
         // bind slider to label showing the currently selected max price
-        maxPriceValueLabel.textProperty().bind(Bindings.format("%.2f", maxPriceSlider.valueProperty()));
-
-        results.setPadding(new Insets(5, 5, 5,5));
-        results.setSpacing(10.0);
+        maxPriceValueLabel.textProperty().bind(Bindings.format("%.2f CZK", maxPriceSlider.valueProperty()));
 
         // calculate grid size and paint on canvas pane
         gridCellSize = pane.getPrefHeight() / gridRows;
@@ -195,6 +190,26 @@ public class SearchController implements Initializable {
         return intersection;
     }
 
+    // get union from two lists of offersdbo
+    public List<OffersDBO> getUnion(List<OffersDBO> first, List<OffersDBO> second) {
+
+        // add whole first array
+        List<OffersDBO> union = new ArrayList<>(first);
+
+        // start adding second array
+        for (OffersDBO offerDBOFromSecond: second) {
+            for (OffersDBO offerDBOFromUnion: union) {
+                if (offerDBOFromSecond.getId() == offerDBOFromUnion.getId()) {
+                    break;
+                }
+                union.add(offerDBOFromSecond);
+            }
+        }
+
+        return union;
+    }
+
+
     // load lands with corresponding object type within its boundaries
     public List<OffersDBO> getObjectWithin(String type) {
         List<Integer> offerIds = SpatialHandler.getInstance().selectWithObject(type);
@@ -219,8 +234,8 @@ public class SearchController implements Initializable {
         String propertyTypeString = propertyType.getSelectionModel().getSelectedItem().toString();
         String transactionTypeString = transactionType.getSelectionModel().getSelectedItem().toString();
         String streetString = streetField.getText();
-        Boolean treesChecked = checkTrees.isSelected();
-        Boolean waterChecked = checkWater.isSelected();
+        boolean treesChecked = checkTrees.isSelected();
+        boolean waterChecked = checkWater.isSelected();
         double maxPrice = maxPriceSlider.getValue();
         System.out.println("name: " + nameString);
         System.out.println("property type: " + propertyTypeString);
@@ -245,17 +260,31 @@ public class SearchController implements Initializable {
         /* Filter by price*/
         offers = filterByPrice(offers, maxPrice);
 
-        // get ids of offers containing checked boxes
+
+        /* Filter by trees/water*/
+        List<OffersDBO> offersFilteredWithTrees = new ArrayList<OffersDBO>();
+        List<OffersDBO> offersFilteredWithWater = new ArrayList<OffersDBO>();
+
         if (treesChecked) {
-            offers = getIntersection(offers, getObjectWithin("Tree"));
-            offers = getIntersection(offers, getObjectWithin("Forest"));
-            System.out.println("Got this intersection with trees: " + offers.toString());
+            List<OffersDBO> offersWithTrees = getIntersection(offers, getObjectWithin("Tree"));
+            List<OffersDBO> offersWithForest = getIntersection(offers, getObjectWithin("Forest"));
+            System.out.println("Got this intersection with trees: " + offersWithTrees.toString());
+            System.out.println("Got this intersection with forest: " + offersWithForest.toString());
+            offersFilteredWithTrees = getUnion(offersWithTrees, offersWithForest);
+            System.out.println("Got this union of offers with trees: " + offersFilteredWithTrees);
+
+            offers = offersFilteredWithTrees;
         }
 
         if (waterChecked) {
-            offers = getIntersection(offers, getObjectWithin("Lake"));
-            offers = getIntersection(offers, getObjectWithin("River"));
-            System.out.println("Got this intersection with water: " + offers.toString());
+            List<OffersDBO> offersWithLake = getIntersection(offers, getObjectWithin("Lake"));
+            List<OffersDBO> offersWithRiver = getIntersection(offers, getObjectWithin("River"));
+            System.out.println("Got this intersection with lake: " + offersWithLake.toString());
+            System.out.println("Got this intersection with river: " + offersWithRiver.toString());
+            offersFilteredWithWater = getUnion(offersWithLake, offersWithRiver);
+            System.out.println("Got this union of offers with water: " + offersFilteredWithWater);
+
+            offers = offersFilteredWithWater;
         }
 
         // -- create spatial object ids list, ids of objects that will be painted to canvas
@@ -263,21 +292,28 @@ public class SearchController implements Initializable {
 
         // 3. Display results
         for (OffersDBO offer: offers) {
+            AnchorPane offerListItem = null;
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
-                AnchorPane offerListItem = loader.load();
+                offerListItem = loader.load();
+                offerListItem.setPadding(new Insets(5, 10, 5, 10));
+                offerListItem.getStyleClass().add("resultBox");
+                offerListItem.setPrefHeight(130);
                 OfferListItemCtrl itemController =  loader.getController();
 
                 MultimediaHandler multiHandler = MultimediaHandler.getInstance();
                 int imageId = multiHandler.getFirstImageId(offer.getId());
                 Image image = (imageId == -1) ? null : multiHandler.getPicture(imageId);
                 itemController.init(offer, image);
+
                 // spatial Id, not displayed, just stored
                 searchResultsSpatialIds.add(offer.getSpatialId());
 
                 // Add selection click  handler
+                AnchorPane finalOfferListItem = offerListItem;
                 offerListItem.setOnMousePressed(mouseEvent -> {
 
+                    System.out.println("Clicked on offer " + offer.getId());
                     // select this object in the canvas
                     selectObjectById(offer.getSpatialId());
 
@@ -289,7 +325,7 @@ public class SearchController implements Initializable {
                         result.getStyleClass().remove("selectedResult");
                     }
                     // add "selectedResult" for this one
-                    offerListItem.getStyleClass().add("selectedResult");
+                    finalOfferListItem.getStyleClass().add("selectedResult");
                 });
 
                 // add the whole result to HBOX of results
@@ -312,6 +348,7 @@ public class SearchController implements Initializable {
                     shape.visualObject.shape.setOnMouseExited(mouseEvent -> { scrollPane.setCursor(Cursor.OPEN_HAND); });
 
                     // handle clicking on the shape by selecting, repainting and showing tooltip
+                    AnchorPane finalOfferListItem1 = offerListItem;
                     shape.visualObject.shape.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
                         // select this object in the canvas
                         selectObjectById(offer.getSpatialId());
@@ -330,7 +367,7 @@ public class SearchController implements Initializable {
                         for (Node result: results.getChildren()) { result.getStyleClass().remove("selectedResult"); }
 
                         // add "selectedResult" class for this specific one
-//                        singleResult.getStyleClass().add("selectedResult");
+                        finalOfferListItem1.getStyleClass().add("selectedResult");
 
                         mouseEvent.consume();
                     });
@@ -427,7 +464,6 @@ public class SearchController implements Initializable {
             if (mouseEvent.getEventType() == MouseEvent.MOUSE_MOVED) {
                 mouseCoordinate.setX(mouseEvent.getX());
                 mouseCoordinate.setY(mouseEvent.getY());
-                mouseCoordinateLabel.setText("Mouse[X: " + Math.round(mouseCoordinate.getX()) + "; Y: " +  Math.round(mouseCoordinate.getY()) + "]");
             }
         }
     };
