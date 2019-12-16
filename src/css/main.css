@@ -88,6 +88,10 @@
     -fx-background-color: #aaa;
 }
 
+#refreshButton {
+    -fx-background-image: url("../assets/icons/baseline_sync_white_36dp.png");
+}
+
 #viewButton {
     -fx-background-image: url("../assets/icons/baseline_pan_tool_white_36dp.png");
 }

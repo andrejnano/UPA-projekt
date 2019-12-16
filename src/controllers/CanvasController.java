@@ -54,6 +54,8 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
     @FXML
     Pane idShapeEdit;
     @FXML
+    Button refreshButton;
+    @FXML
     Button viewButton;
     @FXML
     Button editButton;
@@ -243,6 +245,11 @@ public class CanvasController implements Initializable, ConvertSpatialObjects {
         if (appState.getCanvasShapeState().contains("POLYLINE")) {
             idShapeEditController.shape = new PolyLine(pane, appState, canvasShapes, idShapeEditController);
         }
+    }
+
+    @FXML
+    private void refreshCanvas() {
+        clearCanvas();
         loadShapesFromDb();
     }
 

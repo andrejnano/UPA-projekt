@@ -69,6 +69,8 @@ public class OffersController implements Initializable{
     ImageView titlePicture;
     @FXML
     HBox otherPictures;
+    @FXML
+    Button refreshButton;
 
     // currently selected shape object on canvas
     SimpleIntegerProperty selectedSpatialId;
@@ -417,6 +419,11 @@ public class OffersController implements Initializable{
             shape.clear();
         }
         canvasShapes.clear();
+    }
+
+    @FXML
+    private void refreshCanvas() {
+        clearCanvas();
         loadShapesFromDb();
     }
 

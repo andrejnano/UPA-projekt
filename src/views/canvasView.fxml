@@ -113,6 +113,13 @@
          <left>
             <VBox prefHeight="200.0" prefWidth="40.0" BorderPane.alignment="CENTER">
                <children>
+                   <Button  fx:id="refreshButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refreshCanvas" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
+                       <tooltip>
+                           <Tooltip text="Refresh canvas from DB" />
+                       </tooltip>
+                       <VBox.margin>
+                           <Insets bottom="4.0" top="4.0" />
+                       </VBox.margin></Button>
                        <Button fx:id="viewButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#viewMode" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
                      <font>
                         <Font name="System Bold" size="13.0" />

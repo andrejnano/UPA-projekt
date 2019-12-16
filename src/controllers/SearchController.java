@@ -57,6 +57,8 @@ public class SearchController implements Initializable {
     ComboBox distanceToObjectType;
     @FXML
     HBox results;
+    @FXML
+    Button refreshButton;
 
     Offer queryOffer;
 
@@ -346,6 +348,11 @@ public class SearchController implements Initializable {
             shape.clear();
         }
         canvasShapes.clear();
+    }
+
+    @FXML
+    private void refreshCanvas() {
+        clearCanvas();
         loadShapesFromDb();
     }
 

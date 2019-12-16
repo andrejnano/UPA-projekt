@@ -39,6 +39,15 @@
                      <VBox.margin>
                         <Insets bottom="4.0" top="4.0" left="4.0" right="4.0" />
                      </VBox.margin></Button>
+
+                  <Region prefHeight="20.0" prefWidth="887.0" />
+                  <Button fx:id="refreshButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refreshCanvas" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
+                     <tooltip>
+                        <Tooltip text="Refresh canvas" />
+                     </tooltip>
+                     <VBox.margin>
+                        <Insets bottom="4.0" top="4.0" left="4.0" right="4.0" />
+                     </VBox.margin></Button>
                </items>
             </ToolBar>
          </top>
