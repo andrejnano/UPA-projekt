@@ -13,5 +13,5 @@
 - [ ] zjednotit tooltip name + shape object type do jedneho tooltipu
 - [X] po najetí na road zobrazit délku cesty (selectObjectLength)
 - [X] zjištění vzdálenosti od obchodu/city centre pro nabídku (selectObjectDistance)
-- [ ] najít nabídky podle objektů, které obsahují (les/jezero) (selectWithObject)
+- [X] najít nabídky podle objektů, které obsahují (les/jezero) (selectWithObject)
 

@@ -72,7 +72,7 @@
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" text="Search for offers" textAlignment="CENTER" textFill="WHITE">
+                        <Label alignment="CENTER" maxHeight="60.0" minHeight="60.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="300.0" text="Search for offers" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -92,7 +92,7 @@
                                      </font>
                                  </Label>
 
-                                 <TextField fx:id="nameField" prefHeight="27.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                 <TextField fx:id="nameField" minHeight="27.0" maxHeight="27.0" minWidth="150.0" maxWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="0">
                                      <GridPane.margin>
                                          <Insets bottom="5.0" left="15.0" top="5.0" />
                                      </GridPane.margin>
@@ -103,7 +103,7 @@
                                          <Font name="System Bold" size="14.0" />
                                      </font>
                                  </Label>
-                                 <ComboBox fx:id="propertyType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <ComboBox fx:id="propertyType" minHeight="27.0" maxHeight="27.0" minWidth="150.0" maxWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                      <items>
                                          <FXCollections fx:factory="observableArrayList">
                                              <OfferPropertyType fx:value="FLAT"/>
@@ -125,7 +125,7 @@
                                         <Font name="System Bold" size="14.0" />
                                      </font>
                                   </Label>
-                                 <ComboBox fx:id="transactionType" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <ComboBox fx:id="transactionType" minHeight="27.0" maxHeight="27.0" minWidth="150.0" maxWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                      <items>
                                          <FXCollections fx:factory="observableArrayList">
                                              <OfferTransactionType fx:value="RENT"/>
@@ -144,27 +144,40 @@
                                      </font>
                                  </Label>
 
-                                 <TextField fx:id="streetField" prefHeight="27.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <TextField fx:id="streetField" minHeight="27.0" maxHeight="27.0" minWidth="150.0" maxWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                      <GridPane.margin>
                                          <Insets bottom="5.0" left="15.0" top="5.0" />
                                      </GridPane.margin>
                                  </TextField>
 
-                                  <Label alignment="CENTER_RIGHT" layoutX="25.0" layoutY="166.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="Distance within: " textAlignment="RIGHT" textFill="#f5f5f5" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                                 <Label alignment="CENTER_RIGHT" layoutX="25.0" layoutY="67.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="Contains trees" textAlignment="RIGHT" textFill="#f5f5f5" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                                      <font>
-                                        <Font name="System Bold" size="14.0" />
+                                         <Font name="System Bold" size="14.0" />
                                      </font>
-                                  </Label>
+                                 </Label>
+                                 <CheckBox fx:id="checkTrees" minHeight="27.0" maxHeight="27.0" minWidth="150.0" maxWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
+                                     </GridPane.margin>
+                                 </CheckBox>
 
-                                 <Button fx:id="searchButton" alignment="CENTER" mnemonicParsing="false" onAction="#searchSubmit" prefHeight="28.0" prefWidth="300.0" style="-fx-background-color: #43b480; -fx-cursor: hand;" text="SEARCH" textFill="WHITE" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6">
-                                 <font>
-                                    <Font size="14.0" />
-                                 </font>
-                                 <GridPane.margin>
-                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                                 </GridPane.margin>
-                                 </Button>
-                                  <ChoiceBox fx:id="distance"  prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                 <Label alignment="CENTER_RIGHT" layoutX="25.0" layoutY="67.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="Contains water" textAlignment="RIGHT" textFill="#f5f5f5" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+                                     <font>
+                                         <Font name="System Bold" size="14.0" />
+                                     </font>
+                                 </Label>
+                                 <CheckBox fx:id="checkWater" minHeight="27.0" maxHeight="27.0" minWidth="150.0" maxWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                     <GridPane.margin>
+                                         <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
+                                     </GridPane.margin>
+                                 </CheckBox>
+
+                                 <Label alignment="CENTER_RIGHT" layoutX="25.0" layoutY="166.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="Distance within: " textAlignment="RIGHT" textFill="#f5f5f5" GridPane.rowIndex="7" GridPane.valignment="CENTER">
+                                     <font>
+                                         <Font name="System Bold" size="14.0" />
+                                     </font>
+                                 </Label>
+                                  <ChoiceBox fx:id="distance"  minHeight="27.0" maxHeight="27.0" minWidth="150.0" maxWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                       <items>
                                           <FXCollections fx:factory="observableArrayList">
                                               <String fx:value="any" />
@@ -179,12 +192,12 @@
                                         <Insets bottom="5.0" left="15.0" top="5.0" />
                                      </GridPane.margin>
                                   </ChoiceBox>
-                                 <Label alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="to: " textAlignment="RIGHT" textFill="#f5f5f5" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                                 <Label alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="100.0" text="to: " textAlignment="RIGHT" textFill="#f5f5f5" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.valignment="CENTER">
                                      <font>
                                          <Font name="System Bold" size="14.0" />
                                      </font>
                                  </Label>
-                                 <ComboBox fx:id="distanceToObjectType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                 <ComboBox fx:id="distanceToObjectType" minHeight="27.0" maxHeight="27.0" minWidth="150.0" maxWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="8">
                                      <items>
                                          <FXCollections fx:factory="observableArrayList">
                                              <AreaType fx:value="LAKE"/>
@@ -215,7 +228,14 @@
                                          <Insets bottom="5.0" left="15.0" top="5.0" />
                                      </GridPane.margin>
                                  </ComboBox>
-
+                                 <Button fx:id="searchButton" alignment="CENTER" mnemonicParsing="false" onAction="#searchSubmit" prefHeight="28.0" prefWidth="300.0" style="-fx-background-color: #43b480; -fx-cursor: hand;" text="SEARCH" textFill="WHITE" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="9">
+                                     <font>
+                                         <Font size="14.0" />
+                                     </font>
+                                     <GridPane.margin>
+                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                     </GridPane.margin>
+                                 </Button>
                              </children>
                              <columnConstraints>
                                  <ColumnConstraints maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />

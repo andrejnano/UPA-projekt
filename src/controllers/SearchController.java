@@ -59,6 +59,10 @@ public class SearchController implements Initializable {
     HBox results;
     @FXML
     Button refreshButton;
+    @FXML
+    CheckBox checkWater;
+    @FXML
+    CheckBox checkTrees;
 
     Offer queryOffer;
 
@@ -172,6 +176,11 @@ public class SearchController implements Initializable {
         return intersection;
     }
 
+    // load lands with corresponding object type within its boundaries
+    public List<OffersDBO> getObjectWithin(String type) {
+        List<Integer> offerIds = SpatialHandler.getInstance().selectWithObject(type);
+        return OffersHandler.getInstance().loadOffers(offerIds);
+    }
 
     /* Execute search query */
     @FXML
@@ -188,6 +197,8 @@ public class SearchController implements Initializable {
         String propertyTypeString = propertyType.getSelectionModel().getSelectedItem().toString();
         String transactionTypeString = transactionType.getSelectionModel().getSelectedItem().toString();
         String streetString = streetField.getText();
+        Boolean treesChecked = checkTrees.isSelected();
+        Boolean waterChecked = checkWater.isSelected();
         System.out.println("name: " + nameString);
         System.out.println("property type: " + propertyTypeString);
         System.out.println("transaction type: " + transactionTypeString);
@@ -204,13 +215,26 @@ public class SearchController implements Initializable {
         /* Second, search by distance to given type within given distance */
         offersDBOsCloseToObject = searchCloseTo(distanceToObjectType.getSelectionModel().getSelectedItem().toString());
 
-        System.out.println("Got this intersection: " + getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject).toString());
+        List<OffersDBO> offers = getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject);
+        System.out.println("Got this intersection within distance: " + offers.toString());
+
+        // get ids of offers containing checked boxes
+        if (treesChecked) {
+            offers = getIntersection(offers, getObjectWithin("Tree"));
+            offers = getIntersection(offers, getObjectWithin("Forest"));
+            System.out.println("Got this intersection with trees: " + offers.toString());
+        }
+        if (waterChecked) {
+            offers = getIntersection(offers, getObjectWithin("Lake"));
+            offers = getIntersection(offers, getObjectWithin("River"));
+            System.out.println("Got this intersection with water: " + offers.toString());
+        }
 
         // -- create spatial object ids list, ids of objects that will be painted to canvas
         searchResultsSpatialIds = new ArrayList<Integer>();
 
         // 3. Display results
-        for (OffersDBO offer: getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject)) {
+        for (OffersDBO offer: offers) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
                 AnchorPane offerListItem = loader.load();
