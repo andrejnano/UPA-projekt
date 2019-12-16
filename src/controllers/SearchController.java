@@ -64,6 +64,10 @@ public class SearchController implements Initializable {
     Slider maxPriceSlider;
     @FXML
     Label maxPriceValueLabel;
+    @FXML
+    CheckBox checkWater;
+    @FXML
+    CheckBox checkTrees;
 
     Offer queryOffer;
 
@@ -191,6 +195,11 @@ public class SearchController implements Initializable {
         return intersection;
     }
 
+    // load lands with corresponding object type within its boundaries
+    public List<OffersDBO> getObjectWithin(String type) {
+        List<Integer> offerIds = SpatialHandler.getInstance().selectWithObject(type);
+        return OffersHandler.getInstance().loadOffers(offerIds);
+    }
 
     /* Execute search query */
     @FXML
@@ -210,6 +219,8 @@ public class SearchController implements Initializable {
         String propertyTypeString = propertyType.getSelectionModel().getSelectedItem().toString();
         String transactionTypeString = transactionType.getSelectionModel().getSelectedItem().toString();
         String streetString = streetField.getText();
+        Boolean treesChecked = checkTrees.isSelected();
+        Boolean waterChecked = checkWater.isSelected();
         double maxPrice = maxPriceSlider.getValue();
         System.out.println("name: " + nameString);
         System.out.println("property type: " + propertyTypeString);
@@ -233,6 +244,19 @@ public class SearchController implements Initializable {
 
         /* Filter by price*/
         offers = filterByPrice(offers, maxPrice);
+
+        // get ids of offers containing checked boxes
+        if (treesChecked) {
+            offers = getIntersection(offers, getObjectWithin("Tree"));
+            offers = getIntersection(offers, getObjectWithin("Forest"));
+            System.out.println("Got this intersection with trees: " + offers.toString());
+        }
+
+        if (waterChecked) {
+            offers = getIntersection(offers, getObjectWithin("Lake"));
+            offers = getIntersection(offers, getObjectWithin("River"));
+            System.out.println("Got this intersection with water: " + offers.toString());
+        }
 
         // -- create spatial object ids list, ids of objects that will be painted to canvas
         searchResultsSpatialIds = new ArrayList<Integer>();
@@ -274,60 +298,6 @@ public class SearchController implements Initializable {
                 e.printStackTrace();
             }
 
-//            // configure a single result
-//            VBox singleResult = new VBox();
-//            singleResult.setPadding(new Insets(5, 10, 5, 10));
-//            singleResult.getStyleClass().add("resultBox");
-//            singleResult.setPrefHeight(130);
-//            singleResult.setAlignment(Pos.CENTER_LEFT);
-//
-//            // name
-//            Label name = new Label("Name: " + offer.getName());
-//            singleResult.getChildren().add(name);
-//
-//            // id
-//            Label id = new Label("ID: " + Integer.toString(offer.getId()));
-//            singleResult.getChildren().add(new Label("ID: " + Integer.toString(offer.getId())));
-//
-//            // spatial Id, not displayed, just stored
-//            searchResultsSpatialIds.add(offer.getSpatialId());
-//
-//            // price
-//            Label price = new Label("Price: " + Integer.toString(offer.getPrice()));
-//            singleResult.getChildren().add(price);
-//
-//            // description
-//            Label description = new Label("Description: " + offer.getDescription());
-//            description.setWrapText(true);
-//            description.setPrefWidth(300);
-//            description.setMinWidth(300);
-//            singleResult.getChildren().add(description);
-//
-//            // type
-//            Label type = new Label("Type: " + offer.getType());
-//            singleResult.getChildren().add(type);
-//
-//            // transaction
-//            Label transaction = new Label("Transaction: " + offer.getTransaction());
-//            singleResult.getChildren().add(transaction);
-
-//            // Add selection click  handler
-//            singleResult.setOnMousePressed(mouseEvent -> {
-//
-//                // select this object in the canvas
-//                selectObjectById(offer.getSpatialId());
-//
-//                // remove "selectedResult" style from all results
-//                for (Node result: results.getChildren()
-//                     ) {
-//                    result.getStyleClass().remove("selectedResult");
-//                }
-//                // add "selectedResult" for this one
-//                singleResult.getStyleClass().add("selectedResult");
-//            });
-//
-//            // add the whole result to HBOX of results
-//            results.getChildren().add(singleResult);
 
             // highlight specific object with spatialId in the canvasShapes array < - > canvas
             for (Shape shape: canvasShapes) {
