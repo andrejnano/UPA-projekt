@@ -3,7 +3,7 @@
 - [ ] zarovnavanie bodov pri posunuti do mriezky (anchors)
 - [ ] zarovnavanie bodov pri posunuti do mriezky (cely shape)
 - [X] nacitanie celeho obsahu mapy pri otvoreni tabu/po prihlaseni
-- [ ] refresh/update tlacitko do search/create/manage views na ziskanie aktualnych dat z db
+- [X] refresh/update tlacitko do search/create/manage views na ziskanie aktualnych dat z db
 - [ ] interval "price" pri vyhladavani
 - [X] vypocitanie obsahu plochy a zobrazenie pri vyhladani
 - [X] vytvorenie zakladnych objektov v init.sql, ale obrazky ešte nefungujú
