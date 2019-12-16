@@ -1,14 +1,25 @@
 # UPA-projekt
 Projekt UPA - FIT VUT BRNO
 
+- xnanoa00
+- xmarko15
+- xvasek06
+
+## Quick start guide
+
+1. open project dir
+2. run `./run.sh`
+3. use application gui
+
 ## Requirements
 
+- Gradle
 - Java JDK 13
 - [Java FX 13](https://openjfx.io/)
 - Oracle JDBC
 - Oracle Spatial
 
-## Project setup
+## Project setup for development
 
 1. Install **Java 13**.
 2. Install [**JavaFX SDK 13**](https://gluonhq.com/products/javafx/) to `~/java/java-sdk-13/`.
