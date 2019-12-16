@@ -7,6 +7,7 @@ import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.pool.OracleDataSource;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.sql.*;
 import java.util.ArrayList;
@@ -115,6 +116,21 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        MultimediaHandler multiHandler = MultimediaHandler.getInstance();
+
+        System.out.println("Uploading pictures to DB pleas wait, this could take few minutes.");
+        File[] dirs = new File("./img").listFiles();
+        for (File dir : dirs) {
+            if (dir.isDirectory()) {
+                File[] files = new File(dir.toString()).listFiles();
+                for (File file : files) {
+                    System.out.println("Uploading picture "+file.toString()+" to DB");
+                    multiHandler.storeImage(Integer.parseInt(dir.getName()), file.toString());
+                }
+            }
+        }
+        System.out.println("DB init finished!");
     }
 
     // returns next unused id for specified table
