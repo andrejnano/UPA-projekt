@@ -169,6 +169,15 @@
     -fx-background-image: url("../assets/icons/baseline_view_list_white_36dp.png");
 }
 
+#clearFormButton {
+    -fx-min-height: 32px;
+    -fx-min-width: 32px;
+    -fx-background-size: 16px 16px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-image: url("../assets/icons/baseline_cancel_white_36dp.png");
+}
+
 
 .searchResults {
     /*-fx-text-fill: #fafafa;*/

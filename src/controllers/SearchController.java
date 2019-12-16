@@ -136,6 +136,20 @@ public class SearchController implements Initializable {
     }
 
 
+    // clear the whole search form
+    public void clearForm() {
+        nameField.clear();
+        propertyType.getSelectionModel().selectFirst();
+        transactionType.getSelectionModel().selectFirst();
+        streetField.clear();
+        checkTrees.setSelected(false);
+        checkWater.setSelected(false);
+        maxPriceSlider.setValue(5000);
+        distance.getSelectionModel().selectFirst();
+        distanceToObjectType.getSelectionModel().selectFirst();
+    }
+
+
     // filters offers (OffersDBO) that match given price interval (min - max)
     public List<OffersDBO> filterByPrice(List<OffersDBO> offers, double maxPrice) {
         List <OffersDBO> filteredOffers = new ArrayList<OffersDBO>();
