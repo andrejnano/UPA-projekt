@@ -81,6 +81,13 @@
                         <Insets top="25.0" />
                      </GridPane.margin>
                   </Button>
+                   <HBox alignment="CENTER" fx:id="connectedSuccessfullyMsg" visible="false" prefWidth="250" maxWidth="250" minWidth="250" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="7">
+                       <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+                       </padding>
+                       <Region fx:id="connectedSuccessfullyIcon"/>
+                       <Label alignment="CENTER" textAlignment="center" text="✓ Connected successfully" style="-fx-text-fill: lime; -fx-font-size: 14px;"/>
+                   </HBox>
                     <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" prefWidth="200.0" text="User" textFill="WHITE" GridPane.rowIndex="4">
                      <font>
                         <Font name="System Bold" size="14.0" />
@@ -114,19 +121,19 @@
                      </GridPane.margin>
                   </Label>
             
-                                <Separator prefHeight="0.0" prefWidth="355.0" GridPane.columnSpan="2" GridPane.rowIndex="7" />
-            
-                    <Label alignment="CENTER" maxWidth="-Infinity" prefHeight="18.0" prefWidth="362.0" text="Initialize with a SQL script" textAlignment="CENTER" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="8">
+                                <Separator prefHeight="0.0" prefWidth="355.0" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+
+                    <Label alignment="CENTER" maxWidth="-Infinity" prefHeight="18.0" prefWidth="362.0" text="Initialize with a SQL script" textAlignment="CENTER" textFill="WHITE" GridPane.columnSpan="2" GridPane.rowIndex="9">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
                   </Label>
-                    <TextField fx:id="pathField" promptText="Path to SQL init script" GridPane.rowIndex="9">
+                    <TextField fx:id="pathField" promptText="Path to SQL init script" GridPane.rowIndex="10">
                      <GridPane.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                   </TextField>
-                    <Button fx:id="selectBtn" mnemonicParsing="false" onAction="#openChooser" text="Open file" textFill="#4d4d4d" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="9">
+                    <Button fx:id="selectBtn" mnemonicParsing="false" onAction="#openChooser" text="Open file" textFill="#4d4d4d" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="10">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -134,7 +141,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                   </Button>
-                    <Button fx:id="insertBtn" mnemonicParsing="false" onAction="#commitFile" prefHeight="28.0" prefWidth="350.0" text="Setup DB with this file" textFill="#4d4d4d" GridPane.columnSpan="2" GridPane.rowIndex="10">
+                    <Button fx:id="insertBtn" mnemonicParsing="false" onAction="#commitFile" prefHeight="28.0" prefWidth="350.0" text="Setup DB with this file" textFill="#4d4d4d" GridPane.columnSpan="2" GridPane.rowIndex="11">
                      <font>
                         <Font size="14.0" />
                      </font>

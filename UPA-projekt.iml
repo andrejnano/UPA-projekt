@@ -9,12 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="spatial" level="project" />
     <orderEntry type="library" name="jdbc" level="project" />
-    <orderEntry type="library" name="jdk-11.0" level="project" />
-    <orderEntry type="library" exported="" name="sdoapi" level="project" />
-    <orderEntry type="library" exported="" name="javafx-sdk-11.0" level="project" />
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="admin" level="project" />
-    <orderEntry type="library" name="ordim" level="project" />
     <orderEntry type="library" name="fontawesomefx" level="project" />
+    <orderEntry type="library" name="ordim" level="project" />
   </component>
 </module>

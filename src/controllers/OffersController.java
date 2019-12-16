@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
@@ -282,6 +283,9 @@ public class OffersController implements Initializable{
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
                 AnchorPane offerListItem = loader.load();
+                offerListItem.setPadding(new Insets(5, 10, 5, 10));
+                offerListItem.getStyleClass().add("resultBox");
+                offerListItem.setPrefHeight(130);
                 OfferListItemCtrl itemController =  loader.getController();
 
                 multiHandler = MultimediaHandler.getInstance();

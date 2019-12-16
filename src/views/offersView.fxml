@@ -7,8 +7,8 @@
 <?import java.lang.*?>
 <?import javafx.collections.FXCollections?>
 
-<?import model.offerType.OfferPropertyType?>
-<?import model.offerType.OfferTransactionType?>
+<!--<?import model.offerType.OfferPropertyType?>-->
+<!--<?import model.offerType.OfferTransactionType?>-->
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.effect.DropShadow?>
@@ -29,7 +29,7 @@
                         <Tooltip text="Create new offer" />
                      </tooltip>
                      <VBox.margin>
-                        <Insets bottom="4.0" top="4.0" left="4.0" right="4.0" />
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </VBox.margin></Button>
 
                   <Button fx:id="myOffersButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#myOffers" prefHeight="32.0" prefWidth="32.0" styleClass="canvasToolBarButton">
@@ -37,7 +37,7 @@
                         <Tooltip text="My offers" />
                      </tooltip>
                      <VBox.margin>
-                        <Insets bottom="4.0" top="4.0" left="4.0" right="4.0" />
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </VBox.margin></Button>
 
                   <Region prefHeight="20.0" prefWidth="887.0" />
@@ -46,7 +46,7 @@
                         <Tooltip text="Refresh canvas" />
                      </tooltip>
                      <VBox.margin>
-                        <Insets bottom="4.0" top="4.0" left="4.0" right="4.0" />
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                      </VBox.margin></Button>
                </items>
             </ToolBar>
@@ -63,7 +63,7 @@
             </ScrollPane>
          </center>
          <right>
-            <AnchorPane fx:id="sideBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="300.0" style="-fx-background-color: #2f3136;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" BorderPane.alignment="TOP_RIGHT">
+            <AnchorPane fx:id="sideBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="333.0" style="-fx-background-color: #2f3136;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" BorderPane.alignment="TOP_LEFT">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
@@ -71,10 +71,10 @@
                   <Insets />
                </BorderPane.margin>
                <children>
-                  <VBox layoutX="-7.0" prefHeight="700.0" prefWidth="300.0"  fx:id="editOfferSidebar" >
+                  <VBox fx:id="editOfferSidebar" layoutX="-7.0" prefHeight="700.0" prefWidth="320.0">
                      <children>
                         <Label fx:id="errorLabel" textFill="RED" />
-                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" text="Create new offer" textAlignment="CENTER" textFill="WHITE">
+                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="331.0" text="Create new offer" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
@@ -92,18 +92,18 @@
                                     <Insets bottom="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </Label>
-                              <ComboBox fx:id="propertyType" maxWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                              <ComboBox fx:id="propertyType" maxWidth="-Infinity" prefHeight="37.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
                                  <items>
-                                      <FXCollections fx:factory="observableArrayList">
-                                         <OfferPropertyType fx:value="FLAT"/>
-                                         <OfferPropertyType fx:value="LAND"/>
-                                         <OfferPropertyType fx:value="DETACHED"/>
-                                         <OfferPropertyType fx:value="TOWNHOUSE"/>
-                                         <OfferPropertyType fx:value="BUNGALOW"/>
-                                         <OfferPropertyType fx:value="COTTAGE"/>
-                                         <OfferPropertyType fx:value="OTHER"/>
-                                      </FXCollections>
-                                </items>
+<!--                                 <FXCollections fx:factory="observableArrayList">-->
+<!--                                    <OfferPropertyType fx:value="FLAT"/>-->
+<!--                                    <OfferPropertyType fx:value="LAND"/>-->
+<!--                                    <OfferPropertyType fx:value="DETACHED"/>-->
+<!--                                    <OfferPropertyType fx:value="TOWNHOUSE"/>-->
+<!--                                    <OfferPropertyType fx:value="BUNGALOW"/>-->
+<!--                                    <OfferPropertyType fx:value="COTTAGE"/>-->
+<!--                                    <OfferPropertyType fx:value="OTHER"/>-->
+<!--                                 </FXCollections>-->
+                              </items>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
@@ -111,20 +111,20 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
                               </ComboBox>
-         
-                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Transaction type" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1">
+   
+                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="102.0" text="Transaction type" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="1">
                                  <padding>
-                                    <Insets bottom="5.0" right="5.0" top="5.0" />
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </Label>
-                              <ComboBox fx:id="transactionType" maxWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <ComboBox fx:id="transactionType" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <items>
-                                      <FXCollections fx:factory="observableArrayList">
-                                         <OfferTransactionType fx:value="RENT"/>
-                                         <OfferTransactionType fx:value="SELL"/>
-                                         <OfferTransactionType fx:value="SHARE"/>
-                                      </FXCollections>
-                                 </items>
+<!--                                 <FXCollections fx:factory="observableArrayList">-->
+<!--                                    <OfferTransactionType fx:value="RENT"/>-->
+<!--                                    <OfferTransactionType fx:value="SELL"/>-->
+<!--                                    <OfferTransactionType fx:value="SHARE"/>-->
+<!--                                 </FXCollections>-->
+                              </items>
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
@@ -132,12 +132,12 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
                               </ComboBox>
-                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Name" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Name" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="2">
                                  <padding>
                                     <Insets bottom="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </Label>
-                              <TextField fx:id="nameField" maxWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <TextField fx:id="nameField" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
@@ -145,13 +145,13 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
                               </TextField>
-         
-                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Price" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="4">
+   
+                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Price" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="3">
                                  <padding>
                                     <Insets bottom="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </Label>
-                              <TextField fx:id="priceField" maxWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                              <TextField fx:id="priceField" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
@@ -159,32 +159,39 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
                               </TextField>
-         
-                              <Label alignment="CENTER_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" text="Description" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="5">
+   
+                              <Label alignment="TOP_RIGHT" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="66.0" prefWidth="100.0" text="Description" textFill="WHITE" GridPane.columnIndex="0" GridPane.rowIndex="4">
                                  <padding>
                                     <Insets bottom="5.0" right="5.0" top="5.0" />
                                  </padding>
                               </Label>
-                              <TextArea fx:id="descriptionArea" maxHeight="90" maxWidth="-Infinity" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                              <TextArea fx:id="descriptionArea" maxHeight="90" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="57.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                                  <GridPane.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </GridPane.margin>
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
                               </TextArea>
-         
-                              <VBox alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="6">
+   
+                              <VBox alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="5">
                                  <children>
-                                    <Label text="Title picture" textFill="WHITE" />
-                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#loadTitlePic" prefWidth="75.0" text="Load file" GridPane.columnIndex="0" />
+                                    <Label text="Title picture" textFill="WHITE">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </Label>
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#loadTitlePic" prefWidth="80.0" text="Load file" GridPane.columnIndex="0" />
                                  </children>
                               </VBox>
-         
-                              <ImageView fx:id="titlePicture" fitHeight="100" onMouseClicked="#editTitlePicture" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <VBox alignment="CENTER" GridPane.rowIndex="7">
+   
+                              <ImageView fx:id="titlePicture" fitHeight="100" onMouseClicked="#editTitlePicture" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <VBox alignment="CENTER" GridPane.rowIndex="6">
                                  <children>
-               
+   
                                     <Label alignment="CENTER" prefWidth="100.0" text="Pictures" textFill="WHITE" GridPane.rowIndex="7">
                                        <padding>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -193,46 +200,54 @@
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </GridPane.margin>
                                     </Label>
-                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#loadOtherPic" text="Load file" />
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#loadOtherPic" prefWidth="80.0" text="Load file" />
                                  </children>
                               </VBox>
-         
-                              <ScrollPane maxHeight="170" maxWidth="480" vbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.rowIndex="7">
+   
+                              <ScrollPane id="newOfferPictureScrollPane" hbarPolicy="NEVER" maxHeight="170" maxWidth="480" pannable="true" style="-fx-background-color: transparent;" vbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                  <content>
                                     <HBox fx:id="otherPictures" maxHeight="150" minHeight="150" />
                                  </content>
                               </ScrollPane>
-         
-                              <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#saveOffer" prefWidth="75.0" text="Save" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-                              <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#deleteOffer" prefWidth="75.0" style="-fx-background-color: red;" text="Delete" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
-
+   
+                              <Button alignment="CENTER" maxWidth="-Infinity" mnemonicParsing="false" onAction="#saveOffer" prefWidth="150.0" style="-fx-background-color: #43b480;;" text="Save" textFill="WHITE" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="7">
+                                 <font>
+                                    <Font name="System Bold" size="13.0" />
+                                 </font>
+                                 <GridPane.margin>
+                                    <Insets top="15.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#deleteOffer" prefWidth="150.0" style="-fx-background-color: red;" text="Delete" textFill="WHITE" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+   
                            </children>
                            <columnConstraints>
-                              <ColumnConstraints />
-                              <ColumnConstraints />
+                              <ColumnConstraints prefWidth="100.0" />
+                              <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="220.0" />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints maxHeight="100.0" prefHeight="50.0" />
                               <RowConstraints maxHeight="100.0" prefHeight="50.0" />
                               <RowConstraints maxHeight="100.0" prefHeight="50.0" />
                               <RowConstraints maxHeight="100.0" prefHeight="50.0" />
-                              <RowConstraints maxHeight="100.0" prefHeight="50.0" />
-                              <RowConstraints maxHeight="100.0" prefHeight="50.0" />
+                              <RowConstraints maxHeight="100.0" prefHeight="80.0" />
                               <RowConstraints maxHeight="100.0" prefHeight="100.0" valignment="CENTER" />
                               <RowConstraints maxHeight="100.0" prefHeight="100.0" valignment="CENTER" />
-                              <RowConstraints maxHeight="100.0" prefHeight="100.0" />
+                              <RowConstraints maxHeight="60.0" prefHeight="100.0" />
+                              <RowConstraints maxHeight="40.0" prefHeight="100.0" />
                            </rowConstraints>
                         </GridPane>
                      </children>
                   </VBox>
-                  <Pane fx:id="myOffersSidebar" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                     <children>
-                        <ScrollPane hbarPolicy="NEVER" maxHeight="560.0">
-                           <content>
-                              <VBox fx:id="myOffersBox" />
-                           </content>
-                        </ScrollPane>
-                     </children>
+                  <Pane fx:id="myOffersSidebar" prefWidth="300.0" visible="false" GridPane.columnIndex="0"
+                        GridPane.rowIndex="6">
+                     <ScrollPane fx:id="myOffersScrollPane" hbarPolicy="NEVER" maxHeight="690.0">
+                        <VBox spacing="20.0" fx:id="myOffersBox">
+                           <padding>
+                              <Insets bottom="10.0" top="10.0"/>
+                           </padding>
+                        </VBox>
+                     </ScrollPane>
                   </Pane>
                </children>
             </AnchorPane>
@@ -281,8 +296,10 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </HBox>
-                  <ScrollPane style="-fx-background-color: #2f3136;" fitToHeight="true" vmin="0" vmax="0" fitToWidth="true" vbarPolicy="NEVER" maxHeight="150.0" maxWidth="1060" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefViewportHeight="150.0" prefViewportWidth="1060.0" prefWidth="1060.0">
-                     <HBox fx:id="results" style="-fx-background-color: #2f3136;" maxHeight="150" fillHeight="false" maxWidth="10000" prefHeight="150.0" prefWidth="10000.0" styleClass="searchResults" />
+                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="150.0" maxWidth="1060" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefViewportHeight="150.0" prefViewportWidth="1060.0" prefWidth="1060.0" style="-fx-background-color: #2f3136;" vbarPolicy="NEVER" vmax="0" vmin="0">
+                     <content>
+                        <HBox fx:id="results" fillHeight="false" maxHeight="150" maxWidth="10000" prefHeight="150.0" prefWidth="10000.0" style="-fx-background-color: #2f3136;" styleClass="searchResults" />
+                     </content>
                   </ScrollPane>
                </children>
             </VBox>

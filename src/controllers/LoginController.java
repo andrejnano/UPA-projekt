@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.DatabaseManager;
@@ -36,6 +37,8 @@ public class LoginController {
     Button insertBtn;
     @FXML
     Button selectBtn;
+    @FXML
+    HBox connectedSuccessfullyMsg;
 
     @FXML
     public void openChooser() {
@@ -59,11 +62,13 @@ public class LoginController {
             }
             dbm.connect();
             connectBtn.setText("Disconnect");
+            connectedSuccessfullyMsg.setVisible(true);
             connected = true;
         }
         else {
             dbm.disconnect();
             connectBtn.setText("Connect");
+            connectedSuccessfullyMsg.setVisible(false);
             connected = false;
         }
     }

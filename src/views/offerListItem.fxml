@@ -13,14 +13,14 @@
 <?import javafx.scene.control.Tooltip?>
 <AnchorPane prefHeight="140.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.OfferListItemCtrl">
-   <HBox alignment="CENTER_LEFT">
+   <HBox alignment="TOP_LEFT" style="-fx-cursor: hand;">
       <padding>
          <Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
       </padding>
-      <ImageView fx:id="picture" id="titlePic" fitHeight="120" preserveRatio="true"/>
+      <ImageView fx:id="picture" id="titlePic" fitHeight="120" fitWidth="120" preserveRatio="true"/>
       <VBox prefHeight="120.0">
          <padding>
-            <Insets top="4.0" bottom="4.0" left="4.0" right="4.0"/>
+            <Insets left="10.0" right="5.0"/>
          </padding>
          <Label fx:id="name" styleClass="searchResultNameLabel"/>
          <HBox>
