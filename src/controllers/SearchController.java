@@ -3,6 +3,7 @@ package controllers;
 import controllers.canvasShapes.Coordinate;
 import controllers.canvasShapes.PolyLine;
 import controllers.canvasShapes.Shape;
+import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -59,6 +60,10 @@ public class SearchController implements Initializable {
     HBox results;
     @FXML
     Button refreshButton;
+    @FXML
+    Slider maxPriceSlider;
+    @FXML
+    Label maxPriceValueLabel;
 
     Offer queryOffer;
 
@@ -94,6 +99,9 @@ public class SearchController implements Initializable {
         distance.getSelectionModel().selectFirst();
         distanceToObjectType.getSelectionModel().selectFirst();
 
+        // bind slider to label showing the currently selected max price
+        maxPriceValueLabel.textProperty().bind(Bindings.format("%.2f", maxPriceSlider.valueProperty()));
+
         results.setPadding(new Insets(5, 5, 5,5));
         results.setSpacing(10.0);
 
@@ -128,6 +136,18 @@ public class SearchController implements Initializable {
         });
     }
 
+
+    // filters offers (OffersDBO) that match given price interval (min - max)
+    public List<OffersDBO> filterByPrice(List<OffersDBO> offers, double maxPrice) {
+        List <OffersDBO> filteredOffers = new ArrayList<OffersDBO>();
+        for (OffersDBO offer: offers) {
+            if (offer.getPrice() <= maxPrice) {
+                filteredOffers.add(offer);
+            }
+        }
+        return filteredOffers;
+    }
+
     // Return list of OffersDBOs that match 'propertyType' & 'nameString'
     public List<OffersDBO> searchByPropertyTypeAndName(String propertyTypeString, String nameString) {
         List<Integer> offersIds = OffersHandler.getInstance().getOffers(propertyTypeString, nameString);
@@ -156,7 +176,6 @@ public class SearchController implements Initializable {
         return offersDBOs;
     }
 
-
     // get common offer objects in two lists, used to merge search results from different queries
     public List<OffersDBO> getIntersection(List<OffersDBO> first, List<OffersDBO> second) {
         List<OffersDBO> intersection = new ArrayList<>();
@@ -183,15 +202,20 @@ public class SearchController implements Initializable {
         // load all objects from DB, display as background
         loadShapesFromDb();
 
+        // list of filtered/queried offers
+        List<OffersDBO> offers = new ArrayList<OffersDBO>();
+
         // 1. collect data from form
         String nameString = nameField.getText();
         String propertyTypeString = propertyType.getSelectionModel().getSelectedItem().toString();
         String transactionTypeString = transactionType.getSelectionModel().getSelectedItem().toString();
         String streetString = streetField.getText();
+        double maxPrice = maxPriceSlider.getValue();
         System.out.println("name: " + nameString);
         System.out.println("property type: " + propertyTypeString);
         System.out.println("transaction type: " + transactionTypeString);
         System.out.println("street: " + streetString);
+        System.out.println("max price: " + maxPrice);
 
         // get all offers that match property type and string
         List<OffersDBO> offersDBOsMatchingTypeAndName = new ArrayList<OffersDBO>();
@@ -204,13 +228,17 @@ public class SearchController implements Initializable {
         /* Second, search by distance to given type within given distance */
         offersDBOsCloseToObject = searchCloseTo(distanceToObjectType.getSelectionModel().getSelectedItem().toString());
 
-        System.out.println("Got this intersection: " + getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject).toString());
+        offers = getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject);
+        System.out.println("Got this intersection (type,name) + close to object: " + offers.toString());
+
+        /* Filter by price*/
+        offers = filterByPrice(offers, maxPrice);
 
         // -- create spatial object ids list, ids of objects that will be painted to canvas
         searchResultsSpatialIds = new ArrayList<Integer>();
 
         // 3. Display results
-        for (OffersDBO offer: getIntersection(offersDBOsMatchingTypeAndName, offersDBOsCloseToObject)) {
+        for (OffersDBO offer: offers) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
                 AnchorPane offerListItem = loader.load();
