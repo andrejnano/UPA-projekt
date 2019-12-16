@@ -315,7 +315,7 @@ public class SearchController implements Initializable {
         for (OffersDBO offer: offers) {
             AnchorPane offerListItem = null;
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/offerListItem.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("../views/offerListItem.fxml"));
                 offerListItem = loader.load();
                 offerListItem.setPadding(new Insets(5, 10, 5, 10));
                 offerListItem.getStyleClass().add("resultBox");

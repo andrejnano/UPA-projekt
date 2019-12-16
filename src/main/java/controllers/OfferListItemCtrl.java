@@ -8,6 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import main.java.model.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OfferListItemCtrl {
     @FXML
     Label transactionType;
@@ -58,6 +61,15 @@ public class OfferListItemCtrl {
     public void findSimilar(MouseEvent mouseEvent) {
         searchController.clearResults();
         MultimediaHandler multiHandler = MultimediaHandler.getInstance();
-        searchController.showResults(OffersHandler.getInstance().loadOffers(multiHandler.getSimilarities(offerDBO.getId())));
+        List<Integer> similarImages = multiHandler.getSimilarities(offerDBO.getId());
+
+        ArrayList<OffersDBO> offersOut = new ArrayList<OffersDBO>();
+        for (OffersDBO o : OffersHandler.getInstance().getAllOffers()) {
+            for (int i : similarImages) {
+                if (multiHandler.getFirstImageId(o.getId()) == i)
+                    offersOut.add(o);
+            }
+        }
+        searchController.showResults(offersOut);
     }
 }
