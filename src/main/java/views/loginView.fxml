@@ -63,12 +63,12 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                    <TextField fx:id="userField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="login" text="xmarko15" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                    <TextField fx:id="userField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="login" text="xvasek06" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                    <PasswordField fx:id="pwdField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="password" text="tKZNZeuo" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                    <PasswordField fx:id="pwdField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" promptText="password" text="WAplOqOk" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>

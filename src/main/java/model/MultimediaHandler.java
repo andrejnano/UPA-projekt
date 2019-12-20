@@ -77,7 +77,7 @@ public class MultimediaHandler {
         return newId;
     }
 
-    // returns list of picture ids corresponding with specified offer id
+    // returns offer id corresponding with specified picture id
     public int getEstateId(int id) {
         int estateId = 0;
         try (Statement stmt = connection.createStatement()) {
@@ -111,16 +111,18 @@ public class MultimediaHandler {
 
     // returns ids of similar pictures
     // sorted from most similar to image specified by id
-    public List<Integer> getSimilarities(int id) {
-        int estateId = getEstateId(id);
+    public List<Integer> getSimilarities(int estateId) {
+        int id = getFirstImageId(estateId);
         List<Integer> similarEstateIDs = new ArrayList<Integer>();
         try (Statement stmt = connection.createStatement()) {
             String sqlString = "SELECT dst.estateId, si_scorebyftrlist(new si_featurelist(" +
                     "src.picture_ac, 0.3, src.picture_ch, 0.3, src.picture_pc, 0.1, src.picture_tx, 0.3), " +
-                    "dst.picture_si) as similarity FROM pictures src, pictures dst WHERE src.estateId <> dst.estateId and src.estateId = " + estateId + " ORDER BY similarity ASC";
+                    "dst.picture_si) as similarity FROM pictures src, pictures dst WHERE src.id <> dst.id and src.estateId <> dst.estateId and src.id = " + id + " ORDER BY similarity ASC";
             OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
             while (rset.next()) {
-                similarEstateIDs.add(rset.getInt(1));
+                int data = rset.getInt(1);
+                if (!similarEstateIDs.contains(data) && data != estateId)
+                    similarEstateIDs.add(data);
             }
             rset.close();
         } catch (SQLException e) {
@@ -249,10 +251,29 @@ public class MultimediaHandler {
             } finally {
                 connection.setAutoCommit(previousAutoCommit);
             }
+            updateStillImage(id);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
         return id;
+    }
+
+    public void refreshStillimage() {
+        List<Integer> id = new ArrayList<Integer>();
+        try (Statement stmt = connection.createStatement()) {
+            String sqlString = "select id from pictures";
+            OracleResultSet rset = (OracleResultSet) stmt.executeQuery(sqlString);
+            while (rset.next()) {
+                id.add(rset.getInt("id"));
+            }
+            rset.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        for (int i: id) {
+            updateStillImage(i);
+        }
     }
 
     // internal function, loads picture from db into ordImage obejct
